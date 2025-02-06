@@ -1,0 +1,1798 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+body {
+  padding: 0px;
+  margin: 0px;
+  box-sizing:border-box;
+ 
+ overflow-x:hidden;
+}
+.img-responsive {
+    min-width: 100%;
+    max-width: auto;
+    height: auto;
+    background-size: 100% 100%;
+    }
+
+.container-fluid {
+  width: 100%;
+  min-height: 600px;
+  background: #F7F7F7;
+  padding: 0px;
+  margin: 0px;
+  /*overflow-x: hidden;*/
+}
+.nav-link {
+  cursor: pointer;
+}
+.contant{
+  width:100%;
+  height:auto;
+  justify-content:center;
+  align-items:center;
+  padding-top:5rem;
+  overflow:hidden;
+}
+  .contant .trainningcard {
+      /* padding-left: 60px; */
+      justify-content: center;
+      align-items: center;
+      padding-top: 3rem;
+      overflow: auto;
+      padding-left:5rem;
+     
+  }
+/* .trainningcard{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+} */
+.dropdown-menu .nav-item .test {
+  background: #274F70;
+  color: white;
+  width: 120%;
+  position: relative;
+  right: 50px;
+}
+.dropdown-menu .nav-item {
+  color: white;
+}
+
+.dropdown-menu .Solution .test {
+  color: white;
+  width: 100%;
+  position: relative;
+  right: 100px;
+  background: #274F70;
+}
+    
+
+      .dropdown-menu {
+          position: static;
+          float: none;
+          margin-top: 0;
+          background-color: transparent;
+      }
+
+
+.logo img {
+  width: 70%;
+  border-radius: 50px;
+  margin-top: 5px;
+ 
+}
+
+.cypher {
+  height: 50px;
+  width: 15%;
+}
+
+.cypher p {
+  font-family: bold;
+  font-size: 22px;
+  color: #FF8000;
+  text-align: center;
+  margin-top: 10px;
+  position: absolute;
+  left: 100px;
+}
+
+.navbar {
+  min-height: 50px;
+  width: 100%;
+  background: #274F70;
+  position: sticky;
+  top: 0px;
+}
+
+
+.menue {
+  min-height: 50px;
+  width: 50%;
+  float: left;
+}
+
+.navbar-nav {
+  color: white;
+  font-size: 20px;
+  line-height: 22px;
+  font-family: bold;
+  margin-left:30px;
+  text-decoration: none;
+}
+ 
+
+.navbar-nav .nav-link {
+      margin: 2px;
+      color:white;
+  }
+  .navbar-nav .nav-item .nav-link {
+      color: white;
+      font-family: bold;
+      width:max-content;
+  }
+  
+  .navbar-nav li a:hover {
+      color: white;
+      font-size: 22px;
+      line-height: 22px;
+      font-family: bold;
+      background: none;
+      text-decoration: none;
+  }
+ 
+
+      .dropdown-menu li a {
+          background: #274F70;
+          color: white;
+          font-size: 20px;
+      }
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-menu li a {
+  background: #274F70;
+  color: white;
+  font-size: 20px;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-menu .dropdown-submenu .test {
+  color: white;
+  background: #274F70;
+}
+
+  .dropdown-submenu .dropdown-menu {
+      top: 0%;
+      left: 100%;
+      margin-top: -1px;
+      background: #274F70;
+      color: white;
+  }
+
+.dropdown .btn {
+  background: none;
+  color: white;
+  font-size: 20px;
+  padding-top:10px;
+  margin-top:6px;
+}
+
+
+a {
+    text-decoration: none;
+}
+/*<!------------------------------------------------------------------------------------------------>*/
+.aboutcontainer{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.aboutcontainer .Aboutrow{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+}
+.Aboutss {
+  width: 100%;
+  min-height: 350px;
+  margin-left: 20px;
+}
+
+.boxe {
+  min-height: 460px;
+  width: 90%;
+  color: #274F70;
+}
+
+  .boxe h1 {
+      padding-top: 15px;
+      padding-left: 15px;
+  }
+
+  .boxe p {
+    text-align: justify;
+    text-justify: inter-word;
+      padding: 15px;
+      font-size: 20px;
+      color: black;
+      font-family: bold;
+  }
+
+.box2 {
+  height: 400px;
+  justify-content:center;
+  align-items:center;
+
+}
+ 
+.box2 video {
+  height: 50vh;
+  width: 600px;
+text-align:center;
+}
+.box2 img {
+      height: 380px;
+      width: 80%;
+      text-align:center;
+  }
+
+
+.services h1 {
+  transform: translateY(-50px)
+}
+
+.divpart .card h2 {
+  color: #274F70;
+}
+
+  .card p {
+      font-size: 18px;
+      font-family: bold;
+  }
+
+  .card:hover {
+      background: #FD8201;
+      color: white;
+  }
+
+  .card h5:hover {
+      color: white;
+      font-family: bold;
+  }
+.card-body{
+    text-align: justify;
+    text-justify: inter-word;
+}
+.card-body h2 {
+  color: white;
+  font-family: bold;
+
+}
+.mt-5 h2 {
+  text-align: center;
+  color: #274F70;
+}
+.navbar-nav > li {
+  /* float: left; */
+  margin-left: 15px;
+}
+
+.row h2 {
+  text-align: center;
+  color: #274F70;
+  font-family: bold;
+}
+.row h3 {
+  color: #0c4675 ;
+  margin-top: 20px;
+  font-size: 2.1rem;
+}
+.language{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    
+}
+.cards-section{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-right: 1rem;
+    font-size: 1.2rem;
+}
+.language .languagepart{
+    padding-left: 2rem;
+    font-size: 1.2rem;
+    text-align: justify;
+          text-justify: inter-word;
+}
+.cards{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.cards .thirddive{
+min-width: 30vw;
+max-width: auto;
+height: auto;
+
+}
+.cards .thirddive .card-text{
+    font-size: 1.2rem;
+}
+/*    <!------------------------------- only gooter psrt-------------------------------------->*/
+
+.footer {
+  min-height: 400px;
+  background: #274F70;
+  padding-top: 60px;
+}
+
+.sitename {
+  font-size: 25px;
+  color: #FF8000;
+  font-size: 30px;
+}
+
+.footer-contact p {
+  color: white;
+  font-size: 20px;
+}
+
+.footer-links ul li {
+  color: white;
+  
+}
+
+  .footer-links ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+  }
+
+      .footer-links ul li a:hover {
+          color: #FF8000;
+          text-decoration: none;
+          font-size: 20px;
+          font-family: bold;
+      }
+
+h4 {
+  color: #FF8000;
+  font-size: 26px;
+
+}
+
+.col-md-offset-4 {
+  margin-left: 3.333333%;
+}
+
+.d-flex .spin{
+  font-size: 50px;
+  margin: 10px;
+  color: white;
+}
+.d-flex .spin:hover{
+  font-size: 50px;
+  margin: 10px;
+  color: #FF8000;
+}
+
+  /* .d-flex i:hover {
+      font-size: 50px;
+      margin: 10px;
+      color: #FF8000;
+  } */
+
+
+
+
+.btn-light {
+  background: #F7F7F7;
+  color: #274F70;
+  font-family: Bold;
+  box-shadow: 2px 2px 2px 2px lightgray;
+  margin: 0px 0px 20px 20px;
+}
+
+  .btn-light:hover {
+      background: #274F70;
+      color: white;
+      font-family: Bold;
+  }
+
+
+
+
+/*    <!------------------------------- footer policy-------------------------------------->*/
+.Policy {
+  height: 50px;
+  width: 101%;
+  position: fixed;
+  bottom: 0px;
+}
+
+.lefttermpart {
+  height: 50px;
+  width: 38%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.tranceparant {
+  background-color: #F7F7F7;
+}
+
+.lefttermpart ul li {
+  color: gray;
+  font-size: 16px;
+  font-family: bold;
+  float: left;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.ModdilePart {
+  height: 50px;
+  width: 31%;
+}
+
+  .ModdilePart p {
+      color: gray;
+      font-size: 16px;
+      font-family: bold;
+      float: left;
+      text-decoration: none;
+      margin-top: 15px;
+  }
+
+.righttermpart {
+  height: 50px;
+  width: 31%;
+}
+
+  .righttermpart p {
+      color: gray;
+      font-size: 16px;
+      font-family: bold;
+      float: left;
+      text-decoration: none;
+      margin-top: 15px;
+  }
+
+      .righttermpart p a:hover {
+          text-decoration: none;
+          margin-top: 15px;
+      }
+
+.box {
+  opacity: 0;
+}
+
+  .box.animated {
+      opacity: 1;
+  }
+
+.box {
+  animation-delay: 1s;
+}
+
+
+.logo p {
+  color: #FF8000;
+  text-align: center;
+  font-family: bold;
+  font-size: 20px;
+  position: absolute;
+  top: 16px;
+  left: 176px;
+}
+.boxex1 img {
+  height: 100px;
+  width: 800px;
+}
+
+  /* .Abouts {
+      min-height: 300px;
+      width: 102%;
+      background-image: url('../../Images/About_Us_banner.png');
+      background-size: 100% 100%;
+  } */
+
+  .boxes {
+      min-height: 450px;
+      width: 600px;
+      float: left;
+     /* margin: 50px 0px 50px 100px;*/
+      box-shadow: 5px 5px 5px 5px lightgray;
+      font-size: 20px;
+     /*padding: 20px;*/
+      font-family: Bold;
+      justify-content:center;
+      align-items:center;
+    
+     padding: 1rem;
+  }
+
+      .boxes:hover {
+          background: #FD8500;
+          color: white;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem;
+      }
+
+      .boxes h1 {
+          color: #274F70;
+      }
+
+      .boxes p {
+          font-size: 20px;
+          font-family: bold;
+          text-align: justify;
+          text-justify: inter-word;
+      }
+
+  .boxes2 {
+      min-height: 450px;
+      /*margin-left: 40px;*/
+      justify-content:center;
+      align-items:center;
+      padding-left:5rem;
+      padding-top:5rem;
+      margin-bottom:5rem;
+  }
+
+      .boxes2 img {
+          height: 400px;
+          width: 500px;
+          /* margin: 100px 0px 50px 40px;*/
+          margin-bottom: 5rem;
+          margin-top: 3rem;
+          overflow:hidden;
+      }
+
+
+  /*<!--------------------------------------------------------------------------------------------------------------->*/
+  /*<!---------------------------------------------------------------------------------------------------------------------->*/
+ 
+.appraper{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10rem;
+}
+  .Application {
+      min-height: 300px;
+      width: 100%;
+      margin-top: 20px;
+      justify-content:center;
+      align-items:center;
+padding-bottom: 45rem;
+  }
+  .Application1 {
+    min-height: 300px;
+    width: 100%;
+    margin-top: 20px;
+    justify-content:center;
+    align-items:center;
+padding-bottom: 25rem;
+}
+
+  .appboxes {
+      height: 350px;
+      width: 500px;
+      float: left;
+      box-shadow: 5px 5px 10px 10px inset #274F70;
+      padding-top: 20px;
+      padding-bottom: 5rem;
+      margin: 5px;
+      text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .txte {
+      font-size: 1rem;
+      font-weight: 600;
+  }
+
+      .txte h3 {
+          margin-top: 0px;
+      }
+
+  .txte p {
+      font-size: 17px;
+  }
+
+  .imgepart img {
+      height: 70px;
+      width: 500px;
+      border-radius: 10px;
+  }
+
+  /*<!---------------------------------------------------------------------------------------------------------------------->*/
+  .language .languagepart1 .textparte{
+    align-items: justify;
+    text-justify: inter-word;
+  }
+   .languagepart1 h2 {
+      font-size: 50px;
+  }
+
+  .languagepart1 p {
+      font-size: 20px;
+  } 
+.languagepart1 img{
+    height: 45vh;
+    padding-left: 5rem;
+}
+  
+
+  /*    <!------------------------------------------------------------>*/
+
+  .contactus {
+      min-height: 300px;
+      width: 102%;
+  }
+
+  .contactslide {
+      min-height: 300px;
+      width: 101%;
+      background-image: url('/Images/contact-us-banner.jpg');
+      background-size: 100% 100%;
+  }
+
+   
+  .main {
+     
+      position: relative;
+      width: 100%;
+     height:max-content;
+     overflow:hidden;
+     justify-content:center;
+     align-items:center;
+  }
+
+.page1 {
+  height: 400px;
+  min-width: 100%;
+  max-width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-direction: column;
+  background-image: url('/Images/automation1.gif');
+  object-fit: cover;
+  background-repeat: no-repeat;
+  opacity: 0.9;
+  background-size: 100% 100%;
+}
+
+  .page1 h1 {
+      font-family: 'montserrat';
+      font-size: 80px;
+      font-weight: 900;
+      color: white;
+      text-shadow: 1px 1px 2px #f75605;
+  }
+
+  .page1 p {
+      font-family: 'montserrat';
+      text-align: center;
+      font-size: 30px;
+      font-weight: 500;
+      color: white;
+     
+  }
+      
+
+      .page2 {
+          min-height: 570vh;
+          width: 100%;
+          justify-content:center;
+          align-items:center;
+          background: linear-gradient(to bottom, rgba(255, 250, 250, 1), rgba(255, 255, 255, 1));
+      }
+
+.scroll1 {
+  white-space: nowrap;
+  height: 150px;
+ 
+ 
+}
+.scrolle {
+  white-space: nowrap;
+  height: 250px;
+  overflow-X: hidden;
+}
+.scrollr {
+  white-space: nowrap;
+  height: 200px;
+  overflow-X: hidden;
+}
+.scrollo {
+  display: inline-block;
+  white-space: nowrap;
+  animation-name: scrol;
+  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.scrollo img{
+  height: 8rem;
+}
+.scroll {
+  display: inline-block;
+  white-space: nowrap;
+  animation-name: scrol;
+  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+  .scrolle::-webkit-Scrollbar {
+      display: none;
+  }
+  .scrollr::-webkit-Scrollbar {
+    display: none;
+}
+.scroll::-webkit-Scrollbar {
+  display: none;
+}
+
+.scroller {
+  display: inline-block;
+  overflow-x: auto;
+  white-space: nowrap;
+  animation-name: scrol;
+  animation-duration: 50s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  height:180px;
+
+}
+
+  .scroll1 {
+    display: inline-block;
+  }
+  
+  .img-responsives {
+    height: 300px;
+    width: 300px;
+    object-fit: cover; /* इमेज को पूरी तरह से फिट करने के लिए */
+  }
+  
+.list-group-item + .list-group-item {
+  border-top-width: 0;
+  height: 150px;
+}
+  .scroll h2 {
+      display: inline-block;
+      font-size: 96px;
+      font-weight: 300;
+      font-family: gilroy;
+      margin-right: 20px;
+      color: white;
+      -webkit-text-stroke: 1px #FD8300;
+  }
+
+  .scroller img {
+      display: inline-block;
+  }
+
+  .scroll h2:hover {
+      color: rgba(255, 0, 0, 0.1);
+  }
+
+  @keyframes scrol {
+      from {
+          transform: translateX(0);
+      }
+
+      to {
+          transform: translateX(-100%);
+      }
+  }
+
+  .autom {
+      min-height: 450px;
+      max-height: auto;
+      margin-bottom: 30px;
+      /*margin-left: 20px;*/
+      justify-content:center;
+      align-items:center;
+     padding-right: 15rem;
+     gap: 2rem;
+  }
+
+  .automimg {
+      min-height: 300px;
+      width: 400px;
+      margin-top: 50px;
+  }
+
+  .automtext {
+      width: 600px;
+      height: auto;
+      box-shadow: 1px 1px 8px 1px #f5c4c4;
+   
+  }
+
+      .automtext ol li {
+          font-size: 15px;
+      }
+
+      .automtext h3 {
+          text-align: center;
+          color: #274F70;
+          font-family: Bold;
+          font-size: 50px;
+      }
+
+  .autom p {
+      font-size: 18px;
+  }
+
+  .carde {
+    /* width: 25rem; */
+      box-shadow: 1px 1px 8px 1px #f5c4c4;
+      border-radius: 50px 20px;
+      margin-top: 50px;
+      gap:0px;
+      justify-content:center;
+      align-items:center;
+     
+  }
+
+  .calar {
+      font-size: 20px;
+      font-weight: 500;
+      color: #5d8cb3;
+  }
+.zoho{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+  .zohotext h4 {
+      color: #274F70;
+      padding-top: 0rem;
+      margin-top: 0rem;
+      font-size: 40px;
+      font-weight: 500;
+      text-align: center;
+      
+    /*  margin-bottom: 30px;*/
+  }
+  .zoho-section .trainningcard .carde .card-body  {
+    padding: 0.5rem 0.5;
+  }
+  .zoho-section .trainningcard {
+    padding-left: 10rem;
+  }
+.zoho-section1{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+  .carde h5 {
+      color: #5d8cb3;
+      font-size: 23px;
+      font-weight: 500;
+      text-align: center;
+  }
+
+  .card-titles {
+      animation-delay: 5s;
+  }
+
+  .card-container {
+      height: 400px;
+      width:auto;
+      align-items: center;
+      justify-content: center;
+      margin-top: 80px;
+      display: flex;
+  }
+
+  .automa {
+      height: 300px;
+      width: 350px;
+      border-radius: 30px;
+      box-shadow: 2px 5px 20px #274F70;
+      margin-left: 70px;
+      margin-bottom: 40px;
+      background-size: cover;
+      background-position: center;
+      transition: all ease 0.6;
+  }
+
+  #automa1 {
+      background-image: url('/Images/autogif3.gif')
+  }
+
+  #automa2 {
+      background-image: url('/Images/autogif7.gif')
+  }
+
+  #automa3 {
+      background-image: url('/Images/autogif8.gif')
+  }
+
+  .overlay {
+      height: 300px;
+      width: 350px;
+      border-radius: 28px;
+      background-color: #F7B149;
+      opacity: 0;
+      padding-top: 10px;
+      transition: all ease 0.6;
+  }
+
+  .automa:hover .overlay {
+      opacity: 1;
+  }
+
+  .automa:hover {
+      transform: rotate3d(-1,1,0,30deg);
+  }
+
+  .overlay h6 {
+      color: #274F70;
+      font-size: 25px;
+      font-family: bold;
+      font-weight: 100;
+      text-align: center;
+  }
+
+  .overlay p {
+      color: white;
+      font-size: 20px;
+      font-family: bold;
+      font-weight: 100;
+      text-align: center;
+      padding: 20px 30px;
+  }
+ .Aboutss{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+ }
+.carre img{
+min-width: 100vw;
+height: 20rem;
+margin-left: -2rem;
+max-width: auto;
+    background-size: 100% 100%;
+}
+.careimg img{
+    width: 100%;
+    height: 50vh;
+}
+.caree h1 {
+      text-align: center;
+      color: #274F70;
+      font-family: Bold;
+      font-size: 50px;
+  }
+.caree h6 {
+  text-align: center;
+  color: #274F70;
+  font-family: Bold;
+  font-size: 50px;
+}
+.caree .paratext {
+  text-align: center;
+  color: #274F70;
+  font-family: Bold;
+  font-size: 50px;
+}
+
+  .care p {
+      box-shadow: 3px 3px 5px 5px gray;
+      font-size: 20px;
+      font-family: Bold;
+      padding: 40px 20px 20px 20px;
+  }
+
+
+  .career {
+      position: relative;
+      background-color: #F8F3F3;
+      justify-content:center;
+      align-items:center;
+  }
+
+      .career img {
+          position: relative;
+          justify-content:center;
+          align-items:center;
+          margin: 20px 30px 20px 200px; 
+      }
+
+.formcontroler {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  margin-bottom: 160px;
+ 
+}
+.formcontroler form{
+    width: 50vw;
+}
+      .formcontroler .formcont {
+          height: auto;
+          width: 600px;
+          background-color: #274F70;
+          background-size: 100% 100%;
+          margin-left: 20px;
+          margin-right: 60px;
+          border-radius: 10px;
+          padding-bottom: 30px;
+          box-shadow: 3px 2px 30px #154c79;
+          padding: 1rem;
+          
+      }
+
+          .formcontroler .formcont:hover {
+              height: auto;
+              width: 600px;
+              background-color: #546e6d;
+              background-size: 100% 100%;
+              margin-right: 60px;
+              margin-left: 20px;
+              padding-bottom: 30px;
+              box-shadow: 3px 2px 30px #154c79;
+              padding: 1rem;
+          }
+label[for="inputdesination"] {
+  padding:3px;
+  font-weight: bold;
+}
+label[for="txtBody"] {
+  padding: 3px;
+  font-weight: bold;
+}
+label[for="txtEmailId"] {
+  padding: 3px;
+  font-weight: bold;
+}
+#inputNumber {
+  width:200px;
+
+}
+
+.error-Message {
+  color: #fc034e;
+  padding-left: 120px;
+  font-size: 14px;
+}
+.formcont {
+  height: 1000px;
+  width: 800px;
+  position: relative;
+  color: white;
+}
+
+.col-form-label {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+  .formimg {
+      height: 50%;
+      width: 600px;
+      padding-top: 30px;
+  margin-bottom:80px;
+  }
+
+      .formimg img {
+          height: 510px;
+          width: 600px;
+          padding-top: 30px;
+      }
+
+  .formtext {
+      text-align: center;
+      margin: 0px;
+  }
+  .formcont .row{
+    gap: 1rem;
+  }
+      .formtext h2 {
+          margin: 0px;
+          text-align: center;
+          color: white;
+          font-size: 50px;
+          font-family: bold;
+          margin-bottom: 25px;
+      }
+
+  .btn-primary {
+      margin: 20px 30px 50px 400px;
+      padding: 10px 20px 10px 20px;
+  }
+
+  .col1 {
+      background-color: black;
+  }
+
+  .section-title {
+      margin-top: 50px;
+  }
+
+  .info-wrap h3 {
+      color: #274F70;
+  }
+
+  .btn-light {
+      background: #F7F7F7;
+      color: #274F70;
+      font-family: Bold;
+      box-shadow: 5px 5px 5px 5px gray;
+      margin: 0px 0px 30px 20px;
+  }
+
+      .btn-light:hover {
+          background: #274F70;
+          color: white;
+          font-family: Bold;
+      }
+
+  .formcontrol {
+      min-height: 500px;
+      width: 102%;
+      margin: auto;
+      /*    background-image: linear-gradient(to right, rgba(39,79,112), rgba(255,129,0));*/
+  }
+
+
+
+  .section-title {
+      margin-top: 50px;
+  }
+
+  .info-wrap h3 {
+      color: #274F70;
+  }
+
+  .btn-light {
+      background: #F7F7F7;
+      color: #274F70;
+      font-family: Bold;
+      box-shadow: 5px 5px 5px 5px gray;
+      margin: 0px 0px 20px 20px;
+  }
+
+      .btn-light:hover {
+          background: #274F70;
+          color: white;
+          font-family: Bold;
+      }
+
+  .formcontrol {
+      min-height: 500px;
+      width: 100%;
+      margin: auto;
+      /*    background-image: linear-gradient(to right, rgba(39,79,112), rgba(255,129,0));*/
+  }
+
+  .boxex {
+      min-height: 400px;
+      background: #274F70;
+      border-radius: 10px;
+  }
+
+      .boxex:hover {
+          background: #FF8106;
+          transition: all ease 2s;
+      }
+
+      .boxex label {
+          color: white;
+          margin: 10px;
+          font-size: 20px;
+      }
+
+  .btn-success {
+      transform: translate(105px,0px);
+  }
+
+  .boxex1 {
+      min-height: 420px;
+      background: white;
+      border-radius: 10px;
+      color: #274F70;
+      font-family: bold;
+      font-size: 20px;
+  }
+
+      .boxex1 p {
+          padding-left: 30px;
+          color: black;
+      }
+
+      .boxex1 img{
+          height:100px;
+          width:400px;
+          padding-left: 1rem;
+      }
+      .boxex1:hover {
+          background: #FF8106;
+          color: white;
+
+          transition: all ease 2s;
+      }
+
+
+  .map {
+    padding-left: 10rem;
+      height: 80vh;
+  }
+
+ 
+
+  /*<!------------------------------------------------------------------------------------>*/
+ 
+/* General Styles */
+.container-fluid {
+    padding: 0 30px;
+}
+
+/* Mobile and Tablet-specific styles (max-width: 768px) */
+@media (max-width: 768px) {
+    /* body{
+        background-color: chartreuse;
+    } */
+    .Aboutss {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .col-lg-6, .col-md-6 {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .box2 figure {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    #fixed {
+        width: 100%;
+        height: auto;
+    }
+
+    /* .boxe {
+        padding: 20px;
+    } */
+
+    .care h2 {
+        font-size: 1.5rem;
+    }
+
+    .care p {
+        font-size: 1rem;
+    }
+
+    /* Adjust scroll images */
+    .scroll1 img {
+        max-width: 100%;
+        min-width: 10rem;
+        height: auto;
+    }
+
+
+    .img-responsive {
+        width: 100%;
+        height: auto;
+    }
+
+    #aboutbtn {
+        max-width: 100%;
+        min-width: 10rem;
+        font-size: 1rem;
+    }
+    .career img {
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 30px 20px 5px;
+    }
+    /* ....................About Us......................... */
+    .Aboutrow {
+        flex-direction: column;
+        margin-top: 5rem;
+    }
+
+    .boxes, .boxes2 {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .boxes img, .boxes2 img {
+        width: 100%;
+        height: auto;
+        margin-left: -5rem;
+    }
+
+    /* Adjust text size */
+    .Aboutrow h1 {
+        font-size: 1.8rem;
+    }
+
+    .Aboutrow p {
+        font-size: 1rem;
+    }
+
+    /* Responsive card design */
+    .trainningcard .col-md-4 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    /* Adjust button and other elements */
+    .carde {
+        padding: 15px;
+        margin: 1rem;
+        overflow: hidden;
+    }
+    
+    .zohotext h4 {
+        font-size: 1.5rem;
+    }
+    .carre img {
+        min-width: 100vw;
+        max-width: auto;
+        background-size: 100% 100%;
+        margin-left: -2rem;
+    }
+    .contant .trainningcard {
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+        margin: 0rem;
+        padding: 0rem;
+    }
+    /* ...............Services.................. */
+    .Application {
+        min-height: 300px;
+        width: 100%;
+        margin-top: 20px;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 100rem;
+    }
+    .appraper {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        padding: 0rem ;
+        margin: 0rem;
+    }
+    .ms-5 {
+        margin: 0rem;
+    }
+    .appboxes {
+      margin-top: 1rem;
+        float: left;
+        box-shadow: 5px 5px 10px 10px inset #274F70;
+       padding: 1rem 1rem;
+        text-align: justify;
+        text-justify: inter-word;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        text-align: justify;
+        text-justify: inter-word;
+    }
+    .language{
+        margin-top: 5rem;
+    }
+    /* ...................Automation....................... */
+    .autom {
+      justify-content: center;
+      align-items: center;
+      margin-top: -23rem;
+      padding: 0rem 0.4rem;
+    }
+    .card-container {
+        flex-direction: column;
+    }
+    .page2 {
+
+        margin-bottom: 20rem;
+    }
+    /* .scrolle {
+        margin-bottom: 20rem;
+    } */
+       .scrollr {
+        margin-bottom: 20rem;
+    } 
+    .automa {
+    margin: 1rem 0rem;
+    
+    }
+    /* ...................Value_For_Invester............. */
+    .boxe {
+        margin-top: 5rem;
+    }
+    /* ...........................We Serve....................... */
+.languagepart1 h2{
+    font-size: 2.5rem;
+}
+.Application1{
+    padding-bottom: 50rem;
+}
+/* ...............Career.................... */
+.thirddive .carde {
+    /* width: 14rem; */
+    padding: 0rem;
+    margin: 0.5rem -1rem;
+    overflow: hidden;
+}
+.trainningcard .carde {
+    /* width: 14rem; */
+    padding: 0rem;
+    margin: 0.5rem -2rem;
+    margin-left: 2rem;
+    overflow: hidden;
+}
+.formcontroler .formcont {
+    height: auto;
+    width: 450px;
+  justify-content: center;
+  align-items: center;
+}
+.formcontroler .formcont:hover {
+    height: auto;
+    width: 450px;
+  justify-content: center;
+  align-items: center;
+}
+.text-left{
+    padding: 0rem;
+    margin: 0rem -7rem;
+}
+.formimg img {
+    height: 300px;
+    width: 300px;
+    padding-top: 30px;
+    margin: 0rem -1.5rem;
+}
+.col-form-label {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: -10rem;
+}
+}
+
+/* For very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+    /* body{
+        background-color: #fc034e;
+    } */
+    .cypher p {
+      font-size: 18px;
+     margin-left: -40px;
+  }
+  .logo img {
+    width: 40%;
+    border-radius: 50px;
+    margin-top: 5px;
+}
+    .boxe h1 {
+        font-size: 1.5rem;
+    }
+
+    .boxe h2 {
+        font-size: 1.2rem;
+    }
+
+    .boxe p {
+      margin-top: 15rem;
+        font-size: 0.9rem;
+        padding: 0rem;
+    }
+    .box2{
+        height: 10rem;
+    }
+
+    .care p {
+        font-size: 0.85rem;
+    }
+    .career img{
+        margin: 0rem;
+    }
+    /* .............................About Us........................... */
+    .boxes, .boxes2 {
+      text-align: center;
+      padding-bottom: 0rem;
+      margin-bottom: 0rem;
+      min-height: 0rem;
+  }
+.contant {
+ 
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 0rem;
+}
+.trainningcard .carde {
+  /* width: 14rem; */
+  padding: 0rem;
+  margin: 0.5rem -2rem;
+  margin-left: 0rem;
+  overflow: hidden;
+}
+    .trainningcard .col-md-4 {
+        width: 100%;
+        margin-left: -5rem;
+    }
+    .trainningcard1 .col-md-4 {
+      width: 20rem;
+      margin-left: -2.5rem;
+      padding: 0rem;
+  }
+  .trainningcard1 ul{
+    padding: 0rem;
+  }
+
+    .boxes img, .boxes2 img {
+        max-width: 100%;
+        height: auto;
+        margin-left: -4rem;
+    }
+
+    .card-titles {
+        font-size: 1.2rem;
+    }
+
+    .zohotext h4 {
+        font-size: 1.2rem;
+    }
+
+    .Aboutrow p {
+        font-size: 0.9rem;
+    }
+    .contant .trainningcard {
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+      /* ...............Services...................... */
+  .language{
+    margin-top: 5rem;
+  }
+  .mt-4{
+    text-align: justify;
+    text-justify: inter-word;
+  }
+  .appraper{
+    width: 100%;
+    padding: 0rem;
+    margin: 0rem;
+    
+  }
+  .ms-5 {
+    margin-left: 0rem !important;
+    padding: 0.5rem 1rem;
+}
+.lefttxtpart1{
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+.Application {
+    min-height: 300px;
+    width: 100%;
+    /* margin-top: 20px; */
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 145rem;
+}
+.appboxes {
+    height: auto;
+    width: 100%;
+    float: left;
+    margin-top: 1rem;
+    box-shadow: 5px 5px 10px 10px inset #274F70;
+    text-align: justify;
+    text-justify: inter-word;
+}
+/* ................Automation...................... */
+.page1 h1 {
+    font-family: 'montserrat';
+    font-size: 50px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 1px 1px 2px #f75605;
+}
+.page1 p {
+    font-family: 'montserrat';
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+}
+.scroll h2 {
+    display: inline-block;
+    font-size: 60px;
+}
+.autom {
+    justify-content: center;
+    align-items: center;
+ margin: 0rem;
+ padding: 0rem;
+}
+.row h3 {
+    color: #0c4675;
+    margin-top: 20px;
+    font-size: 2rem;
+    overflow: hidden;
+}
+.zoho-section1{
+    width: 25rem;
+    margin-left: -4rem;
+}
+.automa {
+    margin-left: 0rem;
+}
+.card-container {
+    flex-direction: column;
+}
+.page2 {
+
+    margin-bottom: 20rem;
+}
+/* .scrolle {
+    margin-bottom: 20rem;
+} */
+.scrollr {
+  margin-bottom: 20rem;
+} 
+/* ...................Value_For_Invester............. */
+.caree h1 {
+    text-align: center;
+    font-size: 30px;
+}
+.Aboutss {
+    width: 100%;
+    min-height: 350px;
+    margin-left: 0px;
+}
+/* ...........................We Serve....................... */
+.languagepart1 img {
+  height: 45vh;
+padding: 0rem;
+}
+.languagepart1 h2{
+    font-size: 2.5rem;
+}
+.Application1{
+    padding-bottom: 80rem;
+}
+/* ...............................Career.......................... */
+.thirddive .carde {
+    width: 14rem;
+    padding: 0rem;
+    margin: 0.5rem -1rem;
+    overflow: hidden;
+}
+.thirddive .carde {
+  width: auto;
+  padding: 0rem;
+  margin-left: 0.5rem;
+  overflow: hidden;
+}
+.formcontroler .formcont {
+  height: auto;
+  width: 300px;
+  margin-left: 0rem;
+  justify-content: center;
+  align-items: center;
+}
+.formcontroler .formcont:hover {
+  height: auto;
+  width: 300px;
+  margin-left: 0rem;
+  justify-content: center;
+  align-items: center;
+}
+.text-left{
+    padding: 0rem;
+    margin: 0rem -7rem;
+}
+.formimg img {
+    height: 300px;
+    width: 300px;
+    padding-top: 30px;
+    margin: 0rem -1.5rem;
+}
+.col-form-label {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: -4rem;
+}
+.zoho-section .trainningcard {
+  padding: 0rem;
+}
+.map {
+  padding: 0rem;
+  height: 100vh;
+}
+}
+
+
+
