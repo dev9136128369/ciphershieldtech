@@ -1,42 +1,211 @@
-import React from 'react'
-import img1 from '/Images/Carrer_banner.png';
-import img2 from '/Images/carr.png';
-import img3 from '/Images/Java-Python.jpg';
+import React, { useState } from 'react';
+import { Helmet } from "react-helmet";
+
+
+import img1Webp from '/Images/Carrer_banner.webp';
+import img1Jpeg from '/Images/Carrer_banner.webp';
+import img1Jpg from '/Images/Carrer_banner.webp';
+
+
+
+import img2Webp from '/Images/carr.webp';
+import img2Jpeg from '/Images/carr.webp';
+import img2Jpg from '/Images/carr.webp';
+
+
+
+import img3Webp from '/Images/Java-Python.webp';
+import img3Jpeg from '/Images/Java-Python.webp';
+import img3Jpg from '/Images/Java-Python.webp';
 
 
 const Career = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        state: '',
+        designation: '',
+        contact: '',
+        gender: '',
+        message: '',
+      });
+    
+      const [errors, setErrors] = useState({});
+    
+      // Handle input changes
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      };
+    
+      // Validate form inputs
+      const validateForm = () => {
+        const newErrors = {};
+    
+        if (!formData.name) {
+          newErrors.name = 'Name is required.';
+        }
+    
+        if (!formData.email) {
+          newErrors.email = 'Email is required.';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+          newErrors.email = 'Invalid email format.';
+        }
+    
+        if (!formData.state) {
+          newErrors.state = 'State is required.';
+        }
+    
+        if (!formData.designation) {
+          newErrors.designation = 'Designation is required.';
+        }
+    
+        if (!formData.contact) {
+          newErrors.contact = 'Contact is required.';
+        } else if (!/^\d{10}$/.test(formData.contact)) {
+          newErrors.contact = 'Contact must be 10 digits.';
+        }
+    
+        if (!formData.gender) {
+          newErrors.gender = 'Gender is required.';
+        }
+    
+        if (!formData.message) {
+          newErrors.message = 'Message is required.';
+        }
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+    
+      // Handle form submission
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (validateForm()) {
+          try {
+            const response = await fetch('http://localhost:8001/submit-form', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formData),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+              alert(data.message);
+              setFormData({
+                name: '',
+                email: '',
+                state: '',
+                designation: '',
+                contact: '',
+                gender: '',
+                message: '',
+              });
+            } else {
+              alert(data.error || 'Failed to submit form. Please try again.');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to submit form. Please try again.');
+          }
+        }
+      };
   return (
     <>
-<div id='header7'></div>
+
+<Helmet>
+    <title>Career Opportunities at CipherShield Technologies | AI & Automation Solutions</title>
+    <meta name="description" content="Join CipherShield Technologies for exciting career opportunities in AI, automation, and technology solutions. Contact us to be part of an innovative team!" />
+    <meta name="keywords" content="career opportunities, CipherShield Technologies, automation jobs, AI solutions, technology careers, software development, contact CipherShield" />
+    <meta name="robots" content="index, follow" />
+</Helmet>
+
+<div id='heade'></div>
 
     <div className="container-fluid">
         <div className="careerrapper">
         <div className="row carre">
             <div className="col-lg-12 careimg">
                 {/* <img src="~/Images/Carrer_banner.png" alt="carrer Image" height="400" width="1360" /> */}
-                  <img src={img1}  className='img-responsive' alt='carrer img' />   
-                
+                <picture>
+  {/* WebP Format */}
+  <source 
+    srcSet={`${img1Webp} 300w, ${img1Webp} 600w, ${img1Webp} 1200w`} 
+    type="image/webp" 
+  />
+
+  {/* JPEG Format */}
+  <source 
+    srcSet={`${img1Jpeg} 300w, ${img1Jpeg} 600w, ${img1Jpeg} 1200w`} 
+    type="image/jpeg" 
+  />
+
+  {/* Default Fallback (JPG) */}
+  <img 
+    src={img1Jpg} 
+    srcSet={`${img1Jpg} 300w, ${img1Jpg} 600w, ${img1Jpg} 1200w`}
+    sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
+    loading="lazy"
+    alt="Career at CipherShield Technologies - Join Our Team" 
+    className="img-responsive"
+     width="100%"
+    height="auto"
+  />
+</picture>
+
             </div>
 
         </div>
         <div className="col-lg-12 caree pt-5 mb-5">
-            <h1>Career options</h1>
+        <h1>Career Opportunities at CipherShield Technologies</h1>
         </div>
         <div className="container row language mb-5">
             <div className="col-lg-6 col-md-6 languagepart1 mt-5">
-                <h2>CipherShield Technologies</h2>
+            <h2>Join CipherShield Technologies - Innovate with Us</h2>
                 <p className="textpart1  text-justify mt-5 ">
-                    CipherShield Technologies we are passionate about technology and innovation. We strive to provide the best solutions for our clients and foster a work environment where everyone can grow, learn, and contribute. If you're a driven individual with a strong background in development and a desire to work on exciting projects, we want to hear from you.
+                At <strong>CipherShield Technologies</strong>, we are passionate about <strong>technology solutions</strong> and innovation.  We strive to provide the best solutions for our clients and foster a work environment where everyone can grow, learn, and contribute. If you're a driven individual with a strong background in development and a desire to work on exciting projects, we want to hear from you.
                 </p>
             </div>
             <div className="col-lg-6 col-md-6 languagepart1   mb-b ">
-            <img src={img2}  className='img-responsive' alt='Thumnel img' />   
-              
+            <picture>
+  {/* WebP Format */}
+  <source 
+    srcSet={`${img2Webp} 300w, ${img2Webp} 600w, ${img2Webp} 900w`} 
+    type="image/webp" 
+  />
+
+  {/* JPEG Format */}
+  <source 
+    srcSet={`${img2Jpeg} 300w, ${img2Jpeg} 600w, ${img2Jpeg} 900w`} 
+    type="image/jpeg" 
+  />
+
+  {/* Default Fallback (JPG) */}
+  <img 
+    src={img2Jpg} 
+    srcSet={`${img2Jpg} 300w, ${img2Jpg} 600w, ${img2Jpg} 900w`}
+    sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 900px"
+    loading="lazy"
+    alt="Thumbnail image representing our services"
+    className="img-responsive"
+     width="100%"
+    height="auto"
+  />
+</picture>
+
+   
             </div>
         </div>
 
-        <div className="col-sm-12 zohotext">
-            <h4 className="text-justify">Python Developer (2+ Years Experience)</h4>
+        <div className="col-sm-12 zohotext mb-5">
+        <h3 className="text-justify">Python Developer (2+ Years Experience) - Apply Now!</h3>
         </div>
         <div className="container care">
 
@@ -54,18 +223,18 @@ const Career = () => {
         <div className="row cards-section text-center ms-2">
             <div className="container row text-center ">
                 <div className="col-md-4 thirddive  text-center pb-5">
-                    <div className="carde  text-center pb-3">
+                    <div className="carde  text-center pb-4">
                         <div className="card-body  pb-5">
                             <h3 className="card-title">About Us:</h3>
 
-                            <p className="card-text text-justify  pb-5">
+                            <p className="card-text text-justify  pb-2">
 
                                 CipherShield Technologies is an innovative AI-driven company focused on automation solutions to
                                 transform businesses. As part of our mission, we specialize in creating efficient, scalable software and
                                 data solutions tailored for a range of industries. Our team values creativity, efficiency, and
                                 adaptability to leverage advanced technologies for positive impact.
                             </p>
-                            <h3 className="card-title">Position Overview:</h3>
+                            <h3 className="card-title pb-3">Position Overview:</h3>
                            
                             <p className="card-text ">
                                 We are seeking a talented and experienced Python Developer to join our growing team. The ideal
@@ -101,7 +270,7 @@ const Career = () => {
                 </div>
                 <div className="col-md-4 thirddive  text-center">
                     <div className="carde pb-3">
-                        <div className="card-body mb-5 pb-5">
+                        <div className="card-body  pb-5">
                             <h3 className="card-title">Requirements:</h3>
                             
                             <p className="card-text text-justify">
@@ -129,7 +298,7 @@ const Career = () => {
                 <div className="col-md-6 pb-5">
                     <div className="carde pb-5">
                         <div className="card-body text-justify ">
-                            <h3 className="card-titles ms-5 pb-4"><b>Preferred Skills</b></h3>
+                            <h3 className="card-titles ms-5 "><b>Preferred Skills</b></h3>
                             <ul>
                                 <li>
                                     Knowledge of data analysis and data science concepts.</li>
@@ -147,7 +316,7 @@ const Career = () => {
                 <div className="col-md-6 mt-2 text-center">
                     <div className="carde">
                         <div className="card-body text-justify">
-                            <h3 className="card-titles  ms-5 "><b>Benefits</b></h3>
+                            <h3 className="card-titles  ms-5 pb-3"><b>Benefits</b></h3>
                             <ul>
                                 <li>
                                     Competitive salary and performance bonuses.
@@ -171,7 +340,7 @@ const Career = () => {
 
         
 
-        <div className="col-sm-12 zohotext mt-5 text-center">
+        <div className="col-sm-12 zohotext mt-5 text-center mb-5">
             <h4 className="text-justify">Java Developer (2+ Years Experience)</h4>
         </div>
         <div className="container care ">
@@ -194,13 +363,13 @@ const Career = () => {
                         <div className="card-body mb-5">
                             <h3 className="card-title">About Us:</h3>
 
-                            <p className="card-text text-justify pt-3 pb-5">
+                            <p className="card-text text-justify pt-3 ">
                                 CipherShield Technologies is at the forefront of AI-driven solutions, empowering businesses through
                                 automation and intelligent applications. Our mission is to build advanced, adaptable, and efficient
                                 systems that leverage the latest in AI and embedded technology. Join our team and be part of a
                                 transformative journey into the future of intelligent automation.
                             </p>
-                            <h3 className="card-title">Position Overview:</h3>
+                            <h3 className="card-title pb-1">Position Overview:</h3>
 
                             <p className="card-text ">
                                 We are looking for a skilled Java Developer with experience in embedded systems who is eager to
@@ -241,7 +410,7 @@ const Career = () => {
                 </div>
                 <div className="col-md-4 thirddive  pb-5 text-center">
                     <div className="carde pb-3">
-                        <div className="card-body mb-5 pb-5">
+                        <div className="card-body  pb-4">
                             <h3 className="card-title ">Requirements:</h3>
 
                             <p className="card-text text-justify pb-5">
@@ -267,11 +436,11 @@ const Career = () => {
 
             <div className="row trainningcard animated-text mt-2">
                 <div className="col-md-6">
-                    <div className="carde pb-5">
+                    <div className="carde pb-3">
                         <div className="card-body text-justify">
                             <h3 className="card-titles  ms-5 "><b>Preferred Skills:</b></h3>
                             <ul>
-                                <li>Familiarity with Python (for integration with AI and ML models).</li>
+                                <li>Familiarity with Java (for integration with AI and ML models).</li>
 
                                 <li>  Experience in cloud platforms (AWS, Azure) and edge computing.</li>
 
@@ -312,110 +481,191 @@ const Career = () => {
             <h4>How to Apply</h4>
             <p className="text-justify fs-3 mb-5">
                 Interested candidates should submit their resume, portfolio, and a cover letter detailing their
-                experience and motivation for embedded-to-AI automation development to <b>info@ciphershieldtech.com.</b>
+                experience and motivation for embedded-to-AI automation development to <b>info&#64;ciphershieldtech.com.</b>
 
             </p>
         </div>
 
         
         <div className="formcontroler row mt-5 mb-5 text-center" id="registration">
-            <form name="RegForm" method="post" action="/Home/SubmitForm" onsubmit="return submitbutton()">
-                <div className="col-sm-8 formcont pt-5 mb-5">
-                    <div className="formtext">
-                        <h2>Application Form</h2>
-                    </div>
-                    <div className="row mb-2">
-                        <div className="col-sm-2">
-                            <label for="txtName" className="col-sm-2 col-form-label">Name:</label>
-                        </div>
-                        <div className="col-sm-8">
-                            <input type="text" onkeydown="return /[a-z]/i.test(event.key)" className="form-control" name="name" id="txtName" placeholder="Enter Your Name"/>
-                        </div>
-                        <span id="txtName-error" className="error-Message"></span>
-                    </div>
-                    <div className="row mb-2">
-                        <div className="col-sm-2">
-                            <label for="txtEmailId" className="col-sm-2 col-form-label">Email_Id:</label>
-                        </div>
-                        <div className="col-sm-8">
-                            <input type="email" className="form-control" name="email" id="txtEmailId" placeholder="Enter Your EmailId"/>
-                        </div>
-                        <span id="txtEmailId-error" className="error-Message"></span>
-                    </div>
-                    {/* <!--<div className="row mb-2">
-        <label for="inputPassword3" className="col-sm-2 col-form-label">Password:</label>
-        <div className="col-sm-8">
-            <input type="password" className="form-control" id="inputPassword3" placeholder="Enter Your Password"/>
+        <form onSubmit={handleSubmit}>
+      <div className="col-sm-8 formcont pt-5 mb-5">
+        <div className="formtext">
+          <h2>Application Form</h2>
         </div>
-        <span id="inputPassword3-error" className="error-Message"></span>
-    </div>--> */}
-                    <div className="row mb-2">
-                        <label for="inputState" className="col-sm-2 col-form-label">State:</label>
-                        <div className="col-sm-8">
-                            <input type="text" className="form-control" id="inputState" placeholder="Enter Your state"/>
-                        </div>
-                        <span id="inputState-error" className="error-Message"></span>
-                    </div>
-                    <div className="row mb-2">
-                        <label for="inputdesination" className="col-sm-2 col-form-label">Designation:</label>
-                        <div className="col-sm-8">
-                            <input type="text" className="form-control" id="inputdesination" placeholder="Enter Your designation"/>
-                        </div>
-                        <span id="inputdesination-error" className="error-Message"></span>
-                    </div>
-                    <div className="row mb-1">
-                        <label for="inputNumber" className="col-sm-2 col-form-label">Contact:</label>
-                        <div className="col-sm-3">
-                            <input type="tel" className="form-control" id="inputNumber" placeholder="Enter Your Number"/>
-                        </div>
-                        <span id="inputNumber-error" className="error-Message"></span>
-                    </div>
-                    <fieldset className="row">
-                        <legend className="col-form-label col-sm-2 pt-0">Gender:</legend>
-                        <div className="col-sm-3" id="genders">
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gender" id="male" value="male" checked/>
-                                <label className="form-check-label" for="male">Male</label>
-                            </div>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gender" id="female" value="female" />
-                                <label className="form-check-label" for="female">Female</label>
-                            </div>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gender" id="others" value="others"/>
-                                <label className="form-check-label" for="others">Others</label>
-                            </div>
-                        </div>
+        <div className="row mb-2">
+          <div className="col-sm-2">
+            <label htmlFor="txtName" className="col-sm-2 col-form-label">Name:</label>
+          </div>
+          <div className="col-sm-8">
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              id="txtName"
+              placeholder="Enter Your Name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            {errors.name && <span className="error-Message">{errors.name}</span>}
+          </div>
+        </div>
+        <div className="row mb-2">
+          <div className="col-sm-2">
+            <label htmlFor="txtEmailId" className="col-sm-2 col-form-label">Email:</label>
+          </div>
+          <div className="col-sm-8">
+            <input
+              type="email"
+              className="form-control"
+              name="email"
+              id="txtEmailId"
+              placeholder="Enter Your Email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {errors.email && <span className="error-Message">{errors.email}</span>}
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label htmlFor="inputState" className="col-sm-2 col-form-label">State:</label>
+          <div className="col-sm-8">
+            <input
+              type="text"
+              className="form-control"
+                name="state"
+              id="inputState"
+              placeholder="Enter Your State"
+              value={formData.state}
+              onChange={handleChange}
+            />
+            {errors.state && <span className="error-Message">{errors.state}</span>}
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label htmlFor="inputdesination" className="col-sm-2 col-form-label">Designation:</label>
+          <div className="col-sm-8">
+            <input
+              type="text"
+              className="form-control"
+              name="designation"
+              
+              id="inputdesination"
+              placeholder="Enter Your Designation"
+              value={formData.designation}
+              onChange={handleChange}
+            />
+            {errors.designation && <span className="error-Message">{errors.designation}</span>}
+          </div>
+        </div>
+        <div className="row mb-1">
+          <label htmlFor="inputNumber" className="col-sm-2 col-form-label">Contact:</label>
+          <div className="col-sm-3">
+            <input
+              type="tel"
+              className="form-control"
+              name="contact"
 
-                        <span id="gender-error" className="error-Message"></span>
-                    </fieldset>
-                    <div className="form-group row mb-2">
-                        <label for="fileUpload" className="col-sm-2 col-form-label">Upload Resume:</label>
-                        <div className="col-sm-8">
-                            <input type="file" className="form-control" id="fileUpload" name="fileUpload" accept=".pdf,.doc,.docx,.txt"/>
-                        </div>
-                        <span id="fileUpload-error" className="error-Message"></span>
-                    </div>
-                    <span id="gender-error" className="error-Message"></span>
-                    <div className="row">
-                        <div className="col-sm-2">
-                            <label for="txtBody" className="col-sm-2 col-form-label">Message:</label>
-                        </div>
-                        <div className="col-sm-8">
-                            <textarea className="form-control" name="Body" rows="4" id="txtBody"></textarea>
-                        </div>
-                        <span id="txtBody-error" className="error-Message"></span>
-                    </div>
-                    <br />
-                    <div className="col-md-6 text-left">
-                        <button type="submit" className="btn btn-success btn-lg mx-2" id="btnSubmit">Submit</button>
-
-                        <button type="Reset" className="btn btn-success btn-lg" id="btnReset">Reset</button>
-                    </div>
-                </div>
-            </form>
+              id="inputNumber"
+              placeholder="Enter Your Number"
+              value={formData.contact}
+              onChange={handleChange}
+            />
+            {errors.contact && <span className="error-Message">{errors.contact}</span>}
+          </div>
+        </div>
+        <fieldset className="row">
+          <legend className="col-form-label col-sm-2 pt-0">Gender:</legend>
+          <div className="col-sm-3" id="genders">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="male"
+                value="male"
+                checked={formData.gender === 'male'}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="male">Male</label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="female"
+                value="female"
+                checked={formData.gender === 'female'}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="female">Female</label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="others"
+                value="others"
+                checked={formData.gender === 'others'}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="others">Others</label>
+            </div>
+          </div>
+          {errors.gender && <span className="error-Message">{errors.gender}</span>}
+        </fieldset>
+        <div className="row">
+          <div className="col-sm-2">
+            <label htmlFor="txtBody" className="col-sm-2 col-form-label">Message:</label>
+          </div>
+          <div className="col-sm-8">
+            <textarea
+              className="form-control"
+              name="message"
+              rows="4"
+              id="txtBody"
+              value={formData.message}
+              onChange={handleChange}
+            />
+            {errors.message && <span className="error-Message">{errors.message}</span>}
+          </div>
+        </div>
+        <br />
+        <div className="col-md-6 text-left">
+          <button type="submit" className="btn btn-success btn-lg mx-2" id="btnSubmit">Submit</button>
+          <button type="reset" className="btn btn-success btn-lg" id="btnReset">Reset</button>
+        </div>
+      </div>
+    </form>
             <div className="col-sm-4 formimg my-5 ">
-            <img src={img3}  className='img-responsive mt-5' alt='carrer img' />   
+            <picture>
+  {/* WebP Format */}
+  <source 
+    srcSet={`${img3Webp} 300w, ${img3Webp} 600w, ${img3Webp} 900w`} 
+    type="image/webp" 
+  />
+
+  {/* JPEG Format */}
+  <source 
+    srcSet={`${img3Jpeg} 300w, ${img3Jpeg} 600w, ${img3Jpeg} 900w`} 
+    type="image/jpeg" 
+  />
+
+  {/* Default Fallback (JPG) */}
+  <img 
+    src={img3Jpg} 
+    srcSet={`${img3Jpg} 300w, ${img3Jpg} 600w, ${img3Jpg} 900w`}
+    sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 900px"
+    loading="lazy"
+    alt="Career image - Join our team at CipherShield Technologies"
+    className="img-responsive mt-5"
+     width="100%"
+    height="auto"
+  />
+</picture>
+
 
             </div>
 

@@ -1,7 +1,9 @@
 import React from 'react'
-import { Link } from "react-router-dom";
 
-import { Link as ScrollLink } from "react-scroll";
+import { Helmet } from "react-helmet";
+import { Link } from 'react-router-dom'
+
+
 
 // import '@fortawesome/fontawesome-free/css/all.min.css';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +14,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter, faInstagram, faFacebook, faLinkedin, faYoutube } from '@fortawesome/free-brands-svg-icons';
 const Footer = () => {
   return (
+    <>
+    <Helmet>
+        <title>Contact CipherShield Technologies | AI & Automation Solutions</title>
+        <meta name="description" content="Get in touch with CipherShield Technologies for cutting-edge AI and automation solutions. Contact us today for business inquiries and support." />
+        <meta name="keywords" content="CipherShield, technology solutions, automation, AI services, contact CipherShield Technologies" />
+      </Helmet>
     <div className='container-fluide'>
       <footer id="footer" className="footer">
         <div className="container footer-top">
@@ -24,7 +32,7 @@ const Footer = () => {
                         <p>B-7, JS Arcade</p>
                         <p> Sector 18,Noida</p>
                         <p className="mt-3"><strong>Phone:</strong> <span>+91 8882171554</span></p>
-                        <p><strong>Email:</strong> <span>info@ciphershieldtech.com</span></p>
+                        <p><strong>Email:</strong> <span>info&#64;ciphershieldtech.com</span></p>
                     </div>
                 </div>
 
@@ -32,26 +40,24 @@ const Footer = () => {
                     <h4 className="ms-5">Useful Links</h4>
                     <ul>
                         <li>
-                    <ScrollLink to="header" smooth={true} duration={200}>
-<Link class="nav-link" to ="/">Home </Link>
-</ScrollLink>
+              
+<Link className="nav-link" href ="/" onClick={() => scrollToSection('heade')}>Home </Link>
+
+</li>
+<li>                   
+<Link className="nav-link" href ="/AboutUs" onClick={() => scrollToSection('heade')}>About Us </Link>
 </li>
 <li>
-                    <ScrollLink to="header1" smooth={true} duration={200}>
-<Link class="nav-link" to ="/AboutUs">About Us </Link>
-</ScrollLink>
-</li>
-<li>
-                    <ScrollLink to="header3" smooth={true} duration={200}>
-<Link class="nav-link" to ="/Services">Services </Link>
-</ScrollLink>
+                 
+<Link className="nav-link" href ="/Services" onClick={() => scrollToSection('heade')}>Services </Link>
+
 </li>
                         
 
                      <li>
-                    <ScrollLink to="header4" smooth={true} duration={200}>
-<Link class="nav-link" to ="/Value_for_Investors">Value for Investors </Link>
-</ScrollLink>
+                   
+<Link className="nav-link" href ="/ValueforInvestors" onClick={() => scrollToSection('heade')}>Value for Investors </Link>
+
 </li>   
                     
 
@@ -61,28 +67,26 @@ const Footer = () => {
                 <div className="col-lg-3 col-md-4 footer-links">
                     <h4 className="ms-5">Useful Links</h4>
                     <ul>
-                    <li>
-                    <ScrollLink to="header5" smooth={true} duration={200}>
-<Link class="nav-link" to ="/We_Serve">We Serve </Link>
-</ScrollLink>
+                    <li> 
+<Link className="nav-link" href ="/WeServe" onClick={() => scrollToSection('heade')}>We Serve </Link>
 </li>   
                     
 <li>
-                    <ScrollLink to="header6" smooth={true} duration={200}>
-<Link class="nav-link" to ="/Automation">Automation </Link>
-</ScrollLink>
+                    
+<Link className="nav-link" href ="/Automation" onClick={() => scrollToSection('heade')}>Automation </Link>
+
 </li>   
                         
 <li>
-                    <ScrollLink to="header7" smooth={true} duration={200}>
-<Link class="nav-link" to ="/Career">Career </Link>
-</ScrollLink>
+                  
+<Link className="nav-link" href ="/Career" onClick={() => scrollToSection('heade')}>Career </Link>
+
 </li>   
                         
 <li>
-                    <ScrollLink to="header8" smooth={true} duration={200}>
-<Link class="nav-link" to ="/ContactUs">Contact Us </Link>
-</ScrollLink>
+                  
+<Link className="nav-link" href ="/ContactUs" onClick={() => scrollToSection('heade')} >Contact Us </Link>
+
 </li>   
                         
                     </ul>
@@ -96,6 +100,7 @@ const Footer = () => {
       <FontAwesomeIcon icon={faTwitter} className='spin'spin />
       </a>
       <a href="https://www.instagram.com/ciphershieldtechnologies?utm_source=qr&igsh=a2YzMWlmMWEwZTN2">
+    
       <FontAwesomeIcon icon={faInstagram} className='spin' spin />
       </a>
       <a href="https://www.facebook.com/people/Ciphershield-Technology-Pvtltd/61561870779061/">
@@ -118,8 +123,8 @@ const Footer = () => {
             <div className="col-lg-12 col-md-12 col-sm-12 tranceparant">
                 <div className="col-lg-7 col-md-7 col-sm-7 lefttermpart">
                     <ul typeof="none">
-                        <li><a href="~/Master/PrivacyPolicy"> PrivacyPolicy  |</a></li>
-                        <li><a href="~/Master/RefundPolicy"> Return-Policy  |</a></li>
+                        <li><a href="/PrivacyPolicy"> PrivacyPolicy  |</a></li>
+                        <li><a href="/RefundPolicy"> Return-Policy  |</a></li>
                         <li>Tearm Of Use |</li>
                         <li>Security |</li>
                         <li>Policy |</li>
@@ -132,13 +137,14 @@ const Footer = () => {
                 </div>
 
                 <div className="col-lg-3 col-md-3 col-sm-3 righttermpart">
-                    <p>Need help? Visit the <a href="#">Help Center </a>or <a href="~/Master/ContactUs">Contact Us</a></p>
+                    <p>Need help? Visit the <a href="#">Help Center </a>or <a href="/Contactus">Contact Us</a></p>
                 </div>
             </div>
         </div>
 
     </footer> 
     </div>
+    </>
   )
 }
 

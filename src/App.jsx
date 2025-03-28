@@ -1,54 +1,98 @@
-import React from "react";
-
-import './App.css'
-
+import React, { lazy, Suspense,useEffect, } from "react";
+import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Helmet } from 'react-helmet';
-
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import HeaderSlider from "./components/HeaderSlider";
-import Home from "./Components/Home";
-import Navbar from './Components/Navbar';
-import Footer from './Components/Footer';
-import AboutUs from './Components/AboutUs';
-import Services from './Components/Services';
-import Automation from './Components/Automation';
-import Value_for_Investors from './Components/Value_for_Investors';
-import We_Serve from './Components/We_Serve';
-import Career from './Components/Career';
-import Contactus from './Components/Contactus';
 
+// import Navbar from './Components/Navbar';
+// import Footer from './Components/Footer';
+// import Services from './Components/Services';
+// import Automation from './Components/Automation';
+// import ValueforInvestors from './Components/ValueforInvestors';
+// import WeServe from './Components/WeServe';
+// import Career from './Components/Career';
+// import Contactus from './Components/Contactus';
+// import PrivacyPolicy from './Components/PrivacyPolicy';
+// import RefundPolicy from './Components/RefundPolicy';
+
+// Lazy Load Components
+const Home = lazy(() => import("./Components/Home"));
+const AboutUs = lazy(() => import("./Components/AboutUs"));
+
+const Footer = lazy(() => import("./Components/Footer"));
+const Services = lazy(() => import("./Components/Services"));
+const Automation = lazy(() => import("./Components/Automation"));
+const ValueforInvestors = lazy(() => import("./Components/ValueforInvestors"));
+const WeServe = lazy(() => import("./Components/WeServe"));
+const Career = lazy(() => import("./Components/Career"));
+const Contactus = lazy(() => import("./Components/Contactus"));
+const PrivacyPolicy = lazy(() => import("./Components/PrivacyPolicy"));
+const RefundPolicy = lazy(() => import("./Components/RefundPolicy"));
+const Navbar = lazy(() => import("./Components/Navbar"));
+
+const NotFound = lazy(() => import("./Components/NotFound"));
 
 const App = () => {
+  // SEO H1 & H2 को रिमूव करने का कोड
+ 
+   // Combined SEO elements removal in a single useEffect
+   useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      const seoH1 = document.getElementById("seo-h1");
+      const seoH2 = document.getElementById("seo-h2");
+      
+      if (seoH1) seoH1.remove();
+      if (seoH2) seoH2.remove();
+    }
+  }, []);
+ 
   return (
-    <>
-   
     <Router>
-    <Helmet>
+      <Helmet>
+      <h1 id="seo-h1">Welcome to CipherShield Tech - Secure IT Solutions & Automation</h1> 
+      <h2 id="seo-h2">Why Choose CipherShield Tech for Your Cybersecurity Needs?</h2>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="All Type Web Design,Digital marketing,Artificial Inteligence,Machine Learning and Data Science are  free" />
-        <meta name="keywords" content="AI automation for businesses, Deep tech investment opportunities, AI business solutions, Scalable AI solutions, Invest in AI and automation, AI cybersecurity solutions, Business automation ROI, Predictive analytics for business growth,•	AI Automation,•	Robotic Process Automation (RPA),•	Industrial Automation,•	Business Process Automation, IT Automation,	Cloud Automation,	Security Automation,	AI Automation solutions for businesses,	Best AI automation tools in the USA,	AI automation services for cybersecurity,AI-driven automation software,	AI automation for IT companies, Cloud-based AI automation solutions,	AI automation for data security,	AI Automation companies in the USA,	Top AI automation firms in the USA, AI automation services in the USA,	AI automation solutions for American businesses,	AI automation experts in the USA " />
+        <meta name="description" content="CipherShield Tech provides cutting-edge IT solutions, automation services, and cybersecurity technologies to protect your business." />
+        <meta name="keywords" content="AI automation, Business automation, Cloud automation, AI cybersecurity, IT automation, Security automation" />
         <meta name="author" content="CipherShield Technologies" />
-      </Helmet>
-       <Navbar /> 
-      <Routes>
-        
-        {/* <Route path="/" element={<HeaderSlider />} /> */}
-        <Route path="/" element={<Home />} />
-        <Route path="/AboutUs" element={<AboutUs />} />
-        <Route path="/Services" element={<Services />} />
-        <Route path="/Automation" element={<Automation />} />
-        <Route path="/Value_for_Investors" element={<Value_for_Investors />} />
-        <Route path="/We_Serve" element={<We_Serve />} />
-        <Route path="/Career" element={<Career />} />
-        <Route path="/Contactus" element={<Contactus />} />
 
-      </Routes>
-      <Footer/>
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="CipherShield Tech - Secure Your Data" />
+        <meta property="og:description" content="CipherShield Tech specializes in AI-powered security solutions, automation, and cyber defense. Protect your business with our innovative technology and stay ahead of evolving threats." />
+
+        <meta property="og:image" content="https://www.ciphershieldtech.com/og-image.jpg" />
+        <meta property="og:url" content="https://www.ciphershieldtech.com/" />
+
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:title" content="CipherShield Tech - Secure Your Data" />
+        <meta property="og:description" content="CipherShield Tech specializes in AI-powered security solutions, automation, and cyber defense. Protect your business with our innovative technology and stay ahead of evolving threats." />
+
+        <meta name="twitter:image" content="https://www.ciphershieldtech.com/twitter-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
+      <Navbar />
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/Services" element={<Services />} />
+          <Route path="/Automation" element={<Automation />} />
+          <Route path="/ValueforInvestors" element={<ValueforInvestors />} />
+          <Route path="/WeServe" element={<WeServe />} />
+          <Route path="/Career" element={<Career />} />
+          <Route path="/Contactus" element={<Contactus />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/RefundPolicy" element={<RefundPolicy />} />
+
+           {/* 404 Page for Unknown Routes */}
+    <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+
+      <Footer />
     </Router>
-    </>
-    
   );
 }
 

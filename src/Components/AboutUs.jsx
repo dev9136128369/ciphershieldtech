@@ -1,36 +1,103 @@
 import React from 'react'
 // import img1 from '../../Images/ABOUT_US1.png';
-import aboutUsBanner from '/Images/about_us1.png';
+// import aboutUsBanner from '/Images/about_us1.webp';
 
-import img2 from '/Images/finance_AI.png';
+import aboutUsBannerWebp from '/Images/about_us1.webp';
+import aboutUsBannerJpeg from '/Images/about_us1.webp';
+import aboutUsBannerJpg from '/Images/about_us1.webp';
+
+
+import { Helmet } from "react-helmet";
+
+import img2Webp from '/Images/finance_AI.webp';
+import img2Jpeg from '/Images/finance_AI.webp';
+import img2Jpg from '/Images/finance_AI.webp';
 
 
 const AboutUs = () => {
   return (
     <>
-    <div id='header1'></div>
+    <Helmet>
+    <title>AI Solutions & Automation | CipherShield Technologies</title>
+    <meta name="description" content="CipherShield Technologies provides AI-driven business automation solutions, improving efficiency, security, and innovation. Contact us to learn more!" />
+    <meta name="keywords" content="AI solutions, automation, CipherShield Technologies, business innovation, AI-driven security, contact us" />
+    <meta name="author" content="CipherShield Technologies" />
+    <meta name="robots" content="index, follow" />
+</Helmet>
+
+    <div id='heade'></div>
     <div className="container-fluid">
         <div className="row carre text-center">
             <div className="col-lg-5 text-center">
-                  <img src={aboutUsBanner}  className='img-responsive' alt='highparformance Image text-center img' height={200}/>   
-                
+            <picture>
+  {/* WebP Format */}
+  <source 
+    srcSet={`${aboutUsBannerWebp} 200w, ${aboutUsBannerWebp} 400w, ${aboutUsBannerWebp} 800w`} 
+    type="image/webp" 
+  />
+
+  {/* JPEG Format */}
+  <source 
+    srcSet={`${aboutUsBannerJpeg} 200w, ${aboutUsBannerJpeg} 400w, ${aboutUsBannerJpeg} 800w`} 
+    type="image/jpeg" 
+  />
+
+  {/* Default Fallback (JPG) */}
+  <img 
+    src={aboutUsBannerJpg} 
+    srcSet={`${aboutUsBannerJpg} 200w, ${aboutUsBannerJpg} 400w, ${aboutUsBannerJpg} 800w`}
+    sizes="(max-width: 600px) 200px, (max-width: 1200px) 400px, 800px"
+    loading="lazy"
+    alt="High Performance Image - Text Center"
+    className="responsive-img"
+  />
+</picture>
+
+
             </div>
 
         </div>
         <div className="aboutcontainer">
             <div className="row text-center Aboutrow">
                 <div className="col-lg-6 col-md-6 col-sm-6 boxes text-center">
-                    <h1>Ciphershield Technologies</h1>
-                    <p className="text-justify">
-                        Empowering Businesses to Thrive with AI and Automation.
-                    </p>
+                <h1>AI Solutions & Automation - CipherShield Technologies</h1>
+                <h2>Empowering Businesses with Smart AI Solutions</h2>
+                   
                     <p className="text-justify">
                         CipherShield Technologies is dedicated to delivering advanced AI, machine learning, and automation solutions that redefine how businesses operate. Our team of experts works with organizations to design intelligent systems that automate manual tasks, reduce human error, and optimize workflows—leading to faster decision-making and better outcomes.
                         We serve industries such as finance, healthcare, manufacturing, and cybersecurity, and our solutions are built to scale with your business. Whether it's automating processes, improving data security, or providing AI-powered insights, we create solutions that give you a competitive edge and enhance your bottom line.
                     </p>
                 </div>
                 <div className=" col-lg-6 col-md-6 col-xl-6 boxes2 text-center mb-5">
-                <img src={img2}  className='img-responsive' alt='AboutUs Image text-center img' />   
+
+
+
+<picture>
+  {/* WebP Format */}
+  <source 
+    srcSet={`${img2Webp} 300w, ${img2Webp} 600w, ${img2Webp} 900w`} 
+    type="image/webp" 
+  />
+
+  {/* JPEG Format */}
+  <source 
+    srcSet={`${img2Jpeg} 300w, ${img2Jpeg} 600w, ${img2Jpeg} 900w`} 
+    type="image/jpeg" 
+  />
+
+  {/* Default Fallback Image */}
+  <img 
+    src={img2Jpg} 
+    srcSet={`${img2Jpg} 300w, ${img2Jpg} 600w, ${img2Jpg} 900w`}
+    sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 900px"
+    loading="lazy"
+    alt="AboutUs Image - Text Centered"
+    className="responsive-img"
+    width="100%"
+    height="auto"
+  />
+</picture>
+
 
                 </div>
             </div>
@@ -39,7 +106,7 @@ const AboutUs = () => {
        
         <div className=" contant  animated-text mt-5 mb-5 text-center" id="zohoanimated">
             <div className="col-sm-12 zohotext">
-                <h4>Why Choose Us?</h4>
+                <h3>Why Choose CipherShield for AI & Automation?</h3>
             </div>
             <div className="row trainningcard2 animated-text mt-2 mb-5 pb-5">
                 <div className="col-md-4">

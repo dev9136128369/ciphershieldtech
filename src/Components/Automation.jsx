@@ -1,18 +1,31 @@
 import React from 'react'
+import { Helmet } from "react-helmet";
 
-import img1 from '/Images/autogif9.gif';
 
-import img2 from '/Images/autoscrol1.png';
-import img3 from '/Images/autoscrol3.png';
-import img4 from '/Images/autoscrol4.png';
-import img5 from '/Images/autoscrol6.png';
-import img6 from '/Images/autoscrol7.jpg';
+
+
+import img2 from '/Images/autoscrol1.webp';
+import img3 from '/Images/autoscrol3.webp';
+import img4 from '/Images/autoscrol4.webp';
+import img5 from '/Images/autoscrol6.webp';
+import img6 from '/Images/autoscrol7.webp';
 
 
 const Automation = () => {
   return (
     <>
-<div id='header6'></div>
+    <Helmet>
+    <title>Automation Solutions | CipherShield Technologies</title>
+    <meta name="description" content="CipherShield Technologies provides advanced automation solutions for businesses. Contact us to optimize your workflow today!"/>
+
+    <meta name="keywords" content="CipherShield Technologies,Automation Solutions,Technology Solutions,Business Automation,Cybersecurity Solutions,IT Services, Secure Automation, Tech Innovation,Process Optimization,
+AI-driven Security,
+Enterprise IT Solutions,
+Cloud Security,"/>
+    <meta name="author" content="CipherShield Technologies" />
+    <meta name="robots" content="index, follow" />
+</Helmet>
+<div id='heade'></div>
 
     <div className="container-fluid">
 
@@ -26,11 +39,11 @@ const Automation = () => {
     </div>--> */}
      
     
-                <h1>Automation</h1>
+     <h1>Automation Solutions by CipherShield Technologies</h1>
                 <p>Automation tools and services can streamline <br/>processes, reduce manual effort, and increase efficiency across various tasks and industries. </p>
 
             </div>
-                <div className="scrolle">
+                <div className="scrolle  mt-5">
                     <div className="scroll">
                         <h2>  
                             AUTOMATION
@@ -65,7 +78,7 @@ const Automation = () => {
 
                 <div className="row autom">
                     <div className="col-sm-6 automtext">
-                        <h3>Automation</h3>
+                    <h3>Automation Solutions for Efficiency</h3>
                         <p className="text-justify">Automation refers to the use of technology to perform tasks with minimal human intervention. This can involve a wide range of processes and systems, from simple mechanical devices to complex computer algorithms. Essentially, automation aims to increase efficiency, accuracy, and consistency by allowing machines or software to handle repetitive or complex tasks that would otherwise require human effort.</p>
                         <br/>
                         <p className="text-justify">Examples include:</p>
@@ -75,9 +88,22 @@ const Automation = () => {
                             <li><b>Home Automation: </b>Controlling home systems like lighting, heating, and security through smart devices.</li>
                         </ol>
                     </div>
-                    <div className="col-sm-6 automimg ">
-                         <img src={img1}  className='img-responsive' alt='Automation img'/>   
-                    </div>
+                    <div className="col-sm-6 automimg">
+  <div className="video-container">
+    <video 
+      autoPlay 
+      loop 
+      muted 
+      playsInline 
+      className="responsive-video"
+    >
+      <source src="/Images/autogif9.mp4" type="video/mp4" />
+      <source src="/Images/autogif9.webm" type="video/webm" />
+  
+    </video>
+  </div>
+</div>
+
                 </div>
 
                 <div className="row cards ">
@@ -85,7 +111,7 @@ const Automation = () => {
                         <div className="col-md-4 thirddive   ">
                             <div className="carde ">
                                 <div className="card-body ">
-                                    <h3 className="card-title"> Business Process Automation (BPA)</h3>
+                                <h3 className="card-title">Business Process Automation (BPA) Solutions</h3>
                                     <b className="calar ">Tools:</b>
                                     <p className="card-text pt-1 text-justify">
 
@@ -94,8 +120,8 @@ const Automation = () => {
                                         <b>Blue Prism: </b>Provides RPA solutions for enterprise automation.
                                     </p>
                                     <b className="calar ">Services:</b>
-                                    <p className="card-text mb-5">
-                                        <b>Zapier: </b>Connects various apps and automates workflows between them.
+                                    <p className="card-text mb-5 pb-3">
+                                        <b>Zapier: </b>Connects various apps and automates workflows between them.<br/>
                                         <b>Integromat (now Make): </b>Automates tasks by connecting different services and apps.
                                     </p>
                                 </div>
@@ -103,10 +129,10 @@ const Automation = () => {
                         </div>
                         <div className="col-md-4 thirddive ">
                             <div className="carde">
-                                <div className="card-body pb-5">
-                                    <h3 className="card-title">IT Process Automation</h3>
+                                <div className="card-body">
+                                <h3 className="card-title">IT Process Automation & DevOps</h3>
                                     <b className="calar ">Tools:</b>
-                                    <p className="card-text text-justify pb-4">
+                                    <p className="card-text text-justify ">
 
                                         <b>Ansible: </b>An open-source tool for configuration management and automation.<br/>
                                         <b>Puppet: </b>Manages and automates IT infrastructure.<br/>
@@ -125,7 +151,7 @@ const Automation = () => {
                         <div className="col-md-4 thirddive ">
                             <div className="carde">
                                 <div className="card-body mb-5 pb-5">
-                                    <h3 className="card-title">Marketing Automation</h3>
+                                <h3 className="card-title">Marketing Automation Platforms</h3>
                                     <b className="calar ">Tools:</b>
                                     <p className="card-text pt-3 text-justify">
 
@@ -136,7 +162,7 @@ const Automation = () => {
                                     </p>
                                     <b className="calar ">Services:</b>
                                     <p className="card-text ">
-                                        <b>Mailchimp: </b>Automates email campaigns and customer engagement.
+                                        <b>Mailchimp: </b>Automates email campaigns and customer engagement.<br/>
                                         <b>ActiveCampaign: </b>Integrates email marketing, automation, and CRM.
                                     </p>
                                 </div>
@@ -147,7 +173,7 @@ const Automation = () => {
                         <div className="col-md-4 thirddive ">
                             <div className="carde ">
                                 <div className="card-body mb-5 pb-5">
-                                    <h3 className="card-title">Customer Service Automation</h3>
+                                <h3 className="card-title">Customer Service Automation</h3>
                                     <b className="calar ">Tools:</b>
                                     <p className="card-text text-justify">
 
@@ -170,7 +196,7 @@ const Automation = () => {
                         <div className="col-md-4 thirddive ">
                             <div className="carde">
                                 <div className="card-body mb-5 pb-5">
-                                    <h3 className="card-title">DevOps and CI/CD Automation</h3>
+                                <h3 className="card-title">DevOps and CI/CD Automation Solutions</h3>
                                     <b className="calar ">Tools:</b>
                                     <p className="card-text  text-justify">
 
@@ -179,7 +205,7 @@ const Automation = () => {
                                         <b>CircleCI: </b>Automates testing and deployment pipelines.
                                     </p>
                                     <b className="calar ">Services:</b>
-                                    <p className="card-text text-justify">
+                                    <p className="card-text text-justify pb-4">
                                         <b>AWS CodePipeline: </b>Fully managed service for continuous integration and delivery.<br/>
                                         <b>Azure DevOps: </b>Provides tools for continuous integration and continuous delivery.
                                     </p>
@@ -189,8 +215,8 @@ const Automation = () => {
 
                         <div className="col-md-4 thirddive ">
                             <div className="carde mb-5 pb-3">
-                                <div className="card-body mb-5 pb-4">
-                                    <h3 className="card-title">Sales Automation</h3>
+                                <div className="card-body mb-4 pb-4">
+                                <h3 className="card-title">AI-Powered Sales Automation Platforms</h3>
                                     <b className="calar ">Tools:</b>
                                     <p className="card-text text-justify">
 
@@ -258,11 +284,11 @@ const Automation = () => {
                 <div className="container row zoho-section1 animated-text ms-5" id="zohoanimated">
 
                     <div className="row trainningcard1 animated-text mt-2 pb-4">
-                        <div className="col-md-4 ">
-                            <div className="carde ">
-                                <div className="card-body mb-5 pb-5 text-justify">
+                        <div className="col-md-4 mb-4">
+                            <div className="carde  h-100">
+                                <div className="card-body  text-justify">
                                     <h5 className="card-titles animate__animated animate__rotateInDownRight "><b>Email Marketing Platforms:</b></h5>
-                                    <ul>
+                                    <ul className="card-list">
                                         <li><b>Mailchimp: </b>Automates email campaigns, segmentation, and analytics.<br/></li>
                                         <li><b>SendGrid: </b>Provides transactional and marketing email automation services.<br/></li>
 
@@ -270,11 +296,11 @@ const Automation = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4 ">
-                            <div className="carde">
+                        <div className="col-md-4 mb-4">
+                            <div className="carde h-100">
                                 <div className="card-body text-justify ">
                                     <h5 className="card-titles animate__animated animate__rotateInDownRight"><b>Transactional Email Services:</b></h5>
-                                    <ul>
+                                    <ul className="card-list">
                                         <li><b>Amazon SES (Simple Email Service): </b>Allows you to send marketing, notification, and transactional emails.</li>
                                         <li><b>Mandrill (by Mailchimp): </b>For transactional emails with advanced tracking and analytics.</li>
                                     </ul>
@@ -282,9 +308,9 @@ const Automation = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-4 animated-text mt-2">
-                            <div className="carde ">
-                                <div className="card-body mb-5  text-justify ">
+                        <div className="col-md-4 mb-4">
+                            <div className="carde h-100">
+                                <div className="card-body  text-justify ">
                                     <h5 className="card-titles animate__animated animate__rotateInDownRight"><b> Email Automation Tools:</b></h5>
                                     <ul>
                                         <li><b>Zapier: </b>Can automate email workflows, such as sending emails based on triggers from other apps.</li>

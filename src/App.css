@@ -48,11 +48,17 @@ body {
  
  overflow-x:hidden;
 }
-.img-responsive {
+/* .img-responsive {
     min-width: 100%;
     max-width: auto;
     height: auto;
     background-size: 100% 100%;
+    } */
+
+    .img-responsive {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
     }
 
 .container-fluid {
@@ -107,7 +113,18 @@ body {
   right: 100px;
   background: #274F70;
 }
-    
+    .serviceSlider img{
+      height: 25rem;
+      width: 100%;
+    }
+    .WeserviceSlider img{
+      height: 25rem;
+      width: 100%;
+    }
+    .HeserviceSlider img{
+      height: 25rem;
+      width: 100%;
+    }
 
       .dropdown-menu {
           position: static;
@@ -115,7 +132,54 @@ body {
           margin-top: 0;
           background-color: transparent;
       }
+      /* .video-container {
+        position: relative;
+        width: 100%;
+        padding-top: 50.25%;
+        overflow: hidden;
+      }
+      
+      .responsive-video {
+        position: absolute;
+        top: 0;
+        padding-left: 5rem;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      } */
 
+      .languagepart1 .responsive-video{
+        width: 30rem;
+        margin-left: 10rem;
+      }
+      .scroll-container {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 10px;
+        padding:0px;
+        scroll-behavior: smooth;
+      }
+      
+      .scroll-video {
+        width: 200px; /* Adjust size as per requirement */
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+      .scroller1 {
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+        animation-name: scrol;
+        animation-duration: 300s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        height:200px;
+      
+      }
+      
+      
 
 .logo img {
   width: 70%;
@@ -223,7 +287,14 @@ body {
   padding-top:10px;
   margin-top:6px;
 }
-
+.mt-20 h1, .mt-20 h2 {
+  animation-delay: 1s;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-name: move;
+  color: #274f70;
+  font-family: bold;
+}
 
 a {
     text-decoration: none;
@@ -274,7 +345,7 @@ a {
   align-items:center;
 
 }
- 
+
 .box2 video {
   height: 50vh;
   width: 600px;
@@ -309,7 +380,7 @@ text-align:center;
       color: white;
       font-family: bold;
   }
-.card-body{
+.card-body p{
     text-align: justify;
     text-justify: inter-word;
 }
@@ -374,6 +445,33 @@ height: auto;
 }
 .cards .thirddive .card-text{
     font-size: 1.2rem;
+}
+
+
+.NotLink{
+  color: #FFD700;
+  font-Size: 2rem;
+  text-Decoration: none; 
+}
+.NotDiv{
+  position: relative;
+        z-Index: 1;
+        color: white;
+        text-Align: center;
+        padding: 10px;
+}
+.videoinner{
+  position: absolute;
+          width: 100%;
+          height: 100%;
+          object-Fit: cover;
+          z-Index: -1;
+}
+.videoauter{
+   position: relative; 
+   width: 100vw; 
+   height: 100vh; 
+   overflow: hidden;
 }
 /*    <!------------------------------- only gooter psrt-------------------------------------->*/
 
@@ -674,7 +772,7 @@ padding-bottom: 25rem;
     text-justify: inter-word;
   }
    .languagepart1 h2 {
-      font-size: 50px;
+      font-size: 35px;
   }
 
   .languagepart1 p {
@@ -696,8 +794,9 @@ padding-bottom: 25rem;
   .contactslide {
       min-height: 300px;
       width: 101%;
-      background-image: url('/Images/contact-us-banner.jpg');
+      background-image: url('/Images/contact-us-banner.webp');
       background-size: 100% 100%;
+      aspect-ratio: auto;
   }
 
    
@@ -712,7 +811,9 @@ padding-bottom: 25rem;
   }
 
 .page1 {
-  height: 400px;
+  left: 0;
+  right: 0;
+   height: 400px;
   min-width: 100%;
   max-width: auto;
   display: flex;
@@ -725,11 +826,12 @@ padding-bottom: 25rem;
   background-repeat: no-repeat;
   opacity: 0.9;
   background-size: 100% 100%;
+  aspect-ratio: auto;
 }
 
   .page1 h1 {
       font-family: 'montserrat';
-      font-size: 80px;
+      font-size: 50px;
       font-weight: 900;
       color: white;
       text-shadow: 1px 1px 2px #f75605;
@@ -753,12 +855,12 @@ padding-bottom: 25rem;
           background: linear-gradient(to bottom, rgba(255, 250, 250, 1), rgba(255, 255, 255, 1));
       }
 
-.scroll1 {
+/* .scroll1 {
   white-space: nowrap;
   height: 150px;
  
  
-}
+} */
 .scrolle {
   white-space: nowrap;
   height: 250px;
@@ -773,12 +875,13 @@ padding-bottom: 25rem;
   display: inline-block;
   white-space: nowrap;
   animation-name: scrol;
-  animation-duration: 20s;
+  animation-duration: 60s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 .scrollo img{
   height: 8rem;
+  width: 20rem;
 }
 .scroll {
   display: inline-block;
@@ -803,16 +906,16 @@ padding-bottom: 25rem;
   overflow-x: auto;
   white-space: nowrap;
   animation-name: scrol;
-  animation-duration: 50s;
+  animation-duration: 100s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   height:180px;
 
 }
 
-  .scroll1 {
+  /* .scroll1 {
     display: inline-block;
-  }
+  } */
   
   .img-responsives {
     height: 300px;
@@ -867,7 +970,12 @@ padding-bottom: 25rem;
       min-height: 300px;
       width: 400px;
       margin-top: 50px;
+      padding-left: 5rem;
   }
+  .automimg .responsive-video{
+    width: 30rem;
+  }
+  
 
   .automtext {
       width: 600px;
@@ -890,7 +998,16 @@ padding-bottom: 25rem;
   .autom p {
       font-size: 18px;
   }
-
+  .trainningcard1   .carde {
+    box-shadow: 1px 1px 8px 1px #f5c4c4;
+      border-radius: 50px 20px;
+      margin-top: 50px;
+      gap:0px;
+      justify-content:center;
+      align-items:center;
+      overflow: hidden;
+      height: 17rem;
+}
   .carde {
     /* width: 25rem; */
       box-shadow: 1px 1px 8px 1px #f5c4c4;
@@ -899,13 +1016,13 @@ padding-bottom: 25rem;
       gap:0px;
       justify-content:center;
       align-items:center;
-     
+    
   }
 
   .calar {
       font-size: 20px;
       font-weight: 500;
-      color: #5d8cb3;
+      color:#3095e9;
   }
 .zoho{
     width: 100%;
@@ -913,7 +1030,7 @@ padding-bottom: 25rem;
     justify-content: center;
     align-items: center;
 }
-  .zohotext h4 {
+  .zohotext h3 {
       color: #274F70;
       padding-top: 0rem;
       margin-top: 0rem;
@@ -923,6 +1040,16 @@ padding-bottom: 25rem;
       
     /*  margin-bottom: 30px;*/
   }
+  .zohotext h4   {
+    color: #274F70;
+    padding-top: 0rem;
+    margin-top: 0rem;
+    font-size: 40px;
+    font-weight: 500;
+    text-align: center;
+    
+  /*  margin-bottom: 30px;*/
+}
   .zoho-section .trainningcard .carde .card-body  {
     padding: 0.5rem 0.5;
   }
@@ -968,15 +1095,18 @@ padding-bottom: 25rem;
   }
 
   #automa1 {
-      background-image: url('/Images/autogif3.gif')
+      background-image: url('/Images/autogif3.gif');
+      aspect-ratio: auto;
   }
 
   #automa2 {
-      background-image: url('/Images/autogif7.gif')
+      background-image: url('/Images/autogif7.gif');
+      aspect-ratio: auto;
   }
 
   #automa3 {
-      background-image: url('/Images/autogif8.gif')
+      background-image: url('/Images/autogif8.gif');
+      aspect-ratio: auto;
   }
 
   .overlay {
@@ -1059,10 +1189,14 @@ max-width: auto;
 
   .career {
       position: relative;
-      background-color: #F8F3F3;
+      background-color: #ffffff;
       justify-content:center;
       align-items:center;
   }
+  .career h3{text-align: center;
+  margin-left: 25rem;
+  color: #274F70;
+}
 
       .career img {
           position: relative;
@@ -1312,7 +1446,25 @@ label[for="txtEmailId"] {
         flex-direction: column;
         text-align: center;
     }
+    .automimg{
+      margin-right: 25rem;
 
+    }
+    .video-container .ms-5{
+width: 30rem;
+height: 10rem;
+padding-right: 15rem;
+margin-top: -25rem;
+    }
+    .languagepart1 .responsive-video{
+      width: 20rem;
+      margin-left: 0rem;
+    }
+.automimg img {
+    min-height: 300px;
+    width: 400px;
+    margin-right: 15rem;
+}
     .col-lg-6, .col-md-6 {
         width: 100%;
         margin: 0 auto;
@@ -1342,11 +1494,11 @@ label[for="txtEmailId"] {
     }
 
     /* Adjust scroll images */
-    .scroll1 img {
+    /* .scroll1 img {
         max-width: 100%;
         min-width: 10rem;
         height: auto;
-    }
+    } */
 
 
     .img-responsive {
@@ -1404,9 +1556,10 @@ label[for="txtEmailId"] {
         overflow: hidden;
     }
     
-    .zohotext h4 {
+    .zohotext h3 {
         font-size: 1.5rem;
-    }
+       
+    } 
     .carre img {
         min-width: 100vw;
         max-width: auto;
@@ -1673,7 +1826,7 @@ label[for="txtEmailId"] {
 /* ................Automation...................... */
 .page1 h1 {
     font-family: 'montserrat';
-    font-size: 50px;
+    font-size: 30px;
     font-weight: 900;
     color: white;
     text-shadow: 1px 1px 2px #f75605;
@@ -1732,6 +1885,7 @@ label[for="txtEmailId"] {
     margin-left: 0px;
 }
 /* ...........................We Serve....................... */
+
 .languagepart1 img {
   height: 45vh;
 padding: 0rem;
