@@ -2,6 +2,9 @@ import React from 'react'
 import { Helmet } from "react-helmet";
 
 
+import AIDeepLearningJpeg from '/Images/solutioneffecency.webp';
+import AIDeepLearningwebp from '/Images/solutioneffecency.webp';
+import AIDeepLearningJpg from '/Images/solutioneffecency.webp';
 
 
 import img2 from '/Images/autoscrol1.webp';
@@ -89,7 +92,7 @@ Cloud Security,"/>
                         </ol>
                     </div>
                     <div className="col-sm-6 automimg">
-  <div className="video-container">
+  {/* <div className="video-container">
     <video 
       autoPlay 
       loop 
@@ -101,7 +104,34 @@ Cloud Security,"/>
       <source src="/Images/autogif9.webm" type="video/webm" />
   
     </video>
-  </div>
+  </div> */}
+ <picture>
+    {/* WebP Format */}
+    <source 
+      srcSet={`${AIDeepLearningwebp} 300w, ${AIDeepLearningwebp} 600w, ${AIDeepLearningwebp} 1200w`} 
+      type="image/webp" 
+    />
+  
+    {/* JPEG Format */}
+    <source 
+      srcSet={`${AIDeepLearningJpeg} 300w, ${AIDeepLearningJpeg} 600w, ${AIDeepLearningJpeg} 1200w`} 
+      type="image/jpeg" 
+    />
+  
+    {/* Default Fallback (JPG) */}
+    <img 
+      src={AIDeepLearningJpg} 
+      srcSet={`${AIDeepLearningJpg} 300w, ${AIDeepLearningJpg} 600w, ${AIDeepLearningJpg} 1200w`}
+      sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
+      loading="lazy"
+      alt="Ai-Power img" 
+      className="img-responsive" 
+     width="100%"
+      height="auto"
+    />
+  </picture>
+
+
 </div>
 
                 </div>

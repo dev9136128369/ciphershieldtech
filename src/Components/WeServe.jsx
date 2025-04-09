@@ -1,7 +1,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import We_ServeSlider from "../Components/We_ServeSlider";
-import img1 from '/Images/scrol.mp4';
+// import img1 from '/Images/scrol.mp4';
+
+import AIAutomationJpeg from '/Images/AutomationSolution.webp';
+import AIAutomationWebp from '/Images/AutomationSolution.webp';
+import AIAutomationJpg from '/Images/AutomationSolution.webp';
 
 
 const We_Serve = () => {
@@ -37,7 +41,7 @@ const We_Serve = () => {
                 </p>
             </div>
             <div className="col-lg-6 col-md-6 languagepart1 ">
-           <div className="video-container">
+           {/* <div className="video-container">
                <video 
                  autoPlay 
                  loop 
@@ -50,7 +54,33 @@ const We_Serve = () => {
                  <source src='/Images/scrol.webm' type="video/webm" />
              
                </video>
-             </div>
+             </div> */}
+             <picture>
+                 {/* WebP Format */}
+                 <source 
+                   srcSet={`${AIAutomationWebp} 300w, ${AIAutomationWebp} 600w, ${AIAutomationWebp} 1200w`} 
+                   type="image/webp" 
+                 />
+               
+                 {/* JPEG Format */}
+                 <source 
+                   srcSet={`${AIAutomationJpeg} 300w, ${AIAutomationJpeg} 600w, ${AIAutomationJpeg} 1200w`} 
+                   type="image/jpeg" 
+                 />
+               
+                 {/* Default Fallback (JPG) */}
+                 <img 
+                   src={AIAutomationJpg} 
+                   srcSet={`${AIAutomationJpg} 300w, ${AIAutomationJpg} 600w, ${AIAutomationJpg} 1200w`}
+                   sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
+                   loading="lazy"
+                   alt="Ai-Power img" 
+                   className="img-responsive" 
+                  width="100%"
+                   height="auto"
+                 />
+               </picture>
+             
  </div>
         </div>
 

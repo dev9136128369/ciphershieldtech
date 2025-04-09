@@ -2,14 +2,25 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import HeaderSlider from "../components/HeaderSlider";
 
-import video from '/Images/Ai_animation1.mov';
+// import video from '/Images/Ai_animation1.mov';
+
+import AIAutomationJpeg from '/Images/AIAutomation.webp';
+import AIAutomationWebp from '/Images/AIAutomation.webp';
+import AIAutomationJpg from '/Images/AIAutomation.webp';
 
 
-import scroll1 from '/Images/scrole.mp4';
-import scroll2 from '/Images/scrol1.mp4';
-import scroll3 from '/Images/scrol3.mp4';
-import scroll4 from '/Images/scrol5.mp4';
-import scroll5 from '/Images/scrol7.mp4';
+
+import AIDeepLearningJpeg from '/Images/AIDeepLearning.webp';
+import AIDeepLearningwebp from '/Images/AIDeepLearning.webp';
+import AIDeepLearningJpg from '/Images/AIDeepLearning.webp';
+
+import scroll from '/Images/AIAutomation.webp';
+import scroll1 from '/Images/slider2.webp';
+import scroll2 from '/Images/slider3.webp';
+import scroll3 from '/Images/slider4.webp';
+import scroll4 from '/Images/slider5.webp';
+import scroll5 from '/Images/slider6.webp';
+import scroll6 from '/Images/slider7.webp';
 
 const Home = () => {
     return (
@@ -31,7 +42,7 @@ const Home = () => {
                 {/* About Section */}
                 <div className="row Aboutss text-center mt-5">
                     <div className="col-lg-6 col-md-6 col-sm-12 box2 mt-5 pt-5 text-center">
-                    <figure>
+                    {/* <figure>
       <div className="fixed-wrap">
         <video id="fixed" autoPlay muted loop playsInline>
           <source src={video} type="video/mp4" />
@@ -39,7 +50,32 @@ const Home = () => {
           Your browser does not support the video tag.
         </video>
       </div>
-    </figure>
+    </figure> */}
+       <picture>
+    {/* WebP Format */}
+    <source 
+      srcSet={`${AIAutomationWebp} 300w, ${AIAutomationWebp} 600w, ${AIAutomationWebp} 1200w`} 
+      type="image/webp" 
+    />
+  
+    {/* JPEG Format */}
+    <source 
+      srcSet={`${AIAutomationJpeg} 300w, ${AIAutomationJpeg} 600w, ${AIAutomationJpeg} 1200w`} 
+      type="image/jpeg" 
+    />
+  
+    {/* Default Fallback (JPG) */}
+    <img 
+      src={AIAutomationJpg} 
+      srcSet={`${AIAutomationJpg} 300w, ${AIAutomationJpg} 600w, ${AIAutomationJpg} 1200w`}
+      sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
+      loading="lazy"
+      alt="Ai-Power img" 
+      className="img-responsive" 
+     width="100%"
+      height="auto"
+    />
+  </picture>
 
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 mt-5 text-center">
@@ -73,7 +109,7 @@ const Home = () => {
                     <div className="col-lg-8 col-md-10 col-sm-12 career text-center">
                         <h3 className="text-center mt-5 mb-5">AI & Deep Learning in Business</h3>
   
-<div className="video-container text-center">
+{/* <div className="video-container text-center">
     <video 
       autoPlay 
       loop 
@@ -85,7 +121,33 @@ const Home = () => {
       <source src='/Images/Deeplerning.webm' type="video/webm" />
   
     </video>
-  </div>
+  </div> */}
+
+          <picture>
+    {/* WebP Format */}
+    <source 
+      srcSet={`${AIDeepLearningwebp} 300w, ${AIDeepLearningwebp} 600w, ${AIDeepLearningwebp} 1200w`} 
+      type="image/webp" 
+    />
+  
+    {/* JPEG Format */}
+    <source 
+      srcSet={`${AIDeepLearningJpeg} 300w, ${AIDeepLearningJpeg} 600w, ${AIDeepLearningJpeg} 1200w`} 
+      type="image/jpeg" 
+    />
+  
+    {/* Default Fallback (JPG) */}
+    <img 
+      src={AIDeepLearningJpg} 
+      srcSet={`${AIDeepLearningJpg} 300w, ${AIDeepLearningJpg} 600w, ${AIDeepLearningJpg} 1200w`}
+      sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
+      loading="lazy"
+      alt="Ai-Power img" 
+      className="img-responsive" 
+     width="100%"
+      height="auto"
+    />
+  </picture>
                     </div>
                 </div>
 
@@ -94,8 +156,8 @@ const Home = () => {
                     <h3>Our AI-Driven Business Technologies</h3>
                   
                     <div className="scroll-container">
-  {Array(10) // Repeat the video set 10 times
-    .fill([scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5])
+  {/* {Array(10) // Repeat the video set 10 times
+    .fill([scroll1,scroll2,scroll3,scroll4,scroll5,scroll6,scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5,scroll1,scroll2,scroll3,scroll4,scroll5])
     .flat()
     .map((src, index) => (
       <video
@@ -110,7 +172,25 @@ const Home = () => {
         <source src={src.replace(".mp4", ".webm")} type="video/webm" />
         Your browser does not support the video tag.
       </video>
-    ))}
+    ))} */}
+    {Array(10) // Repeat image set 10 times
+  .fill([scroll,
+    scroll1, scroll2, scroll3, scroll4, scroll5, scroll6,scroll,
+    scroll1, scroll2, scroll3, scroll4, scroll5,scroll6,scroll,
+    scroll1, scroll2, scroll3, scroll4, scroll5,scroll6,scroll,
+    scroll1, scroll2, scroll3, scroll4, scroll5,scroll6,scroll,
+    scroll1, scroll2, scroll3, scroll4, scroll5,scroll6,scroll,
+  ])
+  .flat()
+  .map((src, index) => (
+    <img
+      key={index}
+      src={src}
+      alt={`scroll-img-${index}`}
+      className="scroll-image"
+      loading="lazy"
+    />
+))}
 </div>
                     </div>
                 </div>

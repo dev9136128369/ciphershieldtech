@@ -130,7 +130,8 @@ const PrivacyPolicy = () => {
             CipherShield Technology
             B-7, JS Arcade, Sector 18, Noida, Uttar Pradesh 201301
             Email: info [at] ciphershieldtech [dot] com
-            Ph: +91 8882171554
+            Ph: +91 8882171554, +91 1204375355
+
         </p>
     </div>
 

@@ -106,12 +106,15 @@ const Footer = () => {
       <a href="https://www.facebook.com/people/Ciphershield-Technology-Pvtltd/61561870779061/">
       <FontAwesomeIcon icon={faFacebook} className='spin' spin />
       </a>
-      <a href="https://in.linkedin.com/in/ciphershield-technologies-421135314">
+      <a href="https://www.linkedin.com/company/ciphershieldtechnologies/?viewAsMember=true">
       <FontAwesomeIcon icon={faLinkedin} className='spin' spin />
       </a>
       <a href="https://www.youtube.com/@CipherShieldTechnologies">
       <FontAwesomeIcon icon={faYoutube} className='spin' spin />
       </a>
+    </div>
+    <div className='mt-5 text-white'>
+        <a href='https://www.google.com/search?q=CipherShield+Technologies+Pvt.Ltd'><u>CipherShield Technologies</u></a>
     </div>
                 </div>
 

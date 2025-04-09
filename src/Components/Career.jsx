@@ -660,7 +660,7 @@ const Career = () => {
     sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 900px"
     loading="lazy"
     alt="Career image - Join our team at CipherShield Technologies"
-    className="img-responsive mt-5"
+    className="img-responsive "
      width="100%"
     height="auto"
   />
