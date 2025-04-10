@@ -6,6 +6,8 @@ import aboutUsBannerWebp from '/Images/about_us1.webp';
 import aboutUsBannerJpeg from '/Images/about_us1.webp';
 import aboutUsBannerJpg from '/Images/about_us1.webp';
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
 
 import { Helmet } from "react-helmet";
 
@@ -24,6 +26,7 @@ const AboutUs = () => {
     <meta name="author" content="CipherShield Technologies" />
     <meta name="robots" content="index, follow" />
 </Helmet>
+<WhatsAppButton/>
 
     <div id='heade'></div>
     <div className="container-fluid">

@@ -1,6 +1,9 @@
 import React from 'react'
 import { Helmet } from 'react-helmet';
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
+
 const RefundPolicy = () => {
   return (
     <>
@@ -17,6 +20,10 @@ const RefundPolicy = () => {
           content="solutions, ciphershield, technologies, automation, contact, terms and conditions, refund policy"
         />
       </Helmet>
+
+      <WhatsAppButton/>
+
+
     <div className="container mx-auto mt-20 mt-5">
     <h1 className="text-center font-bold f1 text-5xl underline mb-6 drop-shadow-2xl text-indigo-900">
           Terms & Conditions - CipherShield Technologies Automation Solutions & Contact

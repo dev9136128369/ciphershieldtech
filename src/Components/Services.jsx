@@ -6,6 +6,7 @@ import img1Webp from '/Images/AI-Powered.webp';
 import img1Jpeg from '/Images/AI-Powered.webp';
 import img1Jpg from '/Images/AI-Powered.webp';
 
+import WhatsAppButton from "../Components/WhatsAppButton"
 
 const Services = () => {
   return (
@@ -21,6 +22,10 @@ const Services = () => {
           content="solutions, ciphershield, technologies, automation, contact, AI-powered solutions, business automation"
         />
       </Helmet>
+
+      <WhatsAppButton/>
+
+
     <div id='heade'></div>
     <ServiceSlider/>
     <div className="container-fluid" >

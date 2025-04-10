@@ -1,6 +1,8 @@
 import React from 'react'
 import { Helmet } from 'react-helmet';
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
 
 import imageWebp from '/Images/highparformances.webp'
 import imageJpeg from '/Images/highparformances.webp'
@@ -38,6 +40,8 @@ const Value_for_Investors = () => {
         <meta name="twitter:image" content="https://www.ciphershieldtech.com/images/investment-banner.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
+      <WhatsAppButton/>
+
     <div id='heade'></div>
 
     <div className="container-fluid">

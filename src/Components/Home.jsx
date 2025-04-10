@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import HeaderSlider from "../components/HeaderSlider";
 
+import WhatsAppButton from "../Components/WhatsAppButton"
 // import video from '/Images/Ai_animation1.mov';
 
 import AIAutomationJpeg from '/Images/AIAutomation.webp';
@@ -25,6 +26,7 @@ import scroll6 from '/Images/slider7.webp';
 const Home = () => {
     return (
         <>
+        <WhatsAppButton/>
             {/* SEO Meta Tags */}
             <Helmet>
             <title>AI & Automation Solutions | CipherShield Technologies</title>

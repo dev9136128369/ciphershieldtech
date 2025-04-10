@@ -143,19 +143,15 @@ export default defineConfig({
       filename: 'bundle-analysis.html'
     }),
     
-    // Safe image optimization configuration
+    // Fixed image optimization configuration
     viteImagemin({
-      gifsicle: {
-        optimizationLevel: 1, // Safer optimization
-        interlaced: false,
-        colors: 128 // Reduce color palette
-      },
+      gifsicle: false,
       mozjpeg: {
-        quality: 75, // Slightly reduced quality
+        quality: 75,
         progressive: true
       },
       optipng: {
-        optimizationLevel: 3, // Reduced from 5
+        optimizationLevel: 3,
         bitDepthReduction: true,
         colorTypeReduction: true
       },
@@ -166,10 +162,11 @@ export default defineConfig({
             params: {
               overrides: {
                 removeViewBox: false,
-                removeDimensions: true
+                // Removed removeDimensions from here
               }
             }
-          }
+          },
+          // Removed duplicate removeDimensions plugin
         ]
       },
       // Disable problematic formats

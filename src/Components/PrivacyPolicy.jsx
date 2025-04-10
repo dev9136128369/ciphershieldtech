@@ -1,6 +1,9 @@
 import React from 'react'
 import { Helmet } from "react-helmet";
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
+
 const PrivacyPolicy = () => {
   return (
    <>
@@ -12,6 +15,10 @@ const PrivacyPolicy = () => {
         />
         <meta name="keywords" content="CipherShield, Technologies, Privacy Policy, Data Security, Automation, Contact" />
       </Helmet>
+
+      <WhatsAppButton/>
+
+
    <div className="container mx-auto mt-20 pray mt-5">
         <h1 className="text-center font-bold text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">   Privacy Policy - CipherShield Technologies</h1>
     </div>

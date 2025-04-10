@@ -7,6 +7,9 @@ import AIDeepLearningwebp from '/Images/solutioneffecency.webp';
 import AIDeepLearningJpg from '/Images/solutioneffecency.webp';
 
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
+
 import img2 from '/Images/autoscrol1.webp';
 import img3 from '/Images/autoscrol3.webp';
 import img4 from '/Images/autoscrol4.webp';
@@ -28,6 +31,9 @@ Cloud Security,"/>
     <meta name="author" content="CipherShield Technologies" />
     <meta name="robots" content="index, follow" />
 </Helmet>
+
+<WhatsAppButton/>
+
 <div id='heade'></div>
 
     <div className="container-fluid">

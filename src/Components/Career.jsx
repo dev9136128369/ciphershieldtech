@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Helmet } from "react-helmet";
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
 
 import img1Webp from '/Images/Carrer_banner.webp';
 import img1Jpeg from '/Images/Carrer_banner.webp';
@@ -126,6 +128,7 @@ const Career = () => {
     <meta name="keywords" content="career opportunities, CipherShield Technologies, automation jobs, AI solutions, technology careers, software development, contact CipherShield" />
     <meta name="robots" content="index, follow" />
 </Helmet>
+<WhatsAppButton/>
 
 <div id='heade'></div>
 

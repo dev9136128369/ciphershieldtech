@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 
+import WhatsAppButton from "../Components/WhatsAppButton"
+
+
 const NotFound = () => {
   return (
+    <>
+        <WhatsAppButton/>
+
     <div className="videoauter" >
       
       {/* Background Video */}
@@ -26,6 +32,7 @@ const NotFound = () => {
       </div>
 
     </div>
+    </>
   );
 };
 

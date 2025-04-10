@@ -7,6 +7,7 @@ import AIAutomationJpeg from '/Images/AutomationSolution.webp';
 import AIAutomationWebp from '/Images/AutomationSolution.webp';
 import AIAutomationJpg from '/Images/AutomationSolution.webp';
 
+import WhatsAppButton from "../Components/WhatsAppButton"
 
 const We_Serve = () => {
   return (
@@ -22,6 +23,7 @@ const We_Serve = () => {
           content="solutions, ciphershield, technologies, automation, contact, AI solutions, technology solutions"
         />
       </Helmet>
+      <WhatsAppButton/>
 
 <div id='heade'></div>
 
