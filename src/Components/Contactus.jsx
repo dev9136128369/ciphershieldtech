@@ -28,7 +28,7 @@ const Contactus = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8001/send-email', formData);
+      const response = await axios.post('/.netlify/functions/submit-form', formData);
       
       if (response.status === 200) {
         alert('✅ Email sent successfully!');

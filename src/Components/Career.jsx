@@ -89,7 +89,7 @@ const Career = () => {
     
         if (validateForm()) {
           try {
-            const response = await fetch('http://localhost:8001/submit-form', {
+            const response = await fetch('/.netlify/functions/submit-form', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
