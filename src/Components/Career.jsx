@@ -89,7 +89,9 @@ const Career = () => {
     
         if (validateForm()) {
           try {
-            const response = await fetch('/.netlify/functions/submit-form', {
+      // const response = await axios.post('https://api.ciphershieldtech.com/send-email', formData);
+
+            const response = await axios.post('https://api.ciphershieldtech.com/send-email', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

@@ -4,10 +4,6 @@ import img2 from '/Images/contactNumber.webp';
 import img3 from '/Images/Email.webp';
 import axios from 'axios';
 import { Helmet } from "react-helmet";
-import EmailProtection from './EmailProtection';
-
-import WhatsAppButton from "../Components/WhatsAppButton"
-
 
 const Contactus = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +24,7 @@ const Contactus = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/.netlify/functions/submit-form', formData);
+      const response = await axios.post('https://api.ciphershieldtech.com/send-email', formData);
       
       if (response.status === 200) {
         alert('✅ Email sent successfully!');
@@ -38,7 +34,6 @@ const Contactus = () => {
     } catch (error) {
       console.error('Error sending email:', error);
   
-      // Axios Error Handling
       if (error.response) {
         alert(`Server Error: ${error.response.status} - ${error.response.data}`);
       } else if (error.request) {
@@ -48,30 +43,24 @@ const Contactus = () => {
       }
     }
   };
-  
 
   return (
     <>
-    <Helmet>
-    <title>Contact CipherShield | Automation & AI</title>
-    <meta name="description" content="Get in touch with CipherShield Technologies for cutting-edge AI and automation solutions. Contact us today for business inquiries and support." />
-    <meta name="keywords" content="contact CipherShield, AI solutions, automation services, technology solutions, CipherShield Technologies, business support" />
-    <meta name="robots" content="index, follow" />
-</Helmet>
-
-<WhatsAppButton/>
-
-
+      <Helmet>
+        <title>Contact CipherShield | Automation & AI</title>
+        <meta name="description" content="Get in touch with CipherShield Technologies for cutting-edge AI and automation solutions. Contact us today for business inquiries and support." />
+        <meta name="keywords" content="contact CipherShield, AI solutions, automation services, technology solutions, CipherShield Technologies, business support" />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
       <div id='heade'></div>
       <div className="container-fluid">
         <div className="row contactus">
           <div className="col-sm-12 contactslide"></div>
         </div>
         
-    <div className="col-sm-12 contacts text-center">
-      <h1 className="text-center mt-4">Contact CipherShield Technologies</h1>
-    </div>
- 
+        <div className="col-sm-12 contacts text-center">
+          <h1 className="text-center mt-4">Contact CipherShield Technologies</h1>
+        </div>
 
         <div className="row formcontrol mt-5">
           <div className="col-sm-6 boxex pt-5">
@@ -154,7 +143,6 @@ const Contactus = () => {
         <div className="container map mt-5 mb-5">
           <div className="col-md-12">
             <iframe
-              // src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14015.678522053231!2d77.3240682!3d28.572176!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6c80af5d7e9a74c1%3A0x3712cd302f4b63a0!2sCipherShield%20Technologies!5e0!3m2!1sen!2sin!4v1719750714447!5m2!1sen!2sin"
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14015.678522053231!2d77.3240682!3d28.572176!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6c80af5d7e9a74c1%3A0x3712cd302f4b63a0!2sCipherShield%20Technologies!5e0!3m2!1sen!2sin!4v1719750714447!5m2!1sen!2sin" 
               width="1000"
               height="500"
@@ -165,7 +153,6 @@ const Contactus = () => {
           </div>
         </div>
       </div>
-      <EmailProtection />
     </>
   );
 };
