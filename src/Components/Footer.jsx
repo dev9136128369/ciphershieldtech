@@ -113,9 +113,22 @@ const Footer = () => {
       <FontAwesomeIcon icon={faYoutube} className='spin' spin />
       </a>
     </div>
-    <div className='mt-5 text-white'>
+    <div className='mt-4 text-white'>
         <a href='https://www.google.com/search?q=CipherShield+Technologies+Pvt.Ltd'><u>CipherShield Technologies</u></a>
     </div>
+
+    <div className='mt-4 text-white'>
+        <a href='https://www.linkedin.com/company/ciphershieldtechnologies/?viewAsMember=true' 
+  target="_blank" 
+  rel="noopener noreferrer"><u>Follow me on LinkedIn</u></a>
+    </div>
+    {/* <a 
+  href='https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=ciphershieldtechnologies' 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  <u>Follow me on LinkedIn</u>
+</a> */}
                 </div>
 
             </div>

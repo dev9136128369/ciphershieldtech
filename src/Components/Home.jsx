@@ -195,6 +195,9 @@ const Home = () => {
 ))}
 </div>
                     </div>
+                      {/* <div className='mt-5 text-white'>
+        <a href='www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=ciphershieldtechnologies'><u>Follow me on LinkedIn</u></a>
+    </div> */}
                 </div>
             
         </>
