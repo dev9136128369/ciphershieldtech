@@ -41,22 +41,22 @@ const Footer = () => {
                     <ul>
                         <li>
               
-<Link className="nav-link" href ="/" onClick={() => scrollToSection('heade')}>Home </Link>
+<Link className="nav-link" to ="/" onClick={() => scrollToSection('heade')}>Home </Link>
 
 </li>
 <li>                   
-<Link className="nav-link" href ="/AboutUs" onClick={() => scrollToSection('heade')}>About Us </Link>
+<Link className="nav-link" to ="/AboutUs" onClick={() => scrollToSection('heade')}>About Us </Link>
 </li>
 <li>
                  
-<Link className="nav-link" href ="/Services" onClick={() => scrollToSection('heade')}>Services </Link>
+<Link className="nav-link" to ="/Services" onClick={() => scrollToSection('heade')}>Services </Link>
 
 </li>
                         
 
                      <li>
                    
-<Link className="nav-link" href ="/ValueforInvestors" onClick={() => scrollToSection('heade')}>Value for Investors </Link>
+<Link className="nav-link" to ="/ValueforInvestors" onClick={() => scrollToSection('heade')}>Value for Investors </Link>
 
 </li>   
                     
@@ -68,24 +68,24 @@ const Footer = () => {
                     <h4 className="ms-5">Useful Links</h4>
                     <ul>
                     <li> 
-<Link className="nav-link" href ="/WeServe" onClick={() => scrollToSection('heade')}>We Serve </Link>
+<Link className="nav-link" to ="/WeServe" onClick={() => scrollToSection('heade')}>We Serve </Link>
 </li>   
                     
 <li>
                     
-<Link className="nav-link" href ="/Automation" onClick={() => scrollToSection('heade')}>Automation </Link>
+<Link className="nav-link" to ="/Automation" onClick={() => scrollToSection('heade')}>Automation </Link>
 
 </li>   
                         
 <li>
                   
-<Link className="nav-link" href ="/Career" onClick={() => scrollToSection('heade')}>Career </Link>
+<Link className="nav-link" to ="/Career" onClick={() => scrollToSection('heade')}>Career </Link>
 
 </li>   
                         
 <li>
                   
-<Link className="nav-link" href ="/ContactUs" onClick={() => scrollToSection('heade')} >Contact Us </Link>
+<Link className="nav-link" to ="/ContactUs" onClick={() => scrollToSection('heade')} >Contact Us </Link>
 
 </li>   
                         
