@@ -23,24 +23,41 @@ const Contactus = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
-      const response = await axios.post('https://api.ciphershieldtech.com/send-email', formData);
-      
-      if (response.status === 200) {
-        alert('✅ Email sent successfully!');
+      // Validate form before sending
+      if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        alert('Please fill all fields');
+        return;
+      }
+      // const response = await axios.post("http://localhost:8000/login-email", formData);
+      const response = await axios.post('https://api.ciphershieldtech.com/login-email', formData);
+      if (response.data.success) {
+        alert('Email sent successfully!');
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
       } else {
-        alert(`⚠️ Failed: ${response.status}`);
+        alert(response.data.error || 'Failed to send email');
       }
     } catch (error) {
-      console.error('Error sending email:', error);
-  
+      let errorMessage = 'Failed to send email';
+      
       if (error.response) {
-        alert(`Server Error: ${error.response.status} - ${error.response.data}`);
+        errorMessage = error.response.data.error || 
+                     `Server error: ${error.response.status}`;
       } else if (error.request) {
-        alert('No response received from server');
+        errorMessage = 'No response from server';
       } else {
-        alert(`Error: ${error.message}`);
+        errorMessage = error.message;
       }
+      
+      alert(`Error: ${errorMessage}`);
+      console.error('Full error:', error);
     }
   };
 
@@ -59,7 +76,10 @@ const Contactus = () => {
         </div>
         
         <div className="col-sm-12 contacts text-center">
-          <h1 className="text-center mt-4">Contact CipherShield Technologies</h1>
+          <h1 className="text-center mt-4">Contact CipherShield Technologies
+      <span className="decorative-line2"></span>
+
+          </h1>
         </div>
 
         <div className="row formcontrol mt-5">

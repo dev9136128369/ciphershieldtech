@@ -29,6 +29,8 @@ const Contactus = lazy(() => import("./Components/Contactus"));
 const PrivacyPolicy = lazy(() => import("./Components/PrivacyPolicy"));
 const RefundPolicy = lazy(() => import("./Components/RefundPolicy"));
 const Navbar = lazy(() => import("./Components/Navbar"));
+const BlogPage = lazy(() => import("./Components/BlogPage.jsx"));
+const CategoryPage = lazy(() => import("./Components/CategoryPage"));
 
 const NotFound = lazy(() => import("./Components/NotFound"));
 
@@ -85,6 +87,9 @@ const App = () => {
           <Route path="/Contactus" element={<Contactus />} />
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/RefundPolicy" element={<RefundPolicy />} />
+          <Route path="/BlogPage" element={<BlogPage />} />
+          <Route path="/CategoryPage" element={<CategoryPage />} />
+
 
            {/* 404 Page for Unknown Routes */}
     <Route path="*" element={<NotFound />} />

@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1,
+    "email": "admin@example.com",
+    "password": "$2b$10$2LW4Z93utOIFnDYxXwRZaeUqdV8Bgmme5jik.0PG.ESvqyEN5z3.C",
+    "role": "admin"
+  },
+  {
+    "id": 1745235503061,
+    "email": "yashveersingh7648@gmail.com",
+    "password": "$2b$10$XUJcFBqHuB7LLYtlzPiSwud7kdo4yzzKa21a.vvaiTt0FC0X8aHQq",
+    "name": "yash kumar",
+    "role": "user"
+  },
+  {
+    "id": 1745235827502,
+    "email": "yashshiv7648@gmail.com",
+    "password": "$2b$10$nr8B4IcyFS9oxU8/Wq3bXel.Lr/a3tYO37Oho/FOkpy60GmjzufX6",
+    "name": "yash",
+    "role": "user"
+  },
+  {
+    "id": 1745236314733,
+    "email": "yashshiv7648@gmail.com",
+    "password": "$2b$10$y4bp29kNY7vfPkqm5hlL4eVNKw5kRXRdzkVSamsqwTLBiTsjeUL2y",
+    "name": "yash kumar",
+    "role": "user"
+  },
+  {
+    "id": 1745238095930,
+    "email": "yashshiv7648@gmail.com",
+    "password": "$2b$10$fraZeXN5LFgcrK8OLLRbleLlGFY/OSZZXlWLMGzV1qWfV5IZvQi7e",
+    "name": "yash kumar",
+    "role": "user"
+  },
+  {
+    "id": 1745238896578,
+    "email": "yashshiv7648@gmail.com",
+    "password": "$2b$10$79SHaOWrSDioJksg27qWDe.q.w940oq3ffSEWlsuBYKTwKeMf9lo2",
+    "name": "yash kumar",
+    "role": "user"
+  },
+  {
+    "id": 1745238940329,
+    "email": "yashshiv7648@gmail.com",
+    "password": "$2b$10$Nkiyc6ChT/JeImV9SxcEdex68gzXNr.9.Gey2jKqViSVb5b79T1vu",
+    "name": "dgdfgdfg",
+    "role": "user"
+  },
+  {
+    "id": 1745242986753,
+    "email": "yashveersingh7648@gmail.com",
+    "password": "$2b$10$J9uNTTBSmnBuMtqxp1KMOuExYWUCx/qswkCv8eROknb8Qq6Nn2Fky",
+    "name": "yash kumar",
+    "role": "user"
+  },
+  {
+    "id": 1745243357650,
+    "email": "yashveervalyan9898@gmail.com",
+    "password": "$2b$10$1zzo/Ew5PEoV4rEV5IPX2OQLoRs0VcgLVwXujJY/RaCICM4okCdAy",
+    "name": "valyan",
+    "role": "user"
+  },
+  {
+    "id": 1745244111220,
+    "email": "yashsheiv7648@gmail.com",
+    "password": "$2b$10$LYzupfd83pQ529OF0ADt.OmrlCgv5J0SYqIWvlEqsTJhUpBwcO/WG",
+    "name": "hdff",
+    "role": "user"
+  },
+  {
+    "id": 1745244498981,
+    "email": "yashsada@gmail.com",
+    "password": "$2b$10$xn1lWb2HXa3rNkVVSVwbsuEw5U8BPtEZmAYnsn8CNRj/.D9U8xF4S",
+    "name": "valyan",
+    "role": "user"
+  }
+]

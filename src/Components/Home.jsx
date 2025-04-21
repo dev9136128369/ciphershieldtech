@@ -82,7 +82,10 @@ const Home = () => {
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 mt-5 text-center">
                         <div className="boxe animate__animated animate__rotateInDownRight mt-5 text-justify">
-                        <h1>CipherShield Technologies - AI & Automation Experts</h1>
+                        <h1>CipherShield Technologies - AI & Automation Experts
+      <span className="decorative-line2"></span>
+
+                        </h1>
                         <h2>Transform Your Business with AI-Driven Solutions</h2>
                             <p>
                                 Revolutionizing industries with cutting-edge AI, automation, and deep-tech solutions designed to unlock efficiency, growth, and future-ready success. 
@@ -95,7 +98,10 @@ const Home = () => {
 
                 {/* Introduction Section */}
                 <div className="container care mt-5 text-center">
-                    <h2 className="mb-5">Introduction to AI-Driven Business Solutions</h2>
+                    <h2 className="mb-5">Introduction to AI-Driven Business Solutions
+      <span className="decorative-line2"></span>
+
+                    </h2>
                     <div className="container care text-center">
                         <p className="fonts font-medium text-justify mt-2">
                             At CipherShield Technologies, we are building the future of business with artificial intelligence (AI), automation, and deep-tech innovations. 
@@ -109,7 +115,10 @@ const Home = () => {
                 {/* Image Section */}
                 <div className="container text-center mb-5">
                     <div className="col-lg-8 col-md-10 col-sm-12 career text-center">
-                        <h3 className="text-center mt-5 mb-5">AI & Deep Learning in Business</h3>
+                        <h3 className="text-center mt-5 mb-5">AI & Deep Learning in Business
+      <span className="decorative-line1"></span>
+
+                        </h3>
   
 {/* <div className="video-container text-center">
     <video 

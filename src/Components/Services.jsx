@@ -53,6 +53,8 @@ const Services = () => {
 <div className="container mx-auto mt-20 text-center mt-5">
           <h1 className="font-bold text-5xl underline mb-6 drop-shadow-2xl text-indigo-900">
             AI-Powered Solutions for Business Growth
+      <span className="decorative-line2"></span>
+
           </h1>
         </div>
         <div className="container row language mb-5 text-center">

@@ -87,7 +87,8 @@ Cloud Security,"/>
 
                 <div className="row autom">
                     <div className="col-sm-6 automtext">
-                    <h3>Automation Solutions for Efficiency</h3>
+                    <h3>Automation Solutions for Efficiency
+                    </h3>
                         <p className="text-justify">Automation refers to the use of technology to perform tasks with minimal human intervention. This can involve a wide range of processes and systems, from simple mechanical devices to complex computer algorithms. Essentially, automation aims to increase efficiency, accuracy, and consistency by allowing machines or software to handle repetitive or complex tasks that would otherwise require human effort.</p>
                         <br/>
                         <p className="text-justify">Examples include:</p>
@@ -273,7 +274,10 @@ Cloud Security,"/>
                     </div>
                 </div>
                 <div className="col-sm-12 zohotext mt-5 ">
-                    <h4>Browsing Automation</h4>
+                    <h4>Browsing Automation
+                    <span className="decorative-line"></span>
+
+                    </h4>
                 </div>
                 <div className="container row zoho-section1 animated-text ms-5" id="zohoanimated">
 
@@ -315,7 +319,10 @@ Cloud Security,"/>
                     </div>
                 </div>
                 <div className="col-sm-12 zohotext mt-5 ">
-                    <h4>Mailing Automation</h4>
+                    <h4>Mailing Automation
+                    <span className="decorative-line"></span>
+
+                    </h4>
                 </div>
                 <div className="container row zoho-section1 animated-text ms-5" id="zohoanimated">
 
@@ -359,7 +366,10 @@ Cloud Security,"/>
                     </div>
                 </div>
                 <div className="col-sm-12 zohotext pt-5">
-                    <h4>Data Extraction</h4>
+                    <h4>Data Extraction
+                    <span className="decorative-line"></span>
+
+                    </h4>
                 </div>
 
                 <div className="container row zoho-section1 animated-text mb-5 ms-5" id="zohoanimated">

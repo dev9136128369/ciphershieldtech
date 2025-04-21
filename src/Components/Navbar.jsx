@@ -53,6 +53,12 @@ const Navbar = () => {
 
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
+
+            <li className="nav-item">
+            <Link className="nav-link" to ="/CategoryPage
+            ">Portfolio</Link>
+                {/* <a className="nav-link me-2" href="/Career">Career</a> */}
+            </li>
             <li className="nav-item">
             <Link className="nav-link" to ="/ContactUs">Contact Us </Link>
 

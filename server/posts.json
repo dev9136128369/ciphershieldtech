@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1745050163310,
+    "title": "hello boss",
+    "content": "hello boss",
+    "category": "general",
+    "attachments": [],
+    "createdAt": "2025-04-19T08:09:23.310Z"
+  },
+  {
+    "id": 1745050225431,
+    "title": "gfgdf",
+    "content": "fdgfdgfd",
+    "category": "general",
+    "attachments": [],
+    "createdAt": "2025-04-19T08:10:25.431Z"
+  },
+  {
+    "id": 1745054388795,
+    "title": "Case Study: Lead Generation & Follow-up Automation for a Real Estate Agency",
+    "content": "Stakeholder Map Team Whiteboard in Green Yellow Purple Trendy Stickers Style.",
+    "category": "general",
+    "attachments": [
+      "/uploads/1745054388777-Stakeholder Map Team Whiteboard in Green Yellow Purple Trendy Stickers Style (3).pdf"
+    ],
+    "createdAt": "2025-04-19T09:19:48.795Z"
+  },
+  {
+    "id": 1745062742997,
+    "title": "hello",
+    "content": "dfsfdsf",
+    "category": "general",
+    "attachments": [
+      "/uploads/1745062742980-pexels-janzakelj-9389356.jpg"
+    ],
+    "createdAt": "2025-04-19T11:39:02.997Z"
+  },
+  {
+    "id": 1745062766109,
+    "title": "fdsfds",
+    "content": "fdsfdsfds",
+    "category": "general",
+    "attachments": [
+      "/uploads/1745062766093-tap-4709088_1920.jpg"
+    ],
+    "createdAt": "2025-04-19T11:39:26.109Z"
+  },
+  {
+    "id": 1745062841773,
+    "title": "hello bro",
+    "content": "hello ",
+    "category": "technology",
+    "attachments": [
+      "/uploads/1745062841765-ai-generated-8627457_640.png"
+    ],
+    "createdAt": "2025-04-19T11:40:41.773Z"
+  }
+]

@@ -109,7 +109,11 @@ const AboutUs = () => {
        
         <div className=" contant  animated-text mt-5 mb-5 text-center" id="zohoanimated">
             <div className="col-sm-12 zohotext">
-                <h3>Why Choose CipherShield for AI & Automation?</h3>
+                <div className='container'>
+                <h3>Why Choose CipherShield for AI & Automation?
+                <span className="decorative-line"></span>
+                </h3>
+                </div>
             </div>
             <div className="row trainningcard2 animated-text mt-2 mb-5 pb-5">
                 <div className="col-md-4">

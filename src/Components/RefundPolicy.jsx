@@ -27,6 +27,8 @@ const RefundPolicy = () => {
     <div className="container mx-auto mt-20 mt-5">
     <h1 className="text-center font-bold f1 text-5xl underline mb-6 drop-shadow-2xl text-indigo-900">
           Terms & Conditions - CipherShield Technologies Automation Solutions & Contact
+      <span className="decorative-line2"></span>
+
         </h1>
     </div>
 
@@ -49,6 +51,8 @@ const RefundPolicy = () => {
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">
             USE OF CONTENT
+      <span className="decorative-line1"></span>
+
         </h2>
     </div>
 
@@ -64,7 +68,10 @@ const RefundPolicy = () => {
 
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">ACCEPTABLE WEBSITE USE</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">ACCEPTABLE WEBSITE USE
+      <span className="decorative-line2"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -81,7 +88,10 @@ const RefundPolicy = () => {
 
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INDEMNITY</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INDEMNITY
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -91,7 +101,10 @@ const RefundPolicy = () => {
     </div>
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">LIABILITY </h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">LIABILITY 
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -106,7 +119,10 @@ const RefundPolicy = () => {
 
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">DISCLAIMER OF CONSEQUENTIAL DAMAGES </h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">DISCLAIMER OF CONSEQUENTIAL DAMAGES 
+      <span className="decorative-line2"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">

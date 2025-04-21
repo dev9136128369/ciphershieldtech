@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from "react-helmet";
+import axios from 'axios';
 
 import WhatsAppButton from "../Components/WhatsAppButton"
 
@@ -86,23 +87,14 @@ const Career = () => {
       // Handle form submission
       const handleSubmit = async (e) => {
         e.preventDefault();
-    
+      
         if (validateForm()) {
           try {
-      // const response = await axios.post('https://api.ciphershieldtech.com/send-email', formData);
+      // const response = await axios.post("http://localhost:8000/login-email", formData);
 
-            const response = await axios.post('https://api.ciphershieldtech.com/send-email', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formData),
-            });
-    
-            const data = await response.json();
-    
-            if (response.ok) {
-              alert(data.message);
+      const response = await axios.post('https://api.ciphershieldtech.com/login-email', formData);
+            if (response.status === 200) {
+              alert(response.data.message);
               setFormData({
                 name: '',
                 email: '',
@@ -113,7 +105,7 @@ const Career = () => {
                 message: '',
               });
             } else {
-              alert(data.error || 'Failed to submit form. Please try again.');
+              alert('Failed to submit form. Please try again.');
             }
           } catch (error) {
             console.error('Error:', error);
@@ -169,7 +161,10 @@ const Career = () => {
 
         </div>
         <div className="col-lg-12 caree pt-5 mb-5">
-        <h1>Career Opportunities at CipherShield Technologies</h1>
+        <h1>Career Opportunities at CipherShield Technologies
+      <span className="decorative-line2"></span>
+
+        </h1>
         </div>
         <div className="container row language mb-5">
             <div className="col-lg-6 col-md-6 languagepart1 mt-5">
@@ -210,7 +205,10 @@ const Career = () => {
         </div>
 
         <div className="col-sm-12 zohotext mb-5">
-        <h3 className="text-justify">Python Developer (2+ Years Experience) - Apply Now!</h3>
+        <h3 className="text-justify">Python Developer (2+ Years Experience) - Apply Now!
+      <span className="decorative-line2"></span>
+
+        </h3>
         </div>
         <div className="container care">
 
@@ -346,7 +344,10 @@ const Career = () => {
         
 
         <div className="col-sm-12 zohotext mt-5 text-center mb-5">
-            <h4 className="text-justify">Java Developer (2+ Years Experience)</h4>
+            <h4 className="text-justify">Java Developer (2+ Years Experience)
+      <span className="decorative-line2"></span>
+
+            </h4>
         </div>
         <div className="container care ">
 
@@ -483,7 +484,10 @@ const Career = () => {
         </div>
          
         <div className="col-sm-12 zohotext mb-5 text-center">
-            <h4>How to Apply</h4>
+            <h4>How to Apply
+      <span className="decorative-line1"></span>
+
+            </h4>
             <p className="text-justify fs-3 mb-5">
                 Interested candidates should submit their resume, portfolio, and a cover letter detailing their
                 experience and motivation for embedded-to-AI automation development to <b>info&#64;ciphershieldtech.com.</b>

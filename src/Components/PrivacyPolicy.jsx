@@ -20,7 +20,10 @@ const PrivacyPolicy = () => {
 
 
    <div className="container mx-auto mt-20 pray mt-5">
-        <h1 className="text-center font-bold text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">   Privacy Policy - CipherShield Technologies</h1>
+        <h1 className="text-center font-bold text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">   Privacy Policy - CipherShield Technologies
+      <span className="decorative-line2"></span>
+
+        </h1>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -60,7 +63,10 @@ const PrivacyPolicy = () => {
 
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">USER INFORMATION</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">USER INFORMATION
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -75,7 +81,10 @@ const PrivacyPolicy = () => {
 
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">COOKIES</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">COOKIES
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -87,7 +96,10 @@ const PrivacyPolicy = () => {
     </div>
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">LINKS TO THE OTHER SITES</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">LINKS TO THE OTHER SITES
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -95,7 +107,10 @@ const PrivacyPolicy = () => {
     </div>
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INFORMATION SHARING</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INFORMATION SHARING
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -110,7 +125,10 @@ const PrivacyPolicy = () => {
 
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INFORMATION SECURITY</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INFORMATION SECURITY
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
@@ -124,7 +142,10 @@ const PrivacyPolicy = () => {
     </div>
 
     <div className="container mx-auto mt-20">
-        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">Grievance Redressal</h2>
+        <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">Grievance Redressal
+      <span className="decorative-line1"></span>
+
+        </h2>
     </div>
 
     <div className="container mx-auto mt-20 fonts">
