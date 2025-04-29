@@ -1060,7 +1060,6 @@
 
 
 
-
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
@@ -1073,39 +1072,29 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 
-// Configuration
+// Config
 const JWT_SECRET = process.env.JWT_SECRET || 'your-very-secure-secret-key';
 const PORT = process.env.PORT || 8000;
-
-// Email transporter setup
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-// Verify email transporter
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Email transporter failed:', error);
-  } else {
-    console.log('Email transporter is ready');
-  }
-});
-
-// Create necessary directories
 const uploadDir = path.join(__dirname, 'uploads');
 const dataDir = path.join(__dirname, 'data');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-
-// Database files
 const postsFile = path.join(dataDir, 'posts.json');
 const usersFile = path.join(dataDir, 'users.json');
 
-// Initialize data files
+// Middleware
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://localhost:8000', 'https://www.ciphershieldtech.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable preflight for all routes
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(uploadDir));
+
+// Init directories and data
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 if (!fs.existsSync(postsFile)) fs.writeFileSync(postsFile, '[]');
 if (!fs.existsSync(usersFile)) {
   const hashedPassword = bcrypt.hashSync('admin123', 10);
@@ -1118,41 +1107,41 @@ if (!fs.existsSync(usersFile)) {
   }]));
 }
 
-// Load data
 let posts = JSON.parse(fs.readFileSync(postsFile));
 let users = JSON.parse(fs.readFileSync(usersFile));
 
-// Save data functions
 const savePosts = () => fs.writeFileSync(postsFile, JSON.stringify(posts, null, 2));
 const saveUsers = () => fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:8000', 'https://www.ciphershieldtech.com'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
-app.use(express.json());
-app.use('/uploads', express.static(uploadDir));
+// Nodemailer Transport
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+transporter.verify((err, success) => {
+  if (err) console.error('❌ Email transporter failed:', err);
+  else console.log('✅ Email transporter is ready');
+});
 
-// File upload setup
+// Multer Setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
-
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|pdf|txt/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-    extname && mimetype ? cb(null, true) : cb(new Error('Only images, PDFs, and text files are allowed'));
+    const isValid = filetypes.test(path.extname(file.originalname).toLowerCase()) && filetypes.test(file.mimetype);
+    isValid ? cb(null, true) : cb(new Error('Only JPEG, PNG, PDF, or TXT files are allowed'));
   }
 }).single('file');
 
-// Authentication middleware
+// Middleware: Auth
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'Authentication required' });
@@ -1160,58 +1149,73 @@ const authenticate = (req, res, next) => {
   try {
     req.user = jwt.verify(token, JWT_SECRET);
     next();
-  } catch (err) {
+  } catch {
     res.status(401).json({ error: 'Invalid or expired token' });
   }
 };
 
-
-
-
-app.post('/login-email', async (req, res) => {
+// Chat Email Submission
+app.post('/chat-email', async (req, res) => {
   try {
-    const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required.' });
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Send Login Confirmation Email to User
-    const mailOptions = {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Login Successful - CipherERP',
-      html: `
-        <h2>Welcome Back to CipherERP!</h2>
-        <p>You have successfully logged in to your CipherERP account.</p>
-        <p>If this was not you, please contact our support team immediately.</p>
-        <p>Best regards,<br/>CipherERP Team</p>
-      `,
-    };
+      to: 'your-recipient@example.com',
+      subject: `Message from ${name}`,
+      text: message,
+      html: `<p><strong>Email:</strong> ${email}</p><p>${message}</p>`,
+    });
 
-    await transporter.sendMail(mailOptions);
-    console.log('✅ Login Confirmation Email Sent Successfully:', email);
-
-    res.status(200).json({ success: true, message: 'Login confirmation email sent.' });
+    res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
-    console.error('❌ Email Sending Error:', error);
-    res.status(500).json({ error: 'Failed to send email. Please try again.' });
+    console.error('Email error:', error);
+    res.status(500).json({ error: 'Failed to send email' });
   }
 });
 
-// Routes
 
-// User registration
+// Login Email Notification
+app.post('/login-email', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email is required.' });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Login Successful - CipherERP',
+    html: `<h2>Welcome Back to CipherERP!</h2>
+           <p>You have successfully logged in.</p>`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: 'Login confirmation email sent.' });
+  } catch (err) {
+    console.error('❌ Email error:', err);
+    res.status(500).json({ error: 'Failed to send email.' });
+  }
+});
+
+// Auth: Register
 app.post('/api/register', async (req, res) => {
   const { email, password, name } = req.body;
-  
   if (!email || !password || !name) {
     return res.status(400).json({ error: 'Email, password, and name are required' });
   }
-  
-  // Normalize email
+
   const normalizedEmail = email.toLowerCase().trim();
-  
   if (users.some(u => u.email.toLowerCase() === normalizedEmail)) {
     return res.status(400).json({ error: 'Email already registered' });
   }
@@ -1225,168 +1229,99 @@ app.post('/api/register', async (req, res) => {
       name,
       role: 'user'
     };
-    
     users.push(newUser);
     saveUsers();
-    
-    const token = jwt.sign(
-      { userId: newUser.id, email: newUser.email, role: newUser.role },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-    
-    res.status(201).json({ 
-      token, 
-      user: { 
-        id: newUser.id, 
-        email: newUser.email, 
-        name: newUser.name,
-        role: newUser.role 
-      } 
-    });
-  } catch (error) {
+
+    const token = jwt.sign({ userId: newUser.id, email: newUser.email, role: newUser.role }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).json({ token, user: { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role } });
+  } catch (err) {
     res.status(500).json({ error: 'Error creating user' });
   }
 });
 
-// User login with email notification
+// Auth: Login
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-  
-  console.log('Login attempt for:', email);
-  
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
-  }
-
-  // Normalize email
   const normalizedEmail = email.toLowerCase().trim();
-  const user = users.find(u => u.email.toLowerCase() === normalizedEmail);
-  
-  if (!user) {
-    return res.status(401).json({ error: 'Invalid credentials' });
-  }
+  const user = users.find(u => u.email === normalizedEmail);
+  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
   try {
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: 'Invalid credentials' });
 
-    const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
+    const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
 
-    // Send email notification
-    try {
-      await transporter.sendMail({
-        from: `"Blog System" <${process.env.EMAIL_USER}>`,
-        to: 'yashveersingh7648@gmail.com',
-        subject: 'New Login Detected',
-        html: `
-          <h2>New User Login</h2>
-          <p>A user has logged into your blog system:</p>
-          <ul>
-            <li><strong>Name:</strong> ${user.name}</li>
-            <li><strong>Email:</strong> ${user.email}</li>
-            <li><strong>Time:</strong> ${new Date().toLocaleString()}</li>
-            <li><strong>IP:</strong> ${req.ip}</li>
-          </ul>
-        `
-      });
-      console.log('Login notification email sent');
-    } catch (emailError) {
-      console.error('Failed to send login email:', emailError);
-    }
-
-    res.json({ 
-      token, 
-      user: { 
-        id: user.id, 
-        email: user.email, 
-        name: user.name,
-        role: user.role 
-      } 
+    // Email alert
+    await transporter.sendMail({
+      from: `"Cipher Blog" <${process.env.EMAIL_USER}>`,
+      to: 'yashveersingh7648@gmail.com',
+      subject: 'New Login Detected',
+      html: `
+        <h2>User Logged In</h2>
+        <ul>
+          <li>Name: ${user.name}</li>
+          <li>Email: ${user.email}</li>
+          <li>Time: ${new Date().toLocaleString()}</li>
+          <li>IP: ${req.ip}</li>
+        </ul>
+      `
     });
-    
-  } catch (error) {
-    console.error('Login error:', error);
+
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+  } catch (err) {
+    console.error('Login failed:', err);
     res.status(500).json({ error: 'Login failed' });
   }
 });
 
-// Check authentication status
+// Check Auth
 app.get('/api/check-auth', authenticate, (req, res) => {
   const user = users.find(u => u.id === req.user.userId);
   if (!user) return res.status(404).json({ error: 'User not found' });
-  
-  res.json({ 
-    user: { 
-      id: user.id, 
-      email: user.email, 
-      name: user.name,
-      role: user.role 
-    } 
-  });
+
+  res.json({ user: { id: user.id, email: user.email, name: user.name, role: user.role } });
 });
 
-// File upload
+// Upload
 app.post('/api/upload', authenticate, (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      if (err instanceof multer.MulterError) {
-        return res.status(400).json({ error: err.message });
-      } else {
-        return res.status(400).json({ error: err.message });
-      }
-    }
-    
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-    
+  upload(req, res, err => {
+    if (err) return res.status(400).json({ error: err.message });
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
     res.json({
       success: true,
-      filePath: `/uploads/${req.file.filename}`,
-      originalName: req.file.originalname,
-      size: req.file.size
+      file: {
+        filename: req.file.filename,
+        path: `/uploads/${req.file.filename}`,
+        size: req.file.size
+      }
     });
   });
 });
 
-// Blog post routes
+// Posts: Create
 app.post('/api/posts', authenticate, (req, res) => {
-  const { title, content, category, attachments } = req.body;
-  
-  if (!title || !content || !category) {
-    return res.status(400).json({ error: 'Title, content and category are required' });
-  }
-
-  const user = users.find(u => u.id === req.user.userId);
-  if (!user) return res.status(404).json({ error: 'User not found' });
-
+  const { title, content, category } = req.body;
   const newPost = {
     id: Date.now(),
     title,
     content,
     category,
-    attachments: attachments || [],
-    createdAt: new Date().toISOString(),
-    author: user.email,
-    authorName: user.name
+    author: req.user.email,
+    createdAt: new Date().toISOString()
   };
-
   posts.push(newPost);
   savePosts();
-  res.status(201).json(newPost);
+  res.status(201).json({ success: true, post: newPost });
 });
 
-// Other routes...
+// Posts: Fetch
+app.get('/api/posts', (req, res) => {
+  res.json(posts);
+});
 
+// Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📁 Uploads directory: ${uploadDir}`);
 });

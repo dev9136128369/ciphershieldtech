@@ -31,6 +31,8 @@ const RefundPolicy = lazy(() => import("./Components/RefundPolicy"));
 const Navbar = lazy(() => import("./Components/Navbar"));
 const BlogPage = lazy(() => import("./Components/BlogPage.jsx"));
 const CategoryPage = lazy(() => import("./Components/CategoryPage"));
+const Chatbot = lazy(() => import("./Components/Chatbot"));
+const ChatbotBox = lazy(() => import("./Components/ChatbotBox"));
 
 const NotFound = lazy(() => import("./Components/NotFound"));
 
@@ -89,6 +91,8 @@ const App = () => {
           <Route path="/RefundPolicy" element={<RefundPolicy />} />
           <Route path="/BlogPage" element={<BlogPage />} />
           <Route path="/CategoryPage" element={<CategoryPage />} />
+          <Route path="/Chatbot" element={<Chatbot />} />
+          <Route path="/ChatbotBox" element={<ChatbotBox />} />
 
 
            {/* 404 Page for Unknown Routes */}
