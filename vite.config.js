@@ -368,16 +368,25 @@ export default defineConfig({
       },
     }),
   ],
-  server: { proxy: {
-    '/api': {
-      target: 'http://localhost:8000',
-      changeOrigin: true,
-      secure: false,
-      rewrite: (path) => path.replace(/^\/api/, '')
-    }
-  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        configure: (proxy) => {
+          proxy.on('error', (err) => {
+            console.error('Proxy Error:', err);
+          });
+          proxy.on('proxyReq', (proxyReq) => {
+            console.log('Proxy Request to:', proxyReq.path);
+          });
+        }
+      }
+    },
     hmr: {
-      overlay: false, // Disable HMR overlay
+      overlay: false,
     },
     watch: {
       usePolling: true, // Enable polling for file changes

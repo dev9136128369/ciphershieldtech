@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import img1 from '/Images/CT.webp';
+import img1 from '/Images/logo.jpg';
 
 
 const Navbar = () => {
+    const isLoggedIn = localStorage.getItem('token') !== null;
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky sticky-top mainHeader" id='heade'>
     <div className="col-lg-1 col-md-1 col-sm-1 logo">
@@ -59,6 +60,16 @@ const Navbar = () => {
             ">Portfolio</Link>
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
+
+            <li className="nav-item">
+            <Link className="nav-link" to ="/dashboard
+            ">Blog</Link>
+            </li>
+            {/* {isLoggedIn && (
+  <Link to="/blog-editor" className="nav-link">
+    Create Blog
+  </Link>
+)} */}
             <li className="nav-item">
             <Link className="nav-link" to ="/ContactUs">Contact Us </Link>
 

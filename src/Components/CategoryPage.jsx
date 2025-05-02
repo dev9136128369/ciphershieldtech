@@ -103,10 +103,15 @@ const CategoryPage = () => {
       </section>
 
     <div className="blog-container">
-      <h1>All Categories
-      <span className="decorative-line1"></span>
+    <div className="category-header-wrapper">
+  <h1 className="category-title">All Categories
+  <span className="decorative-line1"></span>
 
-      </h1>
+  </h1>
+  <button className="add-button" onClick={() => navigate('/BlogPage')}>
+    + Add
+  </button>
+</div>
 
       {categories.map(category => (
         <section key={category} className="category-section">

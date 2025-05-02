@@ -658,7 +658,7 @@ const BlogPage = () => {
           )}
         </div>
         
-        <h1>My Blog<span className="decorative-line1"></span></h1>
+        <h1>My Products And Services<span className="decorative-line1"></span></h1>
         
         <form onSubmit={handleSubmit} className="post-form">
           <div className="form-group">
