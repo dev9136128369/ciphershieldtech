@@ -807,414 +807,427 @@
 // export default Chatbot;
 
 
-import React, { useState } from 'react';
-import axios from 'axios';
-import '../ChatbotBox.css';
-const Chatbot = () => {
-  const [activeSection, setActiveSection] = useState('registrationForm');
-  const [selectedOption, setSelectedOption] = useState('');
-  const [isChatboxOpen, setIsChatboxOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
 
-  const toggleChatbox = () => {
-    setIsChatboxOpen(!isChatboxOpen);
-  };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
-  // const handleFormSubmit = async (event) => {
-  //   event.preventDefault();
-  //   setIsSubmitting(true);
-  //   setSubmitError('');
-  //   try {
-  //     const response = await axios.post('http://localhost:8000/chat-email', formData);
-  //     console.log('Form submitted successfully', response.data);
-  //     // Reset form or take further actions
-  //   } catch (error) {
-  //     console.error('Error submitting form:', error);
-  //     if (error.response) {
-  //       // Server responded with an error code
-  //       console.error('Error response:', error.response.data);
-  //       setSubmitError(error.response.data.message || 'An error occurred');
-  //     } else if (error.request) {
-  //       // No response received
-  //       console.error('No response from server:', error.request);
-  //       setSubmitError('Server did not respond');
-  //     } else {
-  //       // Error setting up the request
-  //       console.error('Request setup error:', error.message);
-  //       setSubmitError('Request setup error');
-  //     }
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
 
-  const handleFormSubmit = (e) => {
-        e.preventDefault();
-        setActiveSection('productServiceOptions');
-      };
+
+
+
+
+
+
+
+// import React, { useState } from 'react';
+// import axios from 'axios';
+// import '../ChatbotBox.css';
+// const Chatbot = () => {
+//   const [activeSection, setActiveSection] = useState('registrationForm');
+//   const [selectedOption, setSelectedOption] = useState('');
+//   const [isChatboxOpen, setIsChatboxOpen] = useState(false);
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     phone: ''
+//   });
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const [submitError, setSubmitError] = useState('');
+
+//   const toggleChatbox = () => {
+//     setIsChatboxOpen(!isChatboxOpen);
+//   };
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData(prev => ({
+//       ...prev,
+//       [name]: value
+//     }));
+//   };
+
+//   // const handleFormSubmit = async (event) => {
+//   //   event.preventDefault();
+//   //   setIsSubmitting(true);
+//   //   setSubmitError('');
+//   //   try {
+//   //     const response = await axios.post('http://localhost:8000/chat-email', formData);
+//   //     console.log('Form submitted successfully', response.data);
+//   //     // Reset form or take further actions
+//   //   } catch (error) {
+//   //     console.error('Error submitting form:', error);
+//   //     if (error.response) {
+//   //       // Server responded with an error code
+//   //       console.error('Error response:', error.response.data);
+//   //       setSubmitError(error.response.data.message || 'An error occurred');
+//   //     } else if (error.request) {
+//   //       // No response received
+//   //       console.error('No response from server:', error.request);
+//   //       setSubmitError('Server did not respond');
+//   //     } else {
+//   //       // Error setting up the request
+//   //       console.error('Request setup error:', error.message);
+//   //       setSubmitError('Request setup error');
+//   //     }
+//   //   } finally {
+//   //     setIsSubmitting(false);
+//   //   }
+//   // };
+
+//   const handleFormSubmit = (e) => {
+//         e.preventDefault();
+//         setActiveSection('productServiceOptions');
+//       };
     
-      const handleProductSelect = (product) => {
-        setSelectedOption(product);
-        setActiveSection('contactMoreDetails');
-      };
+//       const handleProductSelect = (product) => {
+//         setSelectedOption(product);
+//         setActiveSection('contactMoreDetails');
+//       };
     
-      const handleServiceSelect = (service) => {
-        setSelectedOption(service);
-        setActiveSection('serviceContactMoreDetails');
-      };
+//       const handleServiceSelect = (service) => {
+//         setSelectedOption(service);
+//         setActiveSection('serviceContactMoreDetails');
+//       };
     
-      const handleBack = (fromSection) => {
-        switch(fromSection) {
-          case 'productOptions':
-            setActiveSection('productServiceOptions');
-            break;
-          case 'serviceOptions':
-            setActiveSection('productServiceOptions');
-            break;
-          case 'contactMoreDetails':
-            setActiveSection('productOptions');
-            break;
-          case 'serviceContactMoreDetails':
-            setActiveSection('serviceOptions');
-            break;
-          case 'contactOptions':
-            setActiveSection('contactMoreDetails');
-            break;
-          default:
-            setActiveSection('registrationForm');
-        }
-      };
+//       const handleBack = (fromSection) => {
+//         switch(fromSection) {
+//           case 'productOptions':
+//             setActiveSection('productServiceOptions');
+//             break;
+//           case 'serviceOptions':
+//             setActiveSection('productServiceOptions');
+//             break;
+//           case 'contactMoreDetails':
+//             setActiveSection('productOptions');
+//             break;
+//           case 'serviceContactMoreDetails':
+//             setActiveSection('serviceOptions');
+//             break;
+//           case 'contactOptions':
+//             setActiveSection('contactMoreDetails');
+//             break;
+//           default:
+//             setActiveSection('registrationForm');
+//         }
+//       };
     
   
-  // const handleProductSelect = (product) => {
-  //   setSelectedOption(product);
-  //   setActiveSection('contactMoreDetails');
-  // };
+//   // const handleProductSelect = (product) => {
+//   //   setSelectedOption(product);
+//   //   setActiveSection('contactMoreDetails');
+//   // };
 
-  // const handleServiceSelect = (service) => {
-  //   setSelectedOption(service);
-  //   setActiveSection('serviceContactMoreDetails');
-  // };
+//   // const handleServiceSelect = (service) => {
+//   //   setSelectedOption(service);
+//   //   setActiveSection('serviceContactMoreDetails');
+//   // };
 
-  // const handleBack = (fromSection) => {
-  //   switch(fromSection) {
-  //     case 'productOptions':
-  //       setActiveSection('productServiceOptions');
-  //       break;
-  //     case 'serviceOptions':
-  //       setActiveSection('productServiceOptions');
-  //       break;
-  //     case 'contactMoreDetails':
-  //       setActiveSection('productOptions');
-  //       break;
-  //     case 'serviceContactMoreDetails':
-  //       setActiveSection('serviceOptions');
-  //       break;
-  //     case 'contactOptions':
-  //       setActiveSection('contactMoreDetails');
-  //       break;
-  //     default:
-  //       setActiveSection('registrationForm');
-  //   }
-  // };
+//   // const handleBack = (fromSection) => {
+//   //   switch(fromSection) {
+//   //     case 'productOptions':
+//   //       setActiveSection('productServiceOptions');
+//   //       break;
+//   //     case 'serviceOptions':
+//   //       setActiveSection('productServiceOptions');
+//   //       break;
+//   //     case 'contactMoreDetails':
+//   //       setActiveSection('productOptions');
+//   //       break;
+//   //     case 'serviceContactMoreDetails':
+//   //       setActiveSection('serviceOptions');
+//   //       break;
+//   //     case 'contactOptions':
+//   //       setActiveSection('contactMoreDetails');
+//   //       break;
+//   //     default:
+//   //       setActiveSection('registrationForm');
+//   //   }
+//   // };
 
-  const products = [
-    { name: 'Tally', link: 'https://andwebtech.com/content.php#' },
-    { name: 'EzyBill', link: 'https://andwebtech.com/content2.php' },
-    { name: 'Import BusyData', link: 'https://andwebtech.com/content2.php#' },
-    { name: 'Tally on Cloud', link: 'https://andwebtech.com/tally_on_cloud.php' },
-    { name: 'Tally on Mobile', link: 'https://andwebtech.com/tally_on_mobile.php' }
-  ];
+//   const products = [
+//     { name: 'Tally', link: 'https://andwebtech.com/content.php#' },
+//     { name: 'EzyBill', link: 'https://andwebtech.com/content2.php' },
+//     { name: 'Import BusyData', link: 'https://andwebtech.com/content2.php#' },
+//     { name: 'Tally on Cloud', link: 'https://andwebtech.com/tally_on_cloud.php' },
+//     { name: 'Tally on Mobile', link: 'https://andwebtech.com/tally_on_mobile.php' }
+//   ];
 
-  const services = [
-    { name: 'Web Designing', link: 'https://andwebtech.com/content.php#' },
-    { name: 'Software Development', link: 'https://andwebtech.com/content2.php' },
-    { name: 'Android App Development', link: 'https://andwebtech.com/content2.php#' },
-    { name: 'Digital Marketing', link: 'https://andwebtech.com/tally_on_cloud.php' },
-    { name: 'SEO', link: 'https://andwebtech.com/tally_on_mobile.php' },
-    { name: 'E-Publishing', link: 'https://andwebtech.com/content3.php' },
-    { name: 'Digitization', link: 'https://andwebtech.com/content4.php' },
-    { name: 'Data Conversion', link: 'https://andwebtech.com/content5.php' }
-  ];
+//   const services = [
+//     { name: 'Web Designing', link: 'https://andwebtech.com/content.php#' },
+//     { name: 'Software Development', link: 'https://andwebtech.com/content2.php' },
+//     { name: 'Android App Development', link: 'https://andwebtech.com/content2.php#' },
+//     { name: 'Digital Marketing', link: 'https://andwebtech.com/tally_on_cloud.php' },
+//     { name: 'SEO', link: 'https://andwebtech.com/tally_on_mobile.php' },
+//     { name: 'E-Publishing', link: 'https://andwebtech.com/content3.php' },
+//     { name: 'Digitization', link: 'https://andwebtech.com/content4.php' },
+//     { name: 'Data Conversion', link: 'https://andwebtech.com/content5.php' }
+//   ];
 
-  return (
-    <div className="chatbot">
-      {/* Chatbox Icon */}
-      <div className="chatbox__button">
-        <button id="chatboxIcon" onClick={toggleChatbox}>
-          <img 
-            src="https://img.icons8.com/ios-filled/50/000000/chat.png" 
-            alt="Chat Icon"
-          />
-        </button>
-      </div>
+//   return (
+//     <div className="chatbot">
+//       {/* Chatbox Icon */}
+//       <div className="chatbox__button">
+//         <button id="chatboxIcon" onClick={toggleChatbox}>
+//           <img 
+//             src="https://img.icons8.com/ios-filled/50/000000/chat.png" 
+//             alt="Chat Icon"
+//           />
+//         </button>
+//       </div>
 
-      {/* Chatbox Support Window */}
-      {isChatboxOpen && (
-        <div className="chatbox__support" id="chatboxSupport">
-          <div className="chatbox__header">
-            <div className="chatbox__image--header">
-              <img 
-                src="./AnD.png" 
-                width="50px" 
-                height="50px" 
-                alt="Chat"
-              />
-            </div>
-            <div className="chatbox__content--header">
-              <h4 className="chatbox__heading--header"></h4>
-              <p className="chatbox__description--header">Hi! Please fill out the form below.</p>
-            </div>
-          </div>
+//       {/* Chatbox Support Window */}
+//       {isChatboxOpen && (
+//         <div className="chatbox__support" id="chatboxSupport">
+//           <div className="chatbox__header">
+//             <div className="chatbox__image--header">
+//               <img 
+//                 src="./AnD.png" 
+//                 width="50px" 
+//                 height="50px" 
+//                 alt="Chat"
+//               />
+//             </div>
+//             <div className="chatbox__content--header">
+//               <h4 className="chatbox__heading--header"></h4>
+//               <p className="chatbox__description--header">Hi! Please fill out the form below.</p>
+//             </div>
+//           </div>
 
-          <div className="chatbox__messages">
-            <div id="messages">
-              {/* Registration Form */}
-              {activeSection === 'registrationForm' && (
-                <div id="registrationForm" className="container">
-                  <form id="registerForm" onSubmit={handleFormSubmit}>
-                    {submitError && <div className="error-message">{submitError}</div>}
-                    <div className="mb-2">
-                      <label htmlFor="name" className="form-label">Name</label>
-                      <input 
-                        type="text" 
-                        className="form-control form-control-sm" 
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Enter your name" 
-                        required
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <label htmlFor="email" className="form-label">Email</label>
-                      <input 
-                        type="email" 
-                        className="form-control form-control-sm" 
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="Enter your email" 
-                        required
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <label htmlFor="phone" className="form-label">Phone</label>
-                      <input 
-                        type="text" 
-                        className="form-control form-control-sm" 
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="Enter your phone number" 
-                        required 
-                      />
-                    </div>
-                    <button 
-                      type="submit" 
-                      className="btn btn-primary w-100 btn-sm"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Submitting...' : 'Submit'}
-                    </button>
-                  </form>
-                </div>
-              )}
+//           <div className="chatbox__messages">
+//             <div id="messages">
+//               {/* Registration Form */}
+//               {activeSection === 'registrationForm' && (
+//                 <div id="registrationForm" className="container">
+//                   <form id="registerForm" onSubmit={handleFormSubmit}>
+//                     {submitError && <div className="error-message">{submitError}</div>}
+//                     <div className="mb-2">
+//                       <label htmlFor="name" className="form-label">Name</label>
+//                       <input 
+//                         type="text" 
+//                         className="form-control form-control-sm" 
+//                         id="name"
+//                         name="name"
+//                         value={formData.name}
+//                         onChange={handleInputChange}
+//                         placeholder="Enter your name" 
+//                         required
+//                       />
+//                     </div>
+//                     <div className="mb-2">
+//                       <label htmlFor="email" className="form-label">Email</label>
+//                       <input 
+//                         type="email" 
+//                         className="form-control form-control-sm" 
+//                         id="email"
+//                         name="email"
+//                         value={formData.email}
+//                         onChange={handleInputChange}
+//                         placeholder="Enter your email" 
+//                         required
+//                       />
+//                     </div>
+//                     <div className="mb-2">
+//                       <label htmlFor="phone" className="form-label">Phone</label>
+//                       <input 
+//                         type="text" 
+//                         className="form-control form-control-sm" 
+//                         id="phone"
+//                         name="phone"
+//                         value={formData.phone}
+//                         onChange={handleInputChange}
+//                         placeholder="Enter your phone number" 
+//                         required 
+//                       />
+//                     </div>
+//                     <button 
+//                       type="submit" 
+//                       className="btn btn-primary w-100 btn-sm"
+//                       disabled={isSubmitting}
+//                     >
+//                       {isSubmitting ? 'Submitting...' : 'Submit'}
+//                     </button>
+//                   </form>
+//                 </div>
+//               )}
 
-              {/* Product & Service Options */}
-              {activeSection === 'productServiceOptions' && (
-                <div id="productServiceOptions" className="container">
-                  <p className="text-center">Thank you for registering. Please select an option:</p>
-                  <div className="options-container">
-                    <button 
-                      className="btn btn-secondary w-100 btn-sm" 
-                      onClick={() => setActiveSection('productOptions')}
-                    >
-                      Product
-                    </button>
-                    <button 
-                      className="btn btn-secondary w-100 btn-sm" 
-                      onClick={() => setActiveSection('serviceOptions')}
-                    >
-                      Service
-                    </button>
-                    <button 
-                      className="btn btn-secondary w-100 btn-sm" 
-                      onClick={() => setActiveSection('registrationForm')}
-                    >
-                      Back
-                    </button>
-                  </div>
-                </div>
-              )}
+//               {/* Product & Service Options */}
+//               {activeSection === 'productServiceOptions' && (
+//                 <div id="productServiceOptions" className="container">
+//                   <p className="text-center">Thank you for registering. Please select an option:</p>
+//                   <div className="options-container">
+//                     <button 
+//                       className="btn btn-secondary w-100 btn-sm" 
+//                       onClick={() => setActiveSection('productOptions')}
+//                     >
+//                       Product
+//                     </button>
+//                     <button 
+//                       className="btn btn-secondary w-100 btn-sm" 
+//                       onClick={() => setActiveSection('serviceOptions')}
+//                     >
+//                       Service
+//                     </button>
+//                     <button 
+//                       className="btn btn-secondary w-100 btn-sm" 
+//                       onClick={() => setActiveSection('registrationForm')}
+//                     >
+//                       Back
+//                     </button>
+//                   </div>
+//                 </div>
+//               )}
 
-              {/* Product Options */}
-              {activeSection === 'productOptions' && (
-                <div id="productOptions" className="container">
-                  <h5>Select a Product:</h5>
-                  {products.map((product, index) => (
-                    <div key={index} className="product-option mb-3">
-                      <button 
-                        className="btn btn-secondary w-100 btn-sm product-button"
-                        onClick={() => handleProductSelect(product.name)}
-                      >
-                        {product.name}
-                      </button>
-                    </div>
-                  ))}
-                  <button 
-                    className="btn btn-secondary w-100 btn-sm" 
-                    onClick={() => handleBack('productOptions')}
-                  >
-                    Back
-                  </button>
-                </div>
-              )}
+//               {/* Product Options */}
+//               {activeSection === 'productOptions' && (
+//                 <div id="productOptions" className="container">
+//                   <h5>Select a Product:</h5>
+//                   {products.map((product, index) => (
+//                     <div key={index} className="product-option mb-3">
+//                       <button 
+//                         className="btn btn-secondary w-100 btn-sm product-button"
+//                         onClick={() => handleProductSelect(product.name)}
+//                       >
+//                         {product.name}
+//                       </button>
+//                     </div>
+//                   ))}
+//                   <button 
+//                     className="btn btn-secondary w-100 btn-sm" 
+//                     onClick={() => handleBack('productOptions')}
+//                   >
+//                     Back
+//                   </button>
+//                 </div>
+//               )}
 
-              {/* Contact and More Details for Products */}
-              {activeSection === 'contactMoreDetails' && (
-                <div id="contactMoreDetails" className="container">
-                  <h5>Options for <span>{selectedOption}</span></h5>
-                  <div className="options-container">
-                    <button 
-                      className="btn btn-secondary w-100 btn-sm" 
-                      onClick={() => setActiveSection('contactOptions')}
-                    >
-                      Contact
-                    </button>
-                    <a
-                      href={products.find(p => p.name === selectedOption)?.link || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-secondary w-100 btn-sm"
-                    >
-                      More Details
-                    </a>
-                    <button 
-                      className="btn btn-secondary w-100 btn-sm" 
-                      onClick={() => handleBack('contactMoreDetails')}
-                    >
-                      Back
-                    </button>
-                  </div>
-                </div>
-              )}
+//               {/* Contact and More Details for Products */}
+//               {activeSection === 'contactMoreDetails' && (
+//                 <div id="contactMoreDetails" className="container">
+//                   <h5>Options for <span>{selectedOption}</span></h5>
+//                   <div className="options-container">
+//                     <button 
+//                       className="btn btn-secondary w-100 btn-sm" 
+//                       onClick={() => setActiveSection('contactOptions')}
+//                     >
+//                       Contact
+//                     </button>
+//                     <a
+//                       href={products.find(p => p.name === selectedOption)?.link || '#'}
+//                       target="_blank"
+//                       rel="noopener noreferrer"
+//                       className="btn btn-secondary w-100 btn-sm"
+//                     >
+//                       More Details
+//                     </a>
+//                     <button 
+//                       className="btn btn-secondary w-100 btn-sm" 
+//                       onClick={() => handleBack('contactMoreDetails')}
+//                     >
+//                       Back
+//                     </button>
+//                   </div>
+//                 </div>
+//               )}
 
-              {/* Contact Options */}
-              {activeSection === 'contactOptions' && (
-                <div id="contactOptions" className="container text-center">
-                  <h5>Contact Options:</h5>
-                  <div className="contact-icons">
-                    <a href="https://wa.me/919997544981?text=Hello" target="_blank" rel="noopener noreferrer">
-                      <img 
-                        src="whatsapp.png" 
-                        alt="WhatsApp"
-                        className="contact-icon"
-                      />
-                    </a>
-                    <a href="tel:+91-9997544981">
-                      <img 
-                        src="/call.png" 
-                        alt="Call" 
-                        className="contact-icon"
-                      />
-                    </a>
-                  </div>
-                  <button 
-                    className="btn btn-secondary w-100 btn-sm mt-3" 
-                    onClick={() => handleBack('contactOptions')}
-                  >
-                    Back
-                  </button>
-                </div>
-              )}
+//               {/* Contact Options */}
+//               {activeSection === 'contactOptions' && (
+//                 <div id="contactOptions" className="container text-center">
+//                   <h5>Contact Options:</h5>
+//                   <div className="contact-icons">
+//                     <a href="https://wa.me/919997544981?text=Hello" target="_blank" rel="noopener noreferrer">
+//                       <img 
+//                         src="whatsapp.png" 
+//                         alt="WhatsApp"
+//                         className="contact-icon"
+//                       />
+//                     </a>
+//                     <a href="tel:+91-9997544981">
+//                       <img 
+//                         src="/call.png" 
+//                         alt="Call" 
+//                         className="contact-icon"
+//                       />
+//                     </a>
+//                   </div>
+//                   <button 
+//                     className="btn btn-secondary w-100 btn-sm mt-3" 
+//                     onClick={() => handleBack('contactOptions')}
+//                   >
+//                     Back
+//                   </button>
+//                 </div>
+//               )}
 
-              {/* Service Options */}
-              {activeSection === 'serviceOptions' && (
-  <div id="serviceOptions" className="container">
-                  <h5>Select a Service:</h5>
-                  <button 
-                    className="btn btn-secondary w-100 btn-sm"
-                    onClick={() => handleBack('serviceOptions')}
-                  >
-                    Back
-                  </button>
-                  {services.map((service, index) => (
-                    <div key={index} className="service-option">
-                      <button 
-                        className="btn btn-secondary w-100 btn-sm"
-                        onClick={() => handleServiceSelect(service.name)}
-                      >
-                        {service.name}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+//               {/* Service Options */}
+//               {activeSection === 'serviceOptions' && (
+//   <div id="serviceOptions" className="container">
+//                   <h5>Select a Service:</h5>
+//                   <button 
+//                     className="btn btn-secondary w-100 btn-sm"
+//                     onClick={() => handleBack('serviceOptions')}
+//                   >
+//                     Back
+//                   </button>
+//                   {services.map((service, index) => (
+//                     <div key={index} className="service-option">
+//                       <button 
+//                         className="btn btn-secondary w-100 btn-sm"
+//                         onClick={() => handleServiceSelect(service.name)}
+//                       >
+//                         {service.name}
+//                       </button>
+//                     </div>
+//                   ))}
+//                 </div>
+//               )}
 
-              {/* Contact and More Details for Services */}
-              {activeSection === 'serviceContactMoreDetails' && (
-                <div id="serviceContactMoreDetails" className="container">
-                  <h5>Contact Options:</h5>
-                  <div className="contact-icons">
-                    <a href="https://wa.me/919997544981?text=Hello" target="_blank" rel="noopener noreferrer">
-                      <img 
-                        src="whatsapp.png" 
-                        alt="WhatsApp"
-                        className="contact-icon"
-                      />
-                    </a>
-                    <a href="tel:+91-9997544981">
-                      <img 
-                        src="/call.png" 
-                        alt="Call" 
-                        className="contact-icon"
-                      />
-                    </a>
-                  </div>
+//               {/* Contact and More Details for Services */}
+//               {activeSection === 'serviceContactMoreDetails' && (
+//                 <div id="serviceContactMoreDetails" className="container">
+//                   <h5>Contact Options:</h5>
+//                   <div className="contact-icons">
+//                     <a href="https://wa.me/919997544981?text=Hello" target="_blank" rel="noopener noreferrer">
+//                       <img 
+//                         src="whatsapp.png" 
+//                         alt="WhatsApp"
+//                         className="contact-icon"
+//                       />
+//                     </a>
+//                     <a href="tel:+91-9997544981">
+//                       <img 
+//                         src="/call.png" 
+//                         alt="Call" 
+//                         className="contact-icon"
+//                       />
+//                     </a>
+//                   </div>
 
-                  <h5>For more details, visit the following links:</h5>
-                  <ul className="details-links">
-                    {services.map((service, index) => (
-                      <li key={index}>
-                        <a href={service.link} target="_blank" rel="noopener noreferrer">
-                          {service.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+//                   <h5>For more details, visit the following links:</h5>
+//                   <ul className="details-links">
+//                     {services.map((service, index) => (
+//                       <li key={index}>
+//                         <a href={service.link} target="_blank" rel="noopener noreferrer">
+//                           {service.name}
+//                         </a>
+//                       </li>
+//                     ))}
+//                   </ul>
 
-                  <button 
-                    className="btn btn-secondary w-100 btn-sm" 
-                    onClick={() => handleBack('serviceContactMoreDetails')}
-                  >
-                    Back
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+//                   <button 
+//                     className="btn btn-secondary w-100 btn-sm" 
+//                     onClick={() => handleBack('serviceContactMoreDetails')}
+//                   >
+//                     Back
+//                   </button>
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
-export default Chatbot;
+// export default Chatbot;
+
+

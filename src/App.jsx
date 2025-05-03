@@ -143,7 +143,11 @@ const Navbar = lazy(() => import("./Components/Navbar"));
 const BlogPage = lazy(() => import("./Components/BlogPage.jsx"));
 const CategoryPage = lazy(() => import("./Components/CategoryPage"));
 const Chatbot = lazy(() => import("./Components/Chatbot"));
-const ChatbotBox = lazy(() => import("./Components/ChatbotBox"));
+// const ChatbotBox = lazy(() => import("./Components/ChatbotBox"));
+
+const ChatbotComponent = lazy(() => import("./Components/ChatbotComponent"));
+
+
 const ArticlePreview = lazy(() => import("./Components/ArticlePreview"));
 const ArticleForm = lazy(() => import("./Components/ArticleForm"));
 const LinkedInArticle = lazy(() => import("./Components/LinkedInArticle"));
@@ -234,7 +238,11 @@ const App = () => {
           <Route path="/BlogPage" element={<BlogPage />} />
           <Route path="/CategoryPage" element={<CategoryPage />} />
           <Route path="/Chatbot" element={<Chatbot />} />
-          <Route path="/ChatbotBox" element={<ChatbotBox />} />
+          {/* <Route path="/ChatbotBox" element={<ChatbotBox />} /> */}
+
+          <Route path="/ChatbotComponent" element={<ChatbotComponent />} />
+
+
           <Route path="/ArticlePreview" element={<ArticlePreview />} />
           <Route path="/ArticleForm" element={<ArticleForm />} />
           <Route path="/LinkedInArticle" element={<LinkedInArticle />} />
