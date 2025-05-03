@@ -286,28 +286,25 @@
 
 
 
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaArrowRight } from 'react-icons/fa';
 
-const BlogDashboard = ({ blogs, setBlogs, currentUser }) => {
+const BlogDashboard = ({ blogs, setBlogs, currentUser, setisLoggedIn }) => {
   const navigate = useNavigate();
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const userBlogs = blogs.filter(blog => blog.author === currentUser);
-    
-    if (searchTerm) {
-      const filtered = userBlogs.filter(blog => 
-        blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        blog.content.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredBlogs(filtered);
-    } else {
-      setFilteredBlogs(userBlogs);
-    }
+    setFilteredBlogs(
+      searchTerm 
+        ? userBlogs.filter(blog => 
+            blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            blog.content.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        : userBlogs
+    );
   }, [blogs, currentUser, searchTerm]);
 
   const handleDelete = (id) => {
@@ -329,7 +326,13 @@ const BlogDashboard = ({ blogs, setBlogs, currentUser }) => {
   };
 
   const handleCreateNew = () => {
-    navigate('/editor');
+    
+    navigate('/login', { state: { from: '/editor' } });
+  };
+
+  const handleEditBlog = (id, e) => {
+    e.stopPropagation();
+    navigate('/login', { state: { from: `/editor/${id}` } });
   };
 
   return (
@@ -387,10 +390,7 @@ const BlogDashboard = ({ blogs, setBlogs, currentUser }) => {
               </div>
               <div className="blog-actions">
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/editor/${blog.id}`);
-                  }}
+                  onClick={(e) => handleEditBlog(blog.id, e)}
                   className="edit-btn"
                 >
                   <FaEdit /> Edit

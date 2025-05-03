@@ -90,9 +90,9 @@ const Career = () => {
       
         if (validateForm()) {
           try {
-      // const response = await axios.post("http://localhost:8000/login-email", formData);
+      // const response = await axios.post("http://localhost:8000/submit-form", formData);
 
-      const response = await axios.post('https://api.ciphershieldtech.com/login-email', formData);
+      const response = await axios.post('https://api.ciphershieldtech.com/submit-form', formData);
             if (response.status === 200) {
               alert(response.data.message);
               setFormData({

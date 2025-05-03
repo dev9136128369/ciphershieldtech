@@ -1,101 +1,101 @@
-// const express = require('express');
-// const cors = require('cors');
-// const bodyParser = require('body-parser');
-// const nodemailer = require('nodemailer');
-// require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
-// const app = express();
+const app = express();
 
-// // CORS Middleware Setup
-// app.use(cors({
-//   origin: ['http://localhost:5173', 'http://localhost:3000'], 
-//   methods: ['GET', 'POST'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
+// CORS Middleware Setup
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'], 
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// // Nodemailer Configuration
-// const transporter = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 465,
-//   secure: true,
-//   auth: {
-//     user: process.env.EMAIL_USER, 
-//     pass: process.env.EMAIL_PASS,
-//   },
-//   tls: {
-//     rejectUnauthorized: false,
-//   }
-// });
+// Nodemailer Configuration
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  }
+});
 
-// // ✅ New `/submit-form` route
-// app.post('/submit-form', async (req, res) => {
-//   const { name, email, state, designation, contact, gender, message } = req.body;
+// ✅ New `/submit-form` route
+app.post('/submit-form', async (req, res) => {
+  const { name, email, state, designation, contact, gender, message } = req.body;
 
-//   if (!name || !email || !state || !designation || !contact || !gender || !message) {
-//     return res.status(400).json({ error: 'All fields are required.' });
-//   }
+  if (!name || !email || !state || !designation || !contact || !gender || !message) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
 
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: 'yashveersingh7648@gmail.com',
-//     subject: `New Application from ${name}`,
-//     html: `
-//       <h2>New Application Form Submission</h2>
-//       <p><strong>Name:</strong> ${name}</p>
-//       <p><strong>Email:</strong> ${email}</p>
-//       <p><strong>State:</strong> ${state}</p>
-//       <p><strong>Designation:</strong> ${designation}</p>
-//       <p><strong>Contact:</strong> ${contact}</p>
-//       <p><strong>Gender:</strong> ${gender}</p>
-//       <p><strong>Message:</strong> ${message}</p>
-//     `,
-//   };
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: 'yashveersingh7648@gmail.com',
+    subject: `New Application from ${name}`,
+    html: `
+      <h2>New Application Form Submission</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>State:</strong> ${state}</p>
+      <p><strong>Designation:</strong> ${designation}</p>
+      <p><strong>Contact:</strong> ${contact}</p>
+      <p><strong>Gender:</strong> ${gender}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `,
+  };
 
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ success: true, message: '✅ Form submitted and email sent successfully!' });
-//   } catch (error) {
-//     console.error('Error sending email:', error);
-//     res.status(500).json({ error: '❌ Failed to send email. Please try again.' });
-//   }
-// });
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: '✅ Form submitted and email sent successfully!' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: '❌ Failed to send email. Please try again.' });
+  }
+});
 
-// app.post('/send-email', async (req, res) => {
-//   const { name, email, subject, message } = req.body;
+app.post('/login-email', async (req, res) => {
+  const { name, email, subject, message } = req.body;
 
-//   if (!name || !email || !subject || !message) {
-//     return res.status(400).json({ error: 'All fields are required.' });
-//   }
+  if (!name || !email || !subject || !message) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
 
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: 'yashveersingh7648@gmail.com',
-//     subject: `New Message: ${subject}`,
-//     html: `
-//       <h2>Contact Form Submission</h2>
-//       <p><strong>Name:</strong> ${name}</p>
-//       <p><strong>Email:</strong> ${email}</p>
-//       <p><strong>Subject:</strong> ${subject}</p>
-//       <p><strong>Message:</strong> ${message}</p>
-//     `,
-//   };
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: 'yashveersingh7648@gmail.com',
+    subject: `New Message: ${subject}`,
+    html: `
+      <h2>Contact Form Submission</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Subject:</strong> ${subject}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `,
+  };
 
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
-//   } catch (error) {
-//     console.error('❌ Error:', error);
-//     res.status(500).json({ error: 'Failed to send email.' });
-//   }
-// });
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
+  } catch (error) {
+    console.error('❌ Error:', error);
+    res.status(500).json({ error: 'Failed to send email.' });
+  }
+});
 
-// // Start Server
-// app.listen(8000, () => {
-//   console.log('🚀 Server is running on port 8000');
-// });
+// Start Server
+app.listen(8000, () => {
+  console.log('🚀 Server is running on port 8000');
+});
 
 
 
@@ -489,6 +489,9 @@
 //   console.log(`🚀 Server running on http://localhost:${PORT}`);
 //   console.log(`📁 Uploads directory: ${uploadDir}`);
 // });
+
+
+
 
 // require('dotenv').config();
 // const express = require('express');
@@ -1298,432 +1301,436 @@
 // });
 
 
+
+
+
+
 // === server/server.js ===
-const express = require("express");
-const cors = require("cors");
-const fs = require("fs");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const multer = require("multer");
-const path = require("path");
-const app = express();
-const { v4: uuidv4 } = require('uuid');
-// Configuration
-const SECRET = process.env.JWT_SECRET || "your_jwt_secret_should_be_strong_and_in_env";
-const PORT = process.env.PORT || 8000;
-const UPLOAD_DIR = path.join(__dirname, "uploads");
+// const express = require("express");
+// const cors = require("cors");
+// const fs = require("fs");
+// const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
+// const multer = require("multer");
+// const path = require("path");
+// const app = express();
+// const { v4: uuidv4 } = require('uuid');
+// // Configuration
+// const SECRET = process.env.JWT_SECRET || "your_jwt_secret_should_be_strong_and_in_env";
+// const PORT = process.env.PORT || 8000;
+// const UPLOAD_DIR = path.join(__dirname, "uploads");
 
-// Ensure directories exist
-if (!fs.existsSync("data")) fs.mkdirSync("data");
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// // Ensure directories exist
+// if (!fs.existsSync("data")) fs.mkdirSync("data");
+// if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
-const USERS_FILE = path.join(__dirname, "data", "users.json");
-const ARTICLES_FILE = path.join(__dirname, "data", "articles.json");
+// const USERS_FILE = path.join(__dirname, "data", "users.json");
+// const ARTICLES_FILE = path.join(__dirname, "data", "articles.json");
 
-// Initialize empty files if they don't exist
-if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, "[]", "utf8");
-if (!fs.existsSync(ARTICLES_FILE)) fs.writeFileSync(ARTICLES_FILE, "[]", "utf8");
+// // Initialize empty files if they don't exist
+// if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, "[]", "utf8");
+// if (!fs.existsSync(ARTICLES_FILE)) fs.writeFileSync(ARTICLES_FILE, "[]", "utf8");
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://localhost:8000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
-app.use(express.json());
-app.use("/uploads", express.static(UPLOAD_DIR));
+// // Middleware
+// app.use(cors({
+//   origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://localhost:8000'],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true
+// }));
+// app.use(express.json());
+// app.use("/uploads", express.static(UPLOAD_DIR));
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
+// // Configure multer for file uploads
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, UPLOAD_DIR);
+//   },
+//   filename: (req, file, cb) => {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + path.extname(file.originalname));
+//   },
+// });
 
-const upload = multer({ 
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4", "application/pdf"];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type. Only images, videos and PDFs are allowed"), false);
-    }
-  },
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
-});
+// const upload = multer({ 
+//   storage: storage,
+//   fileFilter: (req, file, cb) => {
+//     const allowedTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4", "application/pdf"];
+//     if (allowedTypes.includes(file.mimetype)) {
+//       cb(null, true);
+//     } else {
+//       cb(new Error("Invalid file type. Only images, videos and PDFs are allowed"), false);
+//     }
+//   },
+//   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+// });
 
-// Utility functions
-const readJSON = (file) => {
-  try {
-    const data = fs.readFileSync(file, "utf8");
-    return data ? JSON.parse(data) : [];
-  } catch (err) {
-    console.error(`Error reading ${file}:`, err);
-    return [];
-  }
-};
+// // Utility functions
+// const readJSON = (file) => {
+//   try {
+//     const data = fs.readFileSync(file, "utf8");
+//     return data ? JSON.parse(data) : [];
+//   } catch (err) {
+//     console.error(`Error reading ${file}:`, err);
+//     return [];
+//   }
+// };
 
-const writeJSON = (file, data) => {
-  try {
-    fs.writeFileSync(file, JSON.stringify(data, null, 2), "utf8");
-    return true;
-  } catch (err) {
-    console.error(`Error writing to ${file}:`, err);
-    throw err;
-  }
-};
+// const writeJSON = (file, data) => {
+//   try {
+//     fs.writeFileSync(file, JSON.stringify(data, null, 2), "utf8");
+//     return true;
+//   } catch (err) {
+//     console.error(`Error writing to ${file}:`, err);
+//     throw err;
+//   }
+// };
 
-// Auth Middleware
-function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
+// // Auth Middleware
+// function verifyToken(req, res, next) {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
   
-  if (!token) return res.status(401).json({ error: "Access token required" });
+//   if (!token) return res.status(401).json({ error: "Access token required" });
   
-  try {
-    const decoded = jwt.verify(token, SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    console.error("JWT Verification Error:", err);
-    res.status(403).json({ error: "Invalid or expired token" });
-  }
-}
+//   try {
+//     const decoded = jwt.verify(token, SECRET);
+//     req.user = decoded;
+//     next();
+//   } catch (err) {
+//     console.error("JWT Verification Error:", err);
+//     res.status(403).json({ error: "Invalid or expired token" });
+//   }
+// }
 
-// === Routes ===
+// // === Routes ===
 
-// Health Check
-app.get("/api/health", (req, res) => {
-  res.json({ 
-    status: "OK",
-    server: "Blog API",
-    time: new Date().toISOString()
-  });
-});
+// // Health Check
+// app.get("/api/health", (req, res) => {
+//   res.json({ 
+//     status: "OK",
+//     server: "Blog API",
+//     time: new Date().toISOString()
+//   });
+// });
 
-// Register
-app.post("/api/auth/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+// // Register
+// app.post("/api/auth/register", async (req, res) => {
+//   try {
+//     const { name, email, password } = req.body;
     
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
+//     if (!name || !email || !password) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
 
-    const users = readJSON(USERS_FILE);
+//     const users = readJSON(USERS_FILE);
     
-    if (users.some(u => u.email === email)) {
-      return res.status(409).json({ error: "User already exists" });
-    }
+//     if (users.some(u => u.email === email)) {
+//       return res.status(409).json({ error: "User already exists" });
+//     }
 
-    const hashed = await bcrypt.hash(password, 10);
-    const newUser = { 
-      id: Date.now().toString(), 
-      name, 
-      email, 
-      password: hashed,
-      createdAt: new Date().toISOString()
-    };
+//     const hashed = await bcrypt.hash(password, 10);
+//     const newUser = { 
+//       id: Date.now().toString(), 
+//       name, 
+//       email, 
+//       password: hashed,
+//       createdAt: new Date().toISOString()
+//     };
 
-    users.push(newUser);
-    writeJSON(USERS_FILE, users);
+//     users.push(newUser);
+//     writeJSON(USERS_FILE, users);
     
-    res.status(201).json({ 
-      message: "User registered successfully",
-      user: { id: newUser.id, name: newUser.name, email: newUser.email }
-    });
-  } catch (err) {
-    console.error("Registration Error:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     res.status(201).json({ 
+//       message: "User registered successfully",
+//       user: { id: newUser.id, name: newUser.name, email: newUser.email }
+//     });
+//   } catch (err) {
+//     console.error("Registration Error:", err);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
-// Login
-app.post("/api/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// // Login
+// app.post("/api/auth/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
     
-    const users = readJSON(USERS_FILE);
-    const user = users.find(u => u.email === email);
+//     const users = readJSON(USERS_FILE);
+//     const user = users.find(u => u.email === email);
     
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
+//     if (!user || !(await bcrypt.compare(password, user.password))) {
+//       return res.status(401).json({ error: "Invalid credentials" });
+//     }
 
-    const token = jwt.sign(
-      { id: user.id, name: user.name, email: user.email }, 
-      SECRET,
-      { expiresIn: "24h" }
-    );
+//     const token = jwt.sign(
+//       { id: user.id, name: user.name, email: user.email }, 
+//       SECRET,
+//       { expiresIn: "24h" }
+//     );
 
-    console.log("Generated token:", token); // Log the token for testing
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
-  } catch (err) {
-    console.error("Login Error:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     console.log("Generated token:", token); // Log the token for testing
+//     res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+//   } catch (err) {
+//     console.error("Login Error:", err);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
-// File upload endpoint
-app.post("/api/upload", verifyToken, upload.single("media"), (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+// // File upload endpoint
+// app.post("/api/upload", verifyToken, upload.single("media"), (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ error: "No file uploaded" });
+//     }
 
-    const fileUrl = `/uploads/${req.file.filename}`;
+//     const fileUrl = `/uploads/${req.file.filename}`;
     
-    res.json({ 
-      url: fileUrl,
-      type: req.file.mimetype.startsWith("image") ? "image" : 
-            req.file.mimetype.startsWith("video") ? "video" : "file",
-      filename: req.file.filename
-    });
-  } catch (err) {
-    console.error("Upload Error:", err);
-    res.status(500).json({ error: "File upload failed" });
-  }
-});
+//     res.json({ 
+//       url: fileUrl,
+//       type: req.file.mimetype.startsWith("image") ? "image" : 
+//             req.file.mimetype.startsWith("video") ? "video" : "file",
+//       filename: req.file.filename
+//     });
+//   } catch (err) {
+//     console.error("Upload Error:", err);
+//     res.status(500).json({ error: "File upload failed" });
+//   }
+// });
 
-// Get all articles (published only for public, all for owner)
-app.get("/api/articles", (req, res) => {
-  try {
-    const articles = readJSON(ARTICLES_FILE);
-    const token = req.headers["authorization"]?.split(" ")[1];
+// // Get all articles (published only for public, all for owner)
+// app.get("/api/articles", (req, res) => {
+//   try {
+//     const articles = readJSON(ARTICLES_FILE);
+//     const token = req.headers["authorization"]?.split(" ")[1];
 
-    if (token) {
-      try {
-        const decoded = jwt.verify(token, SECRET);
-        // Return all articles for logged in users
-        res.json(articles);
-        return;
-      } catch (err) {
-        // Token invalid, fall through to public view
-      }
-    }
+//     if (token) {
+//       try {
+//         const decoded = jwt.verify(token, SECRET);
+//         // Return all articles for logged in users
+//         res.json(articles);
+//         return;
+//       } catch (err) {
+//         // Token invalid, fall through to public view
+//       }
+//     }
 
-    // Public view - only published articles
-    const publishedArticles = articles.filter(a => a.status === "published");
-    res.json(publishedArticles);
-  } catch (err) {
-    console.error("Get Articles Error:", err);
-    res.status(500).json({ error: "Failed to fetch articles" });
-  }
-});
+//     // Public view - only published articles
+//     const publishedArticles = articles.filter(a => a.status === "published");
+//     res.json(publishedArticles);
+//   } catch (err) {
+//     console.error("Get Articles Error:", err);
+//     res.status(500).json({ error: "Failed to fetch articles" });
+//   }
+// });
 
-// Create article
-app.post("/api/articles", verifyToken, (req, res) => {
-  try {
-    const { title, content, status = "draft" } = req.body;
+// // Create article
+// app.post("/api/articles", verifyToken, (req, res) => {
+//   try {
+//     const { title, content, status = "draft" } = req.body;
     
-    if (!title || !content) {
-      return res.status(400).json({ error: "Title and content are required" });
-    }
+//     if (!title || !content) {
+//       return res.status(400).json({ error: "Title and content are required" });
+//     }
 
-    const articles = readJSON(ARTICLES_FILE);
-    const newArticle = { 
-      id: uuidv4(),
-      userId: req.user.id,
-      author: req.user.name,
-      title,
-      content,
-      status,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+//     const articles = readJSON(ARTICLES_FILE);
+//     const newArticle = { 
+//       id: uuidv4(),
+//       userId: req.user.id,
+//       author: req.user.name,
+//       title,
+//       content,
+//       status,
+//       createdAt: new Date().toISOString(),
+//       updatedAt: new Date().toISOString()
+//     };
 
-    articles.push(newArticle);
-    writeJSON(ARTICLES_FILE, articles);
+//     articles.push(newArticle);
+//     writeJSON(ARTICLES_FILE, articles);
     
-    console.log("Created article:", newArticle); // Log the created article
-    res.status(201).json(newArticle);
-  } catch (err) {
-    console.error("Create Article Error:", err);
-    res.status(500).json({ error: "Failed to create article" });
-  }
-});
+//     console.log("Created article:", newArticle); // Log the created article
+//     res.status(201).json(newArticle);
+//   } catch (err) {
+//     console.error("Create Article Error:", err);
+//     res.status(500).json({ error: "Failed to create article" });
+//   }
+// });
 
-// Get one article
-// Update your article retrieval endpoint
-// Get one article
-app.get("/api/articles/:id", (req, res) => {
-  try {
-    console.log(`Looking for article with ID: ${req.params.id}`);
+// // Get one article
+// // Update your article retrieval endpoint
+// // Get one article
+// app.get("/api/articles/:id", (req, res) => {
+//   try {
+//     console.log(`Looking for article with ID: ${req.params.id}`);
     
-    const articles = readJSON(ARTICLES_FILE);
-    console.log(`Available article IDs: ${articles.map(a => a.id)}`);
+//     const articles = readJSON(ARTICLES_FILE);
+//     console.log(`Available article IDs: ${articles.map(a => a.id)}`);
     
-    const article = articles.find(a => a.id === req.params.id);
+//     const article = articles.find(a => a.id === req.params.id);
 
-    if (!article) {
-      console.log('Article not found in database');
-      return res.status(404).json({ 
-        error: "Article not found",
-        message: "The requested blog post does not exist"
-      });
-    }
+//     if (!article) {
+//       console.log('Article not found in database');
+//       return res.status(404).json({ 
+//         error: "Article not found",
+//         message: "The requested blog post does not exist"
+//       });
+//     }
 
-    // Rest of your existing code...
-  } catch (err) {
-    console.error("Detailed error:", err);
-    return res.status(500).json({ 
-      error: "Server error",
-      message: "Failed to retrieve the article"
-    });
-  }
-});
+//     // Rest of your existing code...
+//   } catch (err) {
+//     console.error("Detailed error:", err);
+//     return res.status(500).json({ 
+//       error: "Server error",
+//       message: "Failed to retrieve the article"
+//     });
+//   }
+// });
 
-// Edit article
-app.put("/api/articles/:id", verifyToken, (req, res) => {
-  try {
-    const { title, content, status } = req.body;
+// // Edit article
+// app.put("/api/articles/:id", verifyToken, (req, res) => {
+//   try {
+//     const { title, content, status } = req.body;
     
-    if (!title && !content && !status) {
-      return res.status(400).json({ error: "No fields to update" });
-    }
+//     if (!title && !content && !status) {
+//       return res.status(400).json({ error: "No fields to update" });
+//     }
 
-    const articles = readJSON(ARTICLES_FILE);
-    const index = articles.findIndex(a => a.id === req.params.id);
+//     const articles = readJSON(ARTICLES_FILE);
+//     const index = articles.findIndex(a => a.id === req.params.id);
     
-    if (index === -1) {
-      return res.status(404).json({ error: "Article not found" });
-    }
+//     if (index === -1) {
+//       return res.status(404).json({ error: "Article not found" });
+//     }
     
-    if (articles[index].userId !== req.user.id) {
-      return res.status(403).json({ error: "Not authorized to edit this article" });
-    }
+//     if (articles[index].userId !== req.user.id) {
+//       return res.status(403).json({ error: "Not authorized to edit this article" });
+//     }
 
-    // Update only provided fields
-    if (title) articles[index].title = title;
-    if (content) articles[index].content = content;
-    if (status) articles[index].status = status;
-    articles[index].updatedAt = new Date().toISOString();
+//     // Update only provided fields
+//     if (title) articles[index].title = title;
+//     if (content) articles[index].content = content;
+//     if (status) articles[index].status = status;
+//     articles[index].updatedAt = new Date().toISOString();
     
-    writeJSON(ARTICLES_FILE, articles);
+//     writeJSON(ARTICLES_FILE, articles);
     
-    res.json(articles[index]);
-  } catch (err) {
-    console.error("Update Article Error:", err);
-    res.status(500).json({ error: "Failed to update article" });
-  }
-});
+//     res.json(articles[index]);
+//   } catch (err) {
+//     console.error("Update Article Error:", err);
+//     res.status(500).json({ error: "Failed to update article" });
+//   }
+// });
 
-// Delete article
-app.delete("/api/articles/:id", verifyToken, (req, res) => {
-  try {
-    let articles = readJSON(ARTICLES_FILE);
-    const article = articles.find(a => a.id === req.params.id);
+// // Delete article
+// app.delete("/api/articles/:id", verifyToken, (req, res) => {
+//   try {
+//     let articles = readJSON(ARTICLES_FILE);
+//     const article = articles.find(a => a.id === req.params.id);
     
-    if (!article) {
-      return res.status(404).json({ error: "Article not found" });
-    }
+//     if (!article) {
+//       return res.status(404).json({ error: "Article not found" });
+//     }
     
-    if (article.userId !== req.user.id) {
-      return res.status(403).json({ error: "Not authorized to delete this article" });
-    }
+//     if (article.userId !== req.user.id) {
+//       return res.status(403).json({ error: "Not authorized to delete this article" });
+//     }
     
-    articles = articles.filter(a => a.id !== req.params.id);
-    writeJSON(ARTICLES_FILE, articles);
+//     articles = articles.filter(a => a.id !== req.params.id);
+//     writeJSON(ARTICLES_FILE, articles);
     
-    res.json({ message: "Article deleted successfully" });
-  } catch (err) {
-    console.error("Delete Article Error:", err);
-    res.status(500).json({ error: "Failed to delete article" });
-  }
-});
+//     res.json({ message: "Article deleted successfully" });
+//   } catch (err) {
+//     console.error("Delete Article Error:", err);
+//     res.status(500).json({ error: "Failed to delete article" });
+//   }
+// });
 
-// Publish/Unpublish article
-app.patch("/api/articles/:id/publish", verifyToken, (req, res) => {
-  try {
-    const articles = readJSON(ARTICLES_FILE);
-    const index = articles.findIndex(a => a.id === req.params.id);
+// // Publish/Unpublish article
+// app.patch("/api/articles/:id/publish", verifyToken, (req, res) => {
+//   try {
+//     const articles = readJSON(ARTICLES_FILE);
+//     const index = articles.findIndex(a => a.id === req.params.id);
     
-    if (index === -1) {
-      return res.status(404).json({ error: "Article not found" });
-    }
+//     if (index === -1) {
+//       return res.status(404).json({ error: "Article not found" });
+//     }
     
-    if (articles[index].userId !== req.user.id) {
-      return res.status(403).json({ error: "Not authorized to modify this article" });
-    }
+//     if (articles[index].userId !== req.user.id) {
+//       return res.status(403).json({ error: "Not authorized to modify this article" });
+//     }
 
-    // Toggle publish status
-    const newStatus = articles[index].status === "published" ? "draft" : "published";
-    articles[index].status = newStatus;
-    articles[index].updatedAt = new Date().toISOString();
+//     // Toggle publish status
+//     const newStatus = articles[index].status === "published" ? "draft" : "published";
+//     articles[index].status = newStatus;
+//     articles[index].updatedAt = new Date().toISOString();
     
-    writeJSON(ARTICLES_FILE, articles);
+//     writeJSON(ARTICLES_FILE, articles);
     
-    res.json({
-      message: `Article ${newStatus === "published" ? "published" : "unpublished"} successfully`,
-      article: articles[index]
-    });
-  } catch (err) {
-    console.error("Publish Error:", err);
-    res.status(500).json({ error: "Failed to update article status" });
-  }
-});
-
-
+//     res.json({
+//       message: `Article ${newStatus === "published" ? "published" : "unpublished"} successfully`,
+//       article: articles[index]
+//     });
+//   } catch (err) {
+//     console.error("Publish Error:", err);
+//     res.status(500).json({ error: "Failed to update article status" });
+//   }
+// });
 
 
-// ...............
 
-function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+
+// // ...............
+
+// function verifyToken(req, res, next) {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
   
-  if (!token) {
-    return res.status(401).json({ 
-      error: "Access token required",
-      message: "Please login to access this resource"
-    });
-  }
+//   if (!token) {
+//     return res.status(401).json({ 
+//       error: "Access token required",
+//       message: "Please login to access this resource"
+//     });
+//   }
   
-  try {
-    const decoded = jwt.verify(token, SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    console.error("JWT Error:", err.message);
-    res.status(403).json({ 
-      error: "Invalid token",
-      message: "Your session has expired. Please login again."
-    });
-  }
-}
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
+//   try {
+//     const decoded = jwt.verify(token, SECRET);
+//     req.user = decoded;
+//     next();
+//   } catch (err) {
+//     console.error("JWT Error:", err.message);
+//     res.status(403).json({ 
+//       error: "Invalid token",
+//       message: "Your session has expired. Please login again."
+//     });
+//   }
+// }
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
   
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({ 
-      error: "File upload error",
-      message: err.message 
-    });
-  } else if (err) {
-    return res.status(500).json({ 
-      error: "Internal server error",
-      message: err.message 
-    });
-  }
+//   if (err instanceof multer.MulterError) {
+//     return res.status(400).json({ 
+//       error: "File upload error",
+//       message: err.message 
+//     });
+//   } else if (err) {
+//     return res.status(500).json({ 
+//       error: "Internal server error",
+//       message: err.message 
+//     });
+//   }
   
-  next();
-});
+//   next();
+// });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Upload directory: ${UPLOAD_DIR}`);
-}).on("error", (err) => {
-  console.error("Server failed to start:", err);
-  if (err.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use`);
-    process.exit(1);
-  }
-});
+// // Start server
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+//   console.log(`Upload directory: ${UPLOAD_DIR}`);
+// }).on("error", (err) => {
+//   console.error("Server failed to start:", err);
+//   if (err.code === "EADDRINUSE") {
+//     console.error(`Port ${PORT} is already in use`);
+//     process.exit(1);
+//   }
+// });

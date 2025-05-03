@@ -640,7 +640,7 @@ const BlogPage = () => {
       <section className="innerBanner">
         <img className="bannerImage" src="/Images/blogsBanner.jpg" alt="Blog Banner" />
         <div className="bannerContent">
-          <h1>Blogs</h1>
+          <h1>Products</h1>
         </div>
       </section>
       
@@ -662,7 +662,7 @@ const BlogPage = () => {
         
         <form onSubmit={handleSubmit} className="post-form">
           <div className="form-group">
-            <label>Title:</label>
+            <label>Products Title:</label>
             <input
               type="text"
               value={newPost.title}
@@ -674,7 +674,7 @@ const BlogPage = () => {
           </div>
           
           <div className="form-group">
-            <label>Category:</label>
+            <label>Products Category:</label>
             <select
               value={newPost.category}
               onChange={(e) => setNewPost({...newPost, category: e.target.value})}
@@ -689,7 +689,7 @@ const BlogPage = () => {
           </div>
           
           <div className="form-group">
-            <label>Content:</label>
+            <label>Products Content:</label>
             <textarea
               value={newPost.content}
               onChange={(e) => setNewPost({...newPost, content: e.target.value})}
@@ -706,7 +706,7 @@ const BlogPage = () => {
           
           {newPost.files.length > 0 && (
             <div className="uploaded-files">
-              <h4>Files to upload:</h4>
+              <h4>Products Files to upload:</h4>
               <ul>
                 {newPost.files.map((file, index) => (
                   <li key={index}>

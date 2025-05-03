@@ -2697,7 +2697,7 @@ import {
   FaAlignLeft, FaAlignCenter, FaAlignRight,
   FaImage, FaVideo, FaTrash,
   FaEllipsisV, FaListOl, FaListUl, FaPlus, FaMinus,
-  FaArrowLeft, FaSave, FaLink
+  FaArrowLeft, FaSave, FaLink, FaTimes
 } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -2728,34 +2728,35 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
   const [linkText, setLinkText] = useState('');
   const [seoTitle, setSeoTitle] = useState(existingBlog?.seoTitle || '');
   const [seoDescription, setSeoDescription] = useState(existingBlog?.seoDescription || '');
+  const [seoKeywords, setSeoKeywords] = useState(existingBlog?.seoKeywords || '');
   const [urlSlug, setUrlSlug] = useState(existingBlog?.urlSlug || '');
   const [urlError, setUrlError] = useState('');
+  const [isUrlCreated, setIsUrlCreated] = useState(!!existingBlog?.urlSlug);
+  const [isGeneratingUrl, setIsGeneratingUrl] = useState(false);
 
   const titleRef = useRef(null);
   const quillRef = useRef(null);
   const navigate = useNavigate();
 
+  // Function to generate URL slug from title
+  const generateUrlSlug = (title) => {
+    return title.toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '');
+  };
+
   useEffect(() => {
-    if (title && !isEditMode) {
-      const generatedSlug = title.toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w-]+/g, '');
-      setUrlSlug(generatedSlug);
-      
-      if (blogs.some(blog => blog.urlSlug === generatedSlug)) {
-        setUrlError('This URL is already taken. Please customize it.');
-      } else {
-        setUrlError('');
-      }
+    if (existingBlog) {
+      setIsUrlCreated(true); // URL is already created for existing blog
     }
-  }, [title, blogs, isEditMode]);
+  }, [existingBlog]);
 
   const modules = {
     toolbar: {
@@ -2938,6 +2939,32 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
     setShowLinkModal(false);
   };
 
+  // Function to handle URL generation
+  const handleGenerateUrl = () => {
+    if (!title) {
+      alert('Please enter a title first');
+      return;
+    }
+    
+    setIsGeneratingUrl(true);
+    
+    // Simulate API call or processing delay
+    setTimeout(() => {
+      const generatedSlug = generateUrlSlug(title);
+      setUrlSlug(generatedSlug);
+      setIsUrlCreated(true);
+      
+      // Check if URL is available
+      if (blogs.some(blog => blog.urlSlug === generatedSlug && (!isEditMode || blog.id !== id))) {
+        setUrlError('This URL is already taken. Please customize it.');
+      } else {
+        setUrlError('');
+      }
+      
+      setIsGeneratingUrl(false);
+    }, 1000);
+  };
+
   const validateUrlSlug = (slug) => {
     if (!slug) return 'URL cannot be empty';
     if (!/^[a-z0-9-]+$/.test(slug)) return 'URL can only contain lowercase letters, numbers and hyphens';
@@ -2950,6 +2977,11 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
   const handlePublish = () => {
     if (!title || !content) {
       alert('Title and content are required');
+      return;
+    }
+    
+    if (!isUrlCreated) {
+      alert('Please create a URL for your article first');
       return;
     }
     
@@ -2970,6 +3002,7 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
           bannerImage,
           seoTitle: seoTitle || title,
           seoDescription: seoDescription || content.substring(0, 160),
+          seoKeywords: seoKeywords || '',
           urlSlug,
           lastUpdated: new Date().toISOString(),
           titleStyles: titleFormatting
@@ -2984,6 +3017,7 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
         bannerImage,
         seoTitle: seoTitle || title,
         seoDescription: seoDescription || content.substring(0, 160),
+        seoKeywords: seoKeywords || '',
         urlSlug,
         date: new Date().toISOString(),
         lastUpdated: new Date().toISOString(),
@@ -2999,6 +3033,129 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
     alert(`Blog ${isEditMode ? 'updated' : 'published'} successfully!`);
     navigate('/dashboard');
   };
+
+  // Settings Modal Component
+  const SettingsModal = () => (
+    <div className="settings-modal-overlay">
+      <div className="settings-modal-content">
+        <div className="settings-modal-header">
+          <h2>Article Settings</h2>
+          <button 
+            className="close-modal-btn"
+            onClick={() => setShowSettingsModal(false)}
+          >
+            <FaTimes />
+          </button>
+        </div>
+        
+        <section>
+          <div>
+            <h3 className="settings-section-title">General</h3>
+            <h4 className="settings-subtitle">Article URL</h4>
+            <p className="settings-description">
+              This URL will be created using your article's current title. {isUrlCreated ? 
+              "This URL cannot be changed once it is created." : 
+              "This URL cannot be changed once it is created."}
+            </p>
+
+            {!title ? (
+              <div className="url-creation-container">
+                <p className="settings-description">
+                  You need to add a title before you can create a URL for your article.
+                </p>
+                <button 
+                  disabled 
+                  aria-label="Create URL" 
+                  className="create-url-btn disabled"
+                >
+                  Create URL
+                </button>
+              </div>
+            ) : isUrlCreated ? (
+              <div className="url-preview-container">
+                <p className="settings-description">
+                  Your article URL:
+                </p>
+                <div className="url-display">
+                  https://yourblog.com/{urlSlug}
+                </div>
+              </div>
+            ) : (
+              <div className="url-creation-container">
+                <p className="settings-description">
+                  Click below to create a URL for your article.
+                </p>
+                <button 
+                  aria-label="Create URL" 
+                  className="create-url-btn"
+                  onClick={handleGenerateUrl}
+                  disabled={isGeneratingUrl}
+                >
+                  {isGeneratingUrl ? 'Creating...' : 'Create URL'}
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <hr className="settings-divider" />
+
+        <section>
+          <h3 className="settings-section-title">SEO</h3>
+          
+          <form className="seo-form">
+            <div className="form-group">
+              <h4 className="settings-subtitle">SEO title</h4>
+              <p className="settings-description">
+                We'll use your added SEO title in place of your article title for search engine result pages.
+              </p>
+              <div className="input-container">
+                <label htmlFor="seo-title-input">Title</label>
+                <input
+                  id="seo-title-input"
+                  type="text"
+                  value={seoTitle}
+                  onChange={(e) => setSeoTitle(e.target.value)}
+                  placeholder="Ex: My article"
+                  maxLength="60"
+                />
+                <div className="char-counter">{seoTitle.length}/60</div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <h4 className="settings-subtitle">SEO description</h4>
+              <p className="settings-description">
+                We'll use the SEO description in place of the first few lines of your article on search engine result pages. 
+                We suggest utilizing keywords, summarizing your writing, and aiming to write between 140-160 characters.
+              </p>
+              <div className="input-container">
+                <label htmlFor="seo-description-input">Description</label>
+                <textarea
+                  id="seo-description-input"
+                  value={seoDescription}
+                  onChange={(e) => setSeoDescription(e.target.value)}
+                  placeholder="Ex: A recap about what the article is about"
+                  maxLength="160"
+                  rows="3"
+                />
+                <div className="char-counter">{seoDescription.length}/160</div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <div className="settings-modal-footer">
+          <button 
+            className="save-settings-btn"
+            onClick={() => setShowSettingsModal(false)}
+          >
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="blog-editor-container">
@@ -3172,70 +3329,12 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
           </div>
         </div>
 
-        <div className="settings-card">
-          <button 
-            className="settings-toggle"
-            onClick={() => setShowSettings(!showSettings)}
-          >
-            <FaEllipsisV /> Settings
-          </button>
-          
-          {showSettings && (
-            <div className="settings-dropdown">
-              <div className="settings-section">
-                <h4>SEO Settings</h4>
-                <div className="form-group">
-                  <label>SEO Title</label>
-                  <input
-                    type="text"
-                    value={seoTitle}
-                    onChange={(e) => setSeoTitle(e.target.value)}
-                    placeholder="SEO Title (60 characters max)"
-                    maxLength="60"
-                  />
-                  <div className="char-count">{seoTitle.length}/60</div>
-                </div>
-                <div className="form-group">
-                  <label>SEO Description</label>
-                  <textarea
-                    value={seoDescription}
-                    onChange={(e) => setSeoDescription(e.target.value)}
-                    placeholder="SEO Description (160 characters max)"
-                    maxLength="160"
-                  />
-                  <div className="char-count">{seoDescription.length}/160</div>
-                </div>
-              </div>
-              
-              <div className="settings-section">
-                <h4>URL Settings</h4>
-                <div className="form-group">
-                  <label>Custom URL</label>
-                  <div className="url-preview">
-                    <span>https://yourblog.com/</span>
-                    <input
-                      type="text"
-                      value={urlSlug}
-                      onChange={(e) => {
-                        const newSlug = e.target.value.toLowerCase()
-                          .replace(/\s+/g, '-')
-                          .replace(/[^\w-]+/g, '');
-                        setUrlSlug(newSlug);
-                        setUrlError(validateUrlSlug(newSlug));
-                      }}
-                      placeholder="custom-url"
-                    />
-                  </div>
-                  {urlError && <div className="error-message">{urlError}</div>}
-                </div>
-              </div>
-              
-              <button className="save-settings-btn" onClick={() => setShowSettings(false)}>
-                Save Settings
-              </button>
-            </div>
-          )}
-        </div>
+        <button 
+          className="settings-toggle"
+          onClick={() => setShowSettingsModal(true)}
+        >
+          <FaEllipsisV /> Settings
+        </button>
       </div>
 
       <div className="editor-content">
@@ -3411,6 +3510,9 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
           </div>
         </div>
       )}
+
+      {/* Settings Modal */}
+      {showSettingsModal && <SettingsModal />}
     </div>
   );
 };

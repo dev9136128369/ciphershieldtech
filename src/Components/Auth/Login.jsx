@@ -123,81 +123,54 @@
 // export default Login;
 
 
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+
 
 const Login = ({ setIsLoggedIn, setCurrentUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    // Basic validation
     if (!email || !password) {
       setError('Email and password are required');
       return;
     }
-    if (!email.includes('@')) {
-      setError('Please enter a valid email');
-      return;
-    }
 
-    // Mock authentication - replace with real API call
-    try {
-      setIsLoggedIn(true);
-      setCurrentUser({ 
-        email, 
-        name: email.split('@')[0],
-        id: Date.now().toString() // Add a simple ID for the user
-      });
-      
-      // Redirect to intended path or default to '/dashboard'
-      const from = location.state?.from?.pathname || '/dashboard';
-      navigate(from, { replace: true });
-    } catch (err) {
-      setError('Login failed. Please try again.');
-      console.error('Login error:', err);
-    }
+    // Mock authentication
+    setIsLoggedIn(true);
+    setCurrentUser({ 
+      email, 
+      name: email.split('@')[0],
+      id: Date.now().toString()
+    });
+
+    // Redirect logic here
   };
 
   return (
-    <>
-     
-    <div className="auth-container">
-     
-      {error && <p className="error-message">{error}</p>}
-      <form onSubmit={handleSubmit} className="login-form">
-      <div className='container'>
-      <h2>Blog Editor Login</h2>
-      </div>
-        <div className="form-group">
-          <label>Email:</label>
-          <input 
-            type="text" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-          />
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-          />
-        </div>
-        <button type="submit" className="submit-btn">Login</button>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2>Login</h2>
+        {error && <p className="error-message">{error}</p>}
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
       </form>
     </div>
-    </>
-    
   );
 };
 

@@ -146,6 +146,10 @@ const Chatbot = lazy(() => import("./Components/Chatbot"));
 const ChatbotBox = lazy(() => import("./Components/ChatbotBox"));
 const ArticlePreview = lazy(() => import("./Components/ArticlePreview"));
 const ArticleForm = lazy(() => import("./Components/ArticleForm"));
+const LinkedInArticle = lazy(() => import("./Components/LinkedInArticle"));
+
+
+
 const NotFound = lazy(() => import("./Components/NotFound"));
 
 // Blog Components
@@ -171,6 +175,7 @@ const App = () => {
   // Save blogs to localStorage whenever they change
   useEffect(() => {
     try {
+
       localStorage.setItem('blogs', JSON.stringify(blogs));
     } catch (error) {
       console.error('Failed to save blogs to localStorage:', error);
@@ -232,52 +237,50 @@ const App = () => {
           <Route path="/ChatbotBox" element={<ChatbotBox />} />
           <Route path="/ArticlePreview" element={<ArticlePreview />} />
           <Route path="/ArticleForm" element={<ArticleForm />} />
+          <Route path="/LinkedInArticle" element={<LinkedInArticle />} />
           
           {/* Public Blog Routes */}
           <Route path="/blog" element={<BlogList blogs={blogs} />} />
           <Route path="/blog/:slug" element={<BlogDetail blogs={blogs} />} />
           
           {/* Auth Routes */}
+         
           <Route path="/login" element={
-            isLoggedIn ? 
-              <Navigate to="/editor" /> : 
-              <Login 
-                setIsLoggedIn={setIsLoggedIn} 
-                setCurrentUser={setCurrentUser} 
-              />
-          } />
-          
-          {/* Protected Routes */}
-          <Route path="/editor" element={
-            isLoggedIn ? 
-              <BlogEditor 
-                blogs={blogs} 
-                setBlogs={setBlogs} 
-                currentUser={currentUser} 
-              /> : 
-              <Navigate to="/login" />
-          } />
-          
-          <Route path="/dashboard" element={
-            isLoggedIn ? 
-              <BlogDashboard 
-                blogs={blogs} 
-                setBlogs={setBlogs} 
-                currentUser={currentUser} 
-              /> : 
-              <Navigate to="/login" />
-          } />
-          
-          <Route path="/editor/:id" element={
-            isLoggedIn ? 
-              <BlogEditor 
-                blogs={blogs} 
-                setBlogs={setBlogs} 
-                currentUser={currentUser} 
-              /> : 
-              <Navigate to="/login" />
-          } />
+  isLoggedIn ?      
+    <Navigate to="/editor" replace /> : 
+    <Login 
+      setIsLoggedIn={setIsLoggedIn} 
+      setCurrentUser={setCurrentUser} 
+    />
+} />
 
+<Route path="/editor" element={
+  isLoggedIn ? 
+    <BlogEditor 
+      blogs={blogs} 
+      setBlogs={setBlogs} 
+      currentUser={currentUser} 
+    /> : 
+    <Navigate to="/login" replace state={{ from: '/editor' }} />
+} />
+
+<Route path="/editor/:id" element={
+  isLoggedIn ? 
+    <BlogEditor 
+      blogs={blogs} 
+      setBlogs={setBlogs} 
+      currentUser={currentUser} 
+    /> : 
+    <Navigate to="/login" replace state={{ from: window.location.pathname }} />
+} />
+
+<Route path="/dashboard" element={
+    <BlogDashboard 
+      blogs={blogs} 
+      setBlogs={setBlogs} 
+      currentUser={currentUser} 
+      isLoggedIn={isLoggedIn}
+    /> } />
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
