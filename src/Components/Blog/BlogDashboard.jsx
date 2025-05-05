@@ -286,54 +286,233 @@
 
 
 
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { FaEdit, FaTrash, FaPlus, FaSearch, FaArrowRight } from 'react-icons/fa';
+
+// const BlogDashboard = ({ blogs, setBlogs, currentUser, setisLoggedIn }) => {
+//   const navigate = useNavigate();
+//   const [filteredBlogs, setFilteredBlogs] = useState([]);
+//   const [searchTerm, setSearchTerm] = useState('');
+
+//   useEffect(() => {
+//     const userBlogs = blogs.filter(blog => blog.author === currentUser);
+//     setFilteredBlogs(
+//       searchTerm 
+//         ? userBlogs.filter(blog => 
+//             blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//             blog.content.toLowerCase().includes(searchTerm.toLowerCase())
+//           )
+//         : userBlogs
+//     );
+//   }, [blogs, currentUser, searchTerm]);
+
+//   const handleDelete = (id) => {
+//     if (window.confirm('Are you sure you want to delete this blog?')) {
+//       setBlogs(blogs.filter(blog => blog.id !== id));
+//     }
+//   };
+
+//   const formatDate = (dateString) => {
+//     return new Date(dateString).toLocaleDateString('en-US', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric'
+//     });
+//   };
+
+//   const handleCardClick = (blog) => {
+//     navigate(`/blog/${blog.urlSlug}`, { state: { blog } });
+//   };
+
+//   const handleCreateNew = () => {
+    
+//     navigate('/login', { state: { from: '/editor' } });
+//   };
+
+//   const handleEditBlog = (id, e) => {
+//     e.stopPropagation();
+//     navigate('/login', { state: { from: `/editor/${id}` } });
+//   };
+
+//   return (
+//     <div className="dashboard-container">
+//       <div className="dashboard-header">
+//         <h2>My Blogs</h2>
+//         <div className="dashboard-controls">
+//           <div className="search-container">
+//             <FaSearch className="search-icon" />
+//             <input
+//               type="text"
+//               placeholder="Search blogs..."
+//               value={searchTerm}
+//               onChange={(e) => setSearchTerm(e.target.value)}
+//             />
+//           </div>
+//           <button onClick={handleCreateNew} className="create-new-btn">
+//             <FaPlus /> Create New Blog
+//           </button>
+//         </div>
+//       </div>
+
+//       {filteredBlogs.length === 0 ? (
+//         <div className="no-blogs">
+//           {searchTerm ? (
+//             <p>No blogs found matching your search.</p>
+//           ) : (
+//             <>
+//               <p>You don't have any blogs yet.</p>
+//               <button onClick={handleCreateNew} className="create-first-btn">
+//                 Create Your First Blog
+//               </button>
+//             </>
+//           )}
+//         </div>
+//       ) : (
+//         <div className="blogs-grid">
+//           {filteredBlogs.map(blog => (
+//             <div key={blog.id} className="blog-card">
+//               <div className="blog-card-content" onClick={() => handleCardClick(blog)}>
+//                 {blog.bannerImage && (
+//                   <div className="blog-banner">
+//                     <img src={blog.bannerImage} alt="Banner" />
+//                   </div>
+//                 )}
+//                 <div className="blog-content">
+//                   <h3>{blog.title}</h3>
+//                   <div className="blog-meta">
+//                     <span>Created: {formatDate(blog.date)}</span>
+//                     {blog.lastUpdated && blog.lastUpdated !== blog.date && (
+//                       <span>Updated: {formatDate(blog.lastUpdated)}</span>
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
+//               <div className="blog-actions">
+//                 <button 
+//                   onClick={(e) => handleEditBlog(blog.id, e)}
+//                   className="edit-btn"
+//                 >
+//                   <FaEdit /> Edit
+//                 </button>
+//                 <button 
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     handleDelete(blog.id);
+//                   }}
+//                   className="delete-btn"
+//                 >
+//                   <FaTrash /> Delete
+//                 </button>
+//                 <button 
+//                   onClick={() => handleCardClick(blog)}
+//                   className="view-btn"
+//                 >
+//                   <FaArrowRight /> View
+//                 </button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default BlogDashboard;
+
+
+
+
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaArrowRight } from 'react-icons/fa';
 
-const BlogDashboard = ({ blogs, setBlogs, currentUser, setisLoggedIn }) => {
+const BlogDashboard = ({ blogs = [], setBlogs, currentUser }) => {
   const navigate = useNavigate();
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Filter blogs by current user
+  const getFilteredBlogs = useCallback(() => {
+    return blogs.filter(blog => blog.author === currentUser);
+  }, [blogs, currentUser]);
+
+  // Update filtered blogs when search term changes
   useEffect(() => {
-    const userBlogs = blogs.filter(blog => blog.author === currentUser);
-    setFilteredBlogs(
-      searchTerm 
-        ? userBlogs.filter(blog => 
-            blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            blog.content.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-        : userBlogs
-    );
-  }, [blogs, currentUser, searchTerm]);
+    const filtered = getFilteredBlogs();
+    if (searchTerm) {
+      setFilteredBlogs(
+        filtered.filter(blog => 
+          blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          blog.content?.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredBlogs(filtered);
+    }
+  }, [searchTerm, getFilteredBlogs]);
+
+  // Initial load
+  useEffect(() => {
+    setIsLoading(true);
+    try {
+      const filtered = getFilteredBlogs();
+      setFilteredBlogs(filtered);
+      setError(null);
+    } catch (err) {
+      console.error('Error loading blogs:', err);
+      setError('Failed to load blogs');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getFilteredBlogs]);
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
-      setBlogs(blogs.filter(blog => blog.id !== id));
+      setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'Unknown date';
+    }
   };
 
   const handleCardClick = (blog) => {
-    navigate(`/blog/${blog.urlSlug}`, { state: { blog } });
+    navigate(`/blog/${blog.urlSlug || blog.id}`);
   };
 
   const handleCreateNew = () => {
-    
-    navigate('/login', { state: { from: '/editor' } });
+    navigate('/Login');
   };
 
   const handleEditBlog = (id, e) => {
     e.stopPropagation();
-    navigate('/login', { state: { from: `/editor/${id}` } });
+    navigate(`/Login/${id}`);
   };
+
+  if (isLoading) {
+    return <div className="loading">Loading blogs...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="error">
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-container">
@@ -371,43 +550,34 @@ const BlogDashboard = ({ blogs, setBlogs, currentUser, setisLoggedIn }) => {
       ) : (
         <div className="blogs-grid">
           {filteredBlogs.map(blog => (
-            <div key={blog.id} className="blog-card">
-              <div className="blog-card-content" onClick={() => handleCardClick(blog)}>
-                {blog.bannerImage && (
-                  <div className="blog-banner">
-                    <img src={blog.bannerImage} alt="Banner" />
-                  </div>
-                )}
-                <div className="blog-content">
-                  <h3>{blog.title}</h3>
-                  <div className="blog-meta">
-                    <span>Created: {formatDate(blog.date)}</span>
-                    {blog.lastUpdated && blog.lastUpdated !== blog.date && (
-                      <span>Updated: {formatDate(blog.lastUpdated)}</span>
-                    )}
-                  </div>
+            <div key={blog.id} className="blog-card" onClick={() => handleCardClick(blog)}>
+              {blog.bannerImage && (
+                <div className="blog-banner">
+                  <img 
+                    src={blog.bannerImage} 
+                    alt="Banner" 
+                    onError={(e) => e.target.src = '/default-blog-image.jpg'}
+                  />
+                </div>
+              )}
+              <div className="blog-content">
+                <h3>{blog.title || 'Untitled Blog'}</h3>
+                <div className="blog-meta">
+                  <span>Created: {formatDate(blog.date)}</span>
+                  {blog.lastUpdated && <span>Updated: {formatDate(blog.lastUpdated)}</span>}
                 </div>
               </div>
               <div className="blog-actions">
-                <button 
-                  onClick={(e) => handleEditBlog(blog.id, e)}
-                  className="edit-btn"
-                >
+                <button onClick={(e) => handleEditBlog(blog.id, e)} className="edit-btn">
                   <FaEdit /> Edit
                 </button>
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(blog.id);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); handleDelete(blog.id); }} 
                   className="delete-btn"
                 >
                   <FaTrash /> Delete
                 </button>
-                <button 
-                  onClick={() => handleCardClick(blog)}
-                  className="view-btn"
-                >
+                <button onClick={() => handleCardClick(blog)} className="view-btn">
                   <FaArrowRight /> View
                 </button>
               </div>

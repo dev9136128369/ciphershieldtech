@@ -133,8 +133,7 @@ const LoginModal = ({ show, onClose, onLogin }) => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -147,19 +146,14 @@ const LoginModal = ({ show, onClose, onLogin }) => {
         return;
       }
 
-    //   const response = await axios.post('http://localhost:8000/api/register', {
-    //     name,
-    //     email,
-    //     password,
-    //   });
       const response = await axios.post(`${apiBaseUrl}/api/register`, {
         name,
-        email,
+        email: email.trim().toLowerCase(),
         password,
       });
-      console.log('Registration successful:', response.data);
 
-      await onLogin(email, password); // Simulate auto-login
+      // Auto-login after registration
+      await handleLogin(email, password);
       onClose();
     } catch (error) {
       console.error('Registration failed:', error.response?.data || error.message);
@@ -169,34 +163,33 @@ const LoginModal = ({ show, onClose, onLogin }) => {
     }
   };
 
+  const handleLogin = async (email, password) => {
+    try {
+      const response = await axios.post(`${apiBaseUrl}/api/login`, {
+        email: email.trim().toLowerCase(),
+        password
+      });
+
+      onLogin(email, password);
+      onClose();
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+      throw error; // Re-throw to be caught in handleRegister
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-    //   const response = await fetch('http://localhost:8000/login-email', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ email }),
-    //   });
-    const response = await fetch(`${apiBaseUrl}/login-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Login successful! Check your email.');
-        onClose();
+      if (isRegistering) {
+        await handleRegister(e);
       } else {
-        alert(data.error || 'Login failed. Try again.');
+        await handleLogin(email, password);
       }
     } catch (error) {
-      console.error('Login error:', error);
-      alert('An error occurred. Please try again.');
+      alert(error.response?.data?.error || 'Authentication failed. Try again.');
     } finally {
       setIsLoading(false);
     }
@@ -210,7 +203,7 @@ const LoginModal = ({ show, onClose, onLogin }) => {
         <button className="close-btn" onClick={onClose}>×</button>
         <h2>{isRegistering ? 'Register' : 'Login'}</h2>
 
-        <form onSubmit={isRegistering ? handleRegister : handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {isRegistering && (
             <div className="form-group">
               <label>Name:</label>

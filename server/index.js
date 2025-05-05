@@ -1,37 +1,270 @@
+// const express = require('express');
+// const cors = require('cors');
+// const bodyParser = require('body-parser');
+// const nodemailer = require('nodemailer');
+// require('dotenv').config();
+
+// const app = express();
+
+// // CORS Middleware Setup
+// app.use(cors({
+//   origin: ['http://localhost:5173', 'http://localhost:3000'], 
+//   methods: ['GET', 'POST'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
+
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// // Nodemailer Configuration
+// const transporter = nodemailer.createTransport({
+//   host: 'smtp.gmail.com',
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: process.env.EMAIL_USER, 
+//     pass: process.env.EMAIL_PASS,
+//   },
+//   tls: {
+//     rejectUnauthorized: false,
+//   }
+// });
+
+// // ✅ New `/submit-form` route
+// app.post('/submit-form', async (req, res) => {
+//   const { name, email, state, designation, contact, gender, message } = req.body;
+
+//   if (!name || !email || !state || !designation || !contact || !gender || !message) {
+//     return res.status(400).json({ error: 'All fields are required.' });
+//   }
+
+//   const mailOptions = {
+//     from: process.env.EMAIL_USER,
+//     to: 'yashveersingh7648@gmail.com',
+//     subject: `New Application from ${name}`,
+//     html: `
+//       <h2>New Application Form Submission</h2>
+//       <p><strong>Name:</strong> ${name}</p>
+//       <p><strong>Email:</strong> ${email}</p>
+//       <p><strong>State:</strong> ${state}</p>
+//       <p><strong>Designation:</strong> ${designation}</p>
+//       <p><strong>Contact:</strong> ${contact}</p>
+//       <p><strong>Gender:</strong> ${gender}</p>
+//       <p><strong>Message:</strong> ${message}</p>
+//     `,
+//   };
+
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     res.status(200).json({ success: true, message: '✅ Form submitted and email sent successfully!' });
+//   } catch (error) {
+//     console.error('Error sending email:', error);
+//     res.status(500).json({ error: '❌ Failed to send email. Please try again.' });
+//   }
+// });
+
+// app.post('/login-email', async (req, res) => {
+//   const { name, email, subject, message } = req.body;
+
+//   if (!name || !email || !subject || !message) {
+//     return res.status(400).json({ error: 'All fields are required.' });
+//   }
+
+//   const mailOptions = {
+//     from: process.env.EMAIL_USER,
+//     to: 'yashveersingh7648@gmail.com',
+//     subject: `New Message: ${subject}`,
+//     html: `
+//       <h2>Contact Form Submission</h2>
+//       <p><strong>Name:</strong> ${name}</p>
+//       <p><strong>Email:</strong> ${email}</p>
+//       <p><strong>Subject:</strong> ${subject}</p>
+//       <p><strong>Message:</strong> ${message}</p>
+//     `,
+//   };
+
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
+//   } catch (error) {
+//     console.error('❌ Error:', error);
+//     res.status(500).json({ error: 'Failed to send email.' });
+//   }
+// });
+
+
+
+
+
+// // REGISTER
+// app.post('/api/register', async (req, res) => {
+//   const { email, password } = req.body;
+//   const existingUser = users.find(u => u.email === email);
+//   if (existingUser) return res.status(400).json({ error: 'User already exists' });
+
+//   const hashed = await bcrypt.hash(password, 10);
+//   users.push({ email, password: hashed });
+//   res.status(201).json({ message: 'User registered' });
+// });
+
+// // LOGIN
+// app.post('/api/login', async (req, res) => {
+//   const { email, password } = req.body;
+//   const user = users.find(u => u.email === email);
+//   if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+
+//   const isMatch = await bcrypt.compare(password, user.password);
+//   if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+
+//   const token = jwt.sign({ email: user.email }, 'secretkey', { expiresIn: '1h' });
+//   res.json({ token, user: { email: user.email, name: user.email.split('@')[0] } });
+// });
+
+// // AUTH CHECK
+// app.get('/api/check-auth', (req, res) => {
+//   const authHeader = req.headers['authorization'];
+//   const token = authHeader?.split(' ')[1];
+//   if (!token) return res.sendStatus(401);
+
+//   try {
+//     const decoded = jwt.verify(token, 'secretkey');
+//     res.json({ user: { email: decoded.email, name: decoded.email.split('@')[0] } });
+//   } catch {
+//     res.sendStatus(403);
+//   }
+// });
+
+// // Start Server
+// app.listen(8000, () => {
+//   console.log('🚀 Server is running on port 8000');
+// });
+
+
+
+
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const path = require('path');
 require('dotenv').config();
+const multer = require('multer');
 
 const app = express();
+const PORT = 8000;
 
-// CORS Middleware Setup
+const upload = multer({ dest: 'uploads/' });
+// Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'], 
-  methods: ['GET', 'POST'],
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// Nodemailer Configuration
+// Nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
   auth: {
-    user: process.env.EMAIL_USER, 
+    user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
   }
 });
 
-// ✅ New `/submit-form` route
-app.post('/submit-form', async (req, res) => {
+// In-memory storage (replace with DB in production)
+let users = [];
+let posts = [];
+
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+// Auth middleware
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+// Routes
+
+// POST: Create new post
+app.post('/api/posts', authenticateToken, (req, res) => {
+  const { title, content, category, attachments } = req.body;
+
+  if (!title || !content || !category) {
+    return res.status(400).json({ error: 'Title, content, and category are required.' });
+  }
+
+  const newPost = {
+    id: posts.length + 1,
+    title,
+    content,
+    category,
+    attachments,
+    createdAt: new Date(),
+  };
+
+  posts.push(newPost);
+  res.status(201).json(newPost);
+});
+
+// GET: Get posts by category
+app.get('/api/posts/:category', (req, res) => {
+  const category = req.params.category;
+  const filteredPosts = posts.filter(post => post.category === category);
+  res.json(filteredPosts);
+});
+
+// POST: Upload files
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  res.send({ message: 'File uploaded successfully!', file: req.file });
+});
+
+// POST: Login
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(401).json({ error: 'User not found' });
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(401).json({ error: 'Incorrect password' });
+
+  const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET);
+  res.json({ token, user });
+});
+
+// POST: Register new user
+app.post('/api/register', async (req, res) => {
+  const { email, password, name } = req.body;
+
+  const userExist = users.find(u => u.email === email);
+  if (userExist) return res.status(400).json({ error: 'User already exists' });
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = { id: users.length + 1, email, password: hashedPassword, name };
+  users.push(newUser);
+
+  res.status(201).json({ message: 'User registered successfully' });
+});
+
+// POST: Submit contact form (email)
+app.post('/api/submit-form', async (req, res) => {
   const { name, email, state, designation, contact, gender, message } = req.body;
 
   if (!name || !email || !state || !designation || !contact || !gender || !message) {
@@ -40,63 +273,24 @@ app.post('/submit-form', async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: 'yashveersingh7648@gmail.com',
-    subject: `New Application from ${name}`,
-    html: `
-      <h2>New Application Form Submission</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>State:</strong> ${state}</p>
-      <p><strong>Designation:</strong> ${designation}</p>
-      <p><strong>Contact:</strong> ${contact}</p>
-      <p><strong>Gender:</strong> ${gender}</p>
-      <p><strong>Message:</strong> ${message}</p>
-    `,
+    to: 'admin@example.com', // Change to your actual recipient email
+    subject: 'New Form Submission',
+    text: `Name: ${name}\nEmail: ${email}\nState: ${state}\nDesignation: ${designation}\nContact: ${contact}\nGender: ${gender}\nMessage: ${message}`
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true, message: '✅ Form submitted and email sent successfully!' });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ error: '❌ Failed to send email. Please try again.' });
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('Error sending email:', err);
+    res.status(500).json({ error: 'Failed to send email' });
   }
 });
 
-app.post('/login-email', async (req, res) => {
-  const { name, email, subject, message } = req.body;
-
-  if (!name || !email || !subject || !message) {
-    return res.status(400).json({ error: 'All fields are required.' });
-  }
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: 'yashveersingh7648@gmail.com',
-    subject: `New Message: ${subject}`,
-    html: `
-      <h2>Contact Form Submission</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Subject:</strong> ${subject}</p>
-      <p><strong>Message:</strong> ${message}</p>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
-  } catch (error) {
-    console.error('❌ Error:', error);
-    res.status(500).json({ error: 'Failed to send email.' });
-  }
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-// Start Server
-app.listen(8000, () => {
-  console.log('🚀 Server is running on port 8000');
-});
-
 
 
 

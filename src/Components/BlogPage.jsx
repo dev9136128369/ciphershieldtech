@@ -521,13 +521,15 @@ const BlogPage = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
   // Check authentication on component mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const response = await axios.get('http://localhost:8000/api/check-auth', {
+          const response = await axios.get(`${apiBaseUrl}/api/check-auth`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setIsAuthenticated(true);
@@ -539,7 +541,7 @@ const BlogPage = () => {
       }
     };
     checkAuth();
-  }, []);
+  }, [apiBaseUrl]);
 
   // File upload handling
   const { getRootProps, getInputProps } = useDropzone({
@@ -559,7 +561,7 @@ const BlogPage = () => {
 
   const handleLogin = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/login', {
+      const response = await axios.post(`${apiBaseUrl}/api/login`, {
         email: email.trim().toLowerCase(),
         password
       });
@@ -568,10 +570,6 @@ const BlogPage = () => {
       setIsAuthenticated(true);
       setUser(response.data.user);
       setShowLoginModal(false);
-      
-      // Reload to refresh auth state
-      window.location.reload();
-      
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message);
       alert(error.response?.data?.error || 'Login failed');
@@ -582,11 +580,15 @@ const BlogPage = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
     setUser(null);
-    window.location.reload();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
@@ -595,9 +597,10 @@ const BlogPage = () => {
         newPost.files.map(async (file) => {
           const formData = new FormData();
           formData.append('file', file);
-          const response = await axios.post('http://localhost:8000/api/upload', formData, {
+          const response = await axios.post(`${apiBaseUrl}/api/upload`, formData, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'multipart/form-data'
             }
           });
           return response.data;
@@ -612,12 +615,19 @@ const BlogPage = () => {
         attachments: uploadedFiles.map(file => file.filePath)
       };
       
-      await axios.post('http://localhost:8000/api/posts', postData, {
+      await axios.post(`${apiBaseUrl}/api/posts`, postData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
       
+      // Reset form and navigate
+      setNewPost({
+        title: '',
+        content: '',
+        category: 'general',
+        files: []
+      });
       navigate(`/category/${postData.category}`);
       
     } catch (error) {

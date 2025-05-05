@@ -2754,7 +2754,7 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
 
   useEffect(() => {
     if (existingBlog) {
-      setIsUrlCreated(true); // URL is already created for existing blog
+      setIsUrlCreated(true);
     }
   }, [existingBlog]);
 
@@ -2939,7 +2939,6 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
     setShowLinkModal(false);
   };
 
-  // Function to handle URL generation
   const handleGenerateUrl = () => {
     if (!title) {
       alert('Please enter a title first');
@@ -2948,13 +2947,11 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
     
     setIsGeneratingUrl(true);
     
-    // Simulate API call or processing delay
     setTimeout(() => {
       const generatedSlug = generateUrlSlug(title);
       setUrlSlug(generatedSlug);
       setIsUrlCreated(true);
       
-      // Check if URL is available
       if (blogs.some(blog => blog.urlSlug === generatedSlug && (!isEditMode || blog.id !== id))) {
         setUrlError('This URL is already taken. Please customize it.');
       } else {
@@ -2992,49 +2989,34 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
       return;
     }
     
+    const updatedBlog = {
+      id: isEditMode ? id : uuidv4(),
+      title,
+      content,
+      media,
+      bannerImage,
+      seoTitle: seoTitle || title,
+      seoDescription: seoDescription || content.substring(0, 160),
+      seoKeywords: seoKeywords || '',
+      urlSlug,
+      date: isEditMode ? existingBlog.date : new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      likes: isEditMode ? existingBlog.likes : 0,
+      comments: isEditMode ? existingBlog.comments : [],
+      titleStyles: titleFormatting,
+      author: currentUser
+    };
+    
     if (isEditMode) {
-      setBlogs(blogs.map(blog => 
-        blog.id === id ? {
-          ...blog,
-          title,
-          content,
-          media,
-          bannerImage,
-          seoTitle: seoTitle || title,
-          seoDescription: seoDescription || content.substring(0, 160),
-          seoKeywords: seoKeywords || '',
-          urlSlug,
-          lastUpdated: new Date().toISOString(),
-          titleStyles: titleFormatting
-        } : blog
-      ));
+      setBlogs(blogs.map(blog => blog.id === id ? updatedBlog : blog));
     } else {
-      const newBlog = {
-        id: uuidv4(),
-        title,
-        content,
-        media,
-        bannerImage,
-        seoTitle: seoTitle || title,
-        seoDescription: seoDescription || content.substring(0, 160),
-        seoKeywords: seoKeywords || '',
-        urlSlug,
-        date: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-        likes: 0,
-        comments: [],
-        titleStyles: titleFormatting,
-        author: currentUser
-      };
-      
-      setBlogs(prev => [...prev, newBlog]);
+      setBlogs([...blogs, updatedBlog]);
     }
     
     alert(`Blog ${isEditMode ? 'updated' : 'published'} successfully!`);
-    navigate('/dashboard');
+    navigate('/DashboardLayout');
   };
 
-  // Settings Modal Component
   const SettingsModal = () => (
     <div className="settings-modal-overlay">
       <div className="settings-modal-content">
@@ -3161,7 +3143,7 @@ const BlogEditor = ({ blogs, setBlogs, currentUser }) => {
     <div className="blog-editor-container">
       <button 
         className="back-button"
-        onClick={() => navigate('/dashboard')}
+        onClick={() => navigate('/DashboardLayout')}
       >
         <FaArrowLeft /> Back to Dashboard
       </button>

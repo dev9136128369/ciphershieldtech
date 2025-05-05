@@ -91,7 +91,7 @@ const Footer = () => {
 
 <li>
                   
-<Link className="nav-link" to ="/ContactUs" onClick={() => scrollToSection('heade')} >Contact Us </Link>
+<Link className="nav-link" to ="/Contactus" onClick={() => scrollToSection('heade')} >Contact Us </Link>
 
 </li>   
                         
