@@ -118,41 +118,41 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
         
         <ul className="navbar-nav">
             <li className="nav-item">
-            <Link className="nav-link" to ="/" >Home </Link>
+            <Link className="nav-link" to ="/" onClick={() => scrollToSection('heade')}>Home </Link>
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to ="/AboutUs" >About Us </Link>
+            <Link className="nav-link" to ="/AboutUs" onClick={() => scrollToSection('heade')}>About Us </Link>
                 {/* <a className="nav-link me-2" href="/AboutUs">About Us</a> */}
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to ="/Services" >Services </Link>
+            <Link className="nav-link" to ="/Services" onClick={() => scrollToSection('heade')}>Services </Link>
 
                 {/* <a className="nav-link me-2" href="/Services">Services</a> */}
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to ="/Automation" >Automation </Link>
+            <Link className="nav-link" to ="/Automation" onClick={() => scrollToSection('heade')}>Automation </Link>
 
                 {/* <a className="nav-link me-2" href="/Automation">Automation</a> */}
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to ="/ValueforInvestors" >Value for Investors</Link>
+            <Link className="nav-link" to ="/ValueforInvestors" onClick={() => scrollToSection('heade')}>Value for Investors</Link>
 
                 {/* <a className="nav-link me-2" href="/Value_for_Investors">Value for Investors</a> */}
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to ="/WeServe" >We Serve </Link>
+            <Link className="nav-link" to ="/WeServe" onClick={() => scrollToSection('heade')}>We Serve </Link>
 
                 {/* <a className="nav-link me-2" href="/We_Serve">We Serve</a> */}
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to ="/Career" >Career </Link>
+            <Link className="nav-link" to ="/Career" onClick={() => scrollToSection('heade')}>Career </Link>
 
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
 
             <li className="nav-item">
             <Link className="nav-link" to ="/DashboardLayout
-            " >Dashboard</Link>
+            " onClick={() => scrollToSection('heade')}>Dashboard</Link>
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
         
@@ -163,7 +163,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   </Link>
 )} */}
             <li className="nav-item">
-            <Link className="nav-link" to ="/ContactUs" >Contact Us </Link>
+            <Link className="nav-link" to ="/ContactUs" onClick={() => scrollToSection('heade')}>Contact Us </Link>
 
                 {/* <a className="nav-link me-5" href="/ContactUs">Contact Us</a> */}
             </li>
@@ -173,12 +173,12 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                 {/* <Link className="btn btn-primary me-2" to="/dashboard">
                   Dashboard
                 </Link> */}
-                <button className="btns " onClick={handleLogout}>
+                <button className="btns " onClick={handleLogout} >
                   Logout
                 </button>
               </>
             ) : (
-              <Link className="btns " to="/login"  >
+              <Link className="btns " to="/login" onClick={() => scrollToSection('heade')} >
                 Login
               </Link>
             )}
