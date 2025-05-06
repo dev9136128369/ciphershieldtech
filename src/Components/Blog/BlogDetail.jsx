@@ -245,7 +245,7 @@ const BlogDetail = ({ blogs }) => {
         )}
       </div>
       
-      <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+      <div className="blog-content1 text-center" dangerouslySetInnerHTML={{ __html: blog.content }} />
       
       {blog.media && blog.media.length > 0 && (
         <div className="blog-media">

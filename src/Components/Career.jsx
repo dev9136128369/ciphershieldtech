@@ -162,7 +162,7 @@ const Career = () => {
         </div>
         <div className="col-lg-12 caree pt-5 mb-5">
         <h1>Career Opportunities at CipherShield Technologies
-      <span className="decorative-line2"></span>
+      <span className="decorative-line5"></span>
 
         </h1>
         </div>
@@ -206,7 +206,7 @@ const Career = () => {
 
         <div className="col-sm-12 zohotext mb-5">
         <h3 className="text-justify">Python Developer (2+ Years Experience) - Apply Now!
-      <span className="decorative-line2"></span>
+      <span className="decorative-line5"></span>
 
         </h3>
         </div>
@@ -345,7 +345,7 @@ const Career = () => {
 
         <div className="col-sm-12 zohotext mt-5 text-center mb-5">
             <h4 className="text-justify">Java Developer (2+ Years Experience)
-      <span className="decorative-line2"></span>
+      <span className="decorative-line4"></span>
 
             </h4>
         </div>
@@ -485,7 +485,7 @@ const Career = () => {
          
         <div className="col-sm-12 zohotext mb-5 text-center">
             <h4>How to Apply
-      <span className="decorative-line1"></span>
+      <span className="decorative-line6"></span>
 
             </h4>
             <p className="text-justify fs-3 mb-5">

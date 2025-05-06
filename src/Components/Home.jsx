@@ -82,10 +82,10 @@ const Home = () => {
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 mt-5 text-center">
                         <div className="boxe animate__animated animate__rotateInDownRight mt-5 text-justify">
-                        <h1>CipherShield Technologies - AI & Automation Experts
-      <span className="decorative-line2"></span>
-
-                        </h1>
+                        <h1 className="heading-with-line text-center">
+  CipherShield Technologies - AI & Automation Experts
+  <span className="decorative-line3"></span>
+</h1>
                         <h2>Transform Your Business with AI-Driven Solutions</h2>
                             <p>
                                 Revolutionizing industries with cutting-edge AI, automation, and deep-tech solutions designed to unlock efficiency, growth, and future-ready success. 
@@ -99,7 +99,7 @@ const Home = () => {
                 {/* Introduction Section */}
                 <div className="container care mt-5 text-center">
                     <h2 className="mb-5">Introduction to AI-Driven Business Solutions
-      <span className="decorative-line2"></span>
+      <span className="decorative-line"></span>
 
                     </h2>
                     <div className="container care text-center">
@@ -116,7 +116,7 @@ const Home = () => {
                 <div className="container text-center mb-5">
                     <div className="col-lg-8 col-md-10 col-sm-12 career text-center">
                         <h3 className="text-center mt-5 mb-5">AI & Deep Learning in Business
-      <span className="decorative-line1"></span>
+      <span className="decorative-line2"></span>
 
                         </h3>
   

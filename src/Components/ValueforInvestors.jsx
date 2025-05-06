@@ -78,7 +78,7 @@ const Value_for_Investors = () => {
         </div>
         <div className="col-lg-12 caree pt-5 mb-5">
             <h1>Transforming Business Operations <br />with AI &#45; For Better Growth and Return on Investment (ROI)
-      <span className="decorative-line2"></span>
+      <span className="decorative-line5"></span>
             
             </h1>
         </div>

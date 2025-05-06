@@ -275,7 +275,7 @@ Cloud Security,"/>
                 </div>
                 <div className="col-sm-12 zohotext mt-5 ">
                     <h4>Browsing Automation
-                    <span className="decorative-line"></span>
+                    <span className="decorative-line6"></span>
 
                     </h4>
                 </div>
@@ -320,7 +320,8 @@ Cloud Security,"/>
                 </div>
                 <div className="col-sm-12 zohotext mt-5 ">
                     <h4>Mailing Automation
-                    <span className="decorative-line"></span>
+                    <span className="decorative-line6"></span>
+
 
                     </h4>
                 </div>
@@ -367,7 +368,8 @@ Cloud Security,"/>
                 </div>
                 <div className="col-sm-12 zohotext pt-5">
                     <h4>Data Extraction
-                    <span className="decorative-line"></span>
+                    <span className="decorative-line6"></span>
+
 
                     </h4>
                 </div>

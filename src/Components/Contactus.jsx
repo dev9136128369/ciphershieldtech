@@ -78,7 +78,7 @@ const Contactus = () => {
         
         <div className="col-sm-12 contacts text-center">
           <h1 className="text-center mt-4">Contact CipherShield Technologies
-      <span className="decorative-line2"></span>
+      <span className="decorative-line4"></span>
 
           </h1>
         </div>

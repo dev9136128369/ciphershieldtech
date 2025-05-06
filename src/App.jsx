@@ -310,7 +310,7 @@ const Navbar = lazy(() => import("./Components/Navbar"));
 const BlogPage = lazy(() => import("./Components/BlogPage.jsx"));
 const CategoryPage = lazy(() => import("./Components/CategoryPage"));
 const Chatbot = lazy(() => import("./Components/Chatbot"));
-const ChatbotComponent = lazy(() => import("./Components/ChatbotComponent"));
+// const ChatbotComponent = lazy(() => import("./Components/ChatbotComponent"));
 const DashboardLayout = lazy(() => import("./Components/DashboardLayout"));
 const ArticlePreview = lazy(() => import("./Components/ArticlePreview"));
 const ArticleForm = lazy(() => import("./Components/ArticleForm"));
@@ -389,7 +389,7 @@ const App = () => {
           <Route path="/BlogPage" element={<BlogPage />} />
           <Route path="/CategoryPage" element={<CategoryPage />} />
           <Route path="/chatbot" element={<Chatbot />} />
-          <Route path="/ChatbotComponent" element={<ChatbotComponent />} />
+          {/* <Route path="/ChatbotComponent" element={<ChatbotComponent />} /> */}
           <Route path="/article-preview" element={<ArticlePreview />} />
           <Route path="/article-form" element={<ArticleForm />} />
           <Route path="/linkedin-article" element={<LinkedInArticle />} />
@@ -400,6 +400,8 @@ const App = () => {
           
 
           
+
+       
           {/* Auth Routes */}
           <Route path="/login" element={
         
@@ -409,25 +411,25 @@ const App = () => {
           <Route path="/editor" element={
             isLoggedIn ? 
               <BlogEditor blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} /> : 
-              <Navigate to="/login" state={{ from: '/editor' }} replace />
+              <Navigate to="/login" state={{ from: '/DashboardLayout' }} replace />
           } />
 
-          <Route path="/editor/:id" element={
+          <Route path="/Login/:id" element={
             isLoggedIn ? 
               <BlogEditor blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} /> : 
               <Navigate to="/login" state={{ from: window.location.pathname }} replace />
           } />
 
           <Route path="DashboardLayout" element={
-            // isLoggedIn ? 
-            //   <DashboardLayout 
-            //     blogs={blogs}
-            //     setBlogs={setBlogs}
-            //     currentUser={currentUser}
-            //     setIsLoggedIn={setIsLoggedIn}
-            //   /> : 
-            //   <Navigate to="/login" state={{ from: '/dashboard' }} replace />
-            <DashboardLayout/>
+            isLoggedIn ? 
+              <DashboardLayout 
+                blogs={blogs}
+                setBlogs={setBlogs}
+                currentUser={currentUser}
+                setIsLoggedIn={setIsLoggedIn}
+              /> : 
+              <Navigate to="/login" state={{ from: '/DashboardLayout' }} replace />
+            // <DashboardLayout/>
           } />
 
           {/* 404 Route */}

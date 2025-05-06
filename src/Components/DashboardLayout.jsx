@@ -64,14 +64,14 @@ const DashboardLayout = ({ blogs, setBlogs, currentUser, setIsLoggedIn }) => {
             className={`nav-btn ${activeTab === 'blogs' ? 'active' : ''}`}
             onClick={() => setActiveTab('blogs')}
           >
-            <i className="fas fa-blog me-2"></i> My Blogs
+            <i className="fas fa-blog me-2"></i>Products & Services
           </button>
 
           <button
             className={`nav-btn ${activeTab === 'categories' ? 'active' : ''}`}
             onClick={() => setActiveTab('categories')}
           >
-            <i className="fas fa-tags me-2"></i> Products & Services
+            <i className="fas fa-tags me-2"></i>  My Blogs 
           </button>
 
           <button
@@ -89,14 +89,17 @@ const DashboardLayout = ({ blogs, setBlogs, currentUser, setIsLoggedIn }) => {
       {/* Main Content */}
       <div className="main-content">
         <div className="content-header">
-          <h3 className="dashheading">Dashboard</h3>
+          <h3 className="dashheading text-center">Dashboard
+      <span className="decorative-line7"></span>
+
+          </h3>
         </div>
 
         <div className="content-body">
           {activeTab === 'blogs' ? (
-            <BlogDashboard blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} />
+            <CategoryPage blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} />
           ) : (
-            <CategoryPage />
+            <BlogDashboard />
           )}
         </div>
       </div>

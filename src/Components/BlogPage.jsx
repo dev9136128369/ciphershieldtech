@@ -508,13 +508,13 @@ import { useNavigate } from 'react-router-dom';
 import LoginModal from './LoginModal';
 
 const BlogPage = () => {
-  const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({
     title: '',
     content: '',
-    category: 'general',
+    category: 'Products',
     files: []
   });
+  
   const [isLoading, setIsLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -532,8 +532,10 @@ const BlogPage = () => {
           const response = await axios.get(`${apiBaseUrl}/api/check-auth`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          setIsAuthenticated(true);
-          setUser(response.data.user);
+          if (response.data.success) {
+            setIsAuthenticated(true);
+            setUser(response.data.user);
+          }
         }
       } catch (error) {
         console.error('Auth check failed:', error);
@@ -543,19 +545,23 @@ const BlogPage = () => {
     checkAuth();
   }, [apiBaseUrl]);
 
-  // File upload handling
+  // File dropzone configuration
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/pdf': ['.pdf'],
       'image/*': ['.png', '.jpg', '.jpeg'],
       'text/plain': ['.txt']
     },
+    maxFiles: 5,
     onDrop: acceptedFiles => {
       if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
-      setNewPost({...newPost, files: [...newPost.files, ...acceptedFiles]});
+      setNewPost(prev => ({
+        ...prev,
+        files: [...prev.files, ...acceptedFiles]
+      }));
     }
   });
 
@@ -570,9 +576,13 @@ const BlogPage = () => {
       setIsAuthenticated(true);
       setUser(response.data.user);
       setShowLoginModal(false);
+      return { success: true };
     } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
-      alert(error.response?.data?.error || 'Login failed');
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        error: error.response?.data?.error || 'Login failed' 
+      };
     }
   };
 
@@ -584,6 +594,7 @@ const BlogPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!isAuthenticated) {
       setShowLoginModal(true);
       return;
@@ -592,57 +603,58 @@ const BlogPage = () => {
     setIsLoading(true);
     
     try {
-      // Upload files
-      const uploadedFiles = await Promise.all(
-        newPost.files.map(async (file) => {
-          const formData = new FormData();
-          formData.append('file', file);
-          const response = await axios.post(`${apiBaseUrl}/api/upload`, formData, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-          return response.data;
-        })
-      );
+      // Upload files first
+      const uploadedFiles = [];
+      for (const file of newPost.files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await axios.post(`${apiBaseUrl}/api/upload`, formData, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        uploadedFiles.push(response.data.filePath);
+      }
 
-      // Create post
+      // Then create the post
       const postData = {
         title: newPost.title,
         content: newPost.content,
         category: newPost.category,
-        attachments: uploadedFiles.map(file => file.filePath)
+        attachments: uploadedFiles
       };
       
-      await axios.post(`${apiBaseUrl}/api/posts`, postData, {
+      const response = await axios.post(`${apiBaseUrl}/api/posts`, postData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
       
-      // Reset form and navigate
-      setNewPost({
-        title: '',
-        content: '',
-        category: 'general',
-        files: []
-      });
-      navigate(`/category/${postData.category}`);
-      
+      if (response.data.success) {
+        // Reset form
+        setNewPost({
+          title: '',
+          content: '',
+          category: 'Products',
+          files: []
+        });
+        // Navigate to the category page
+        navigate(`/Login/${postData.category}`);
+      }
     } catch (error) {
-      console.error('Error:', error.response?.data || error.message);
-      alert('Failed to create post. Please try again.');
+      console.error('Error:', error);
+      alert(error.response?.data?.error || 'Failed to create post. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleFileDelete = (index) => {
-    setNewPost({
-      ...newPost,
-      files: newPost.files.filter((_, i) => i !== index)
-    });
+    setNewPost(prev => ({
+      ...prev,
+      files: prev.files.filter((_, i) => i !== index)
+    }));
   };
 
   return (
@@ -668,7 +680,7 @@ const BlogPage = () => {
           )}
         </div>
         
-        <h1>My Products And Services<span className="decorative-line1"></span></h1>
+        <h1>My Products And Services<span className="decorative-line4"></span></h1>
         
         <form onSubmit={handleSubmit} className="post-form">
           <div className="form-group">
@@ -691,10 +703,10 @@ const BlogPage = () => {
               required
               disabled={!isAuthenticated}
             >
-              <option value="general">General</option>
-              <option value="technology">Technology</option>
-              <option value="business">Business</option>
-              <option value="education">Education</option>
+              <option value="Products">Products</option>
+              <option value="Services">Services</option>
+              {/* <option value="business">Business</option>
+              <option value="education">Education</option> */}
             </select>
           </div>
           

@@ -146,48 +146,58 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
+const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const path = require('path');
-require('dotenv').config();
 const multer = require('multer');
+require('dotenv').config();
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-const upload = multer({ dest: 'uploads/' });
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Configure file storage
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-// Nodemailer transporter
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-// In-memory storage (replace with DB in production)
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+
+// Middleware
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true
+}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/uploads', express.static(uploadDir));
+
+// Database simulation
 let users = [];
 let posts = [];
 
-// JWT Secret
+// JWT Configuration
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Auth middleware
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
@@ -199,99 +209,221 @@ const authenticateToken = (req, res, next) => {
 
 // Routes
 
-// POST: Create new post
-app.post('/api/posts', authenticateToken, (req, res) => {
-  const { title, content, category, attachments } = req.body;
-
-  if (!title || !content || !category) {
-    return res.status(400).json({ error: 'Title, content, and category are required.' });
-  }
-
-  const newPost = {
-    id: posts.length + 1,
-    title,
-    content,
-    category,
-    attachments,
-    createdAt: new Date(),
-  };
-
-  posts.push(newPost);
-  res.status(201).json(newPost);
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK' });
 });
 
-// GET: Get posts by category
-app.get('/api/posts/:category', (req, res) => {
-  const category = req.params.category;
-  const filteredPosts = posts.filter(post => post.category === category);
-  res.json(filteredPosts);
+// Auth check endpoint - NEW
+app.get('/api/auth/check', authenticateToken, (req, res) => {
+  const user = users.find(u => u.id === req.user.userId);
+  if (!user) return res.sendStatus(404);
+  
+  res.json({
+    success: true,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name
+    }
+  });
 });
 
-// POST: Upload files
-app.post('/api/upload', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No file uploaded.');
-  }
-  res.send({ message: 'File uploaded successfully!', file: req.file });
-});
-
-// POST: Login
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = users.find(u => u.email === email);
-  if (!user) return res.status(401).json({ error: 'User not found' });
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(401).json({ error: 'Incorrect password' });
-
-  const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET);
-  res.json({ token, user });
-});
-
-// POST: Register new user
-app.post('/api/register', async (req, res) => {
-  const { email, password, name } = req.body;
-
-  const userExist = users.find(u => u.email === email);
-  if (userExist) return res.status(400).json({ error: 'User already exists' });
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = { id: users.length + 1, email, password: hashedPassword, name };
-  users.push(newUser);
-
-  res.status(201).json({ message: 'User registered successfully' });
-});
-
-// POST: Submit contact form (email)
-app.post('/api/submit-form', async (req, res) => {
-  const { name, email, state, designation, contact, gender, message } = req.body;
-
-  if (!name || !email || !state || !designation || !contact || !gender || !message) {
-    return res.status(400).json({ error: 'All fields are required.' });
-  }
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: 'admin@example.com', // Change to your actual recipient email
-    subject: 'New Form Submission',
-    text: `Name: ${name}\nEmail: ${email}\nState: ${state}\nDesignation: ${designation}\nContact: ${contact}\nGender: ${gender}\nMessage: ${message}`
-  };
-
+// Register endpoint
+app.post('/api/auth/register', async (req, res) => {
   try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true });
+    const { email, password, name } = req.body;
+    
+    if (!email || !password || !name) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'All fields are required' 
+      });
+    }
+
+    const userExists = users.some(user => user.email === email);
+    if (userExists) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'User already exists' 
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = {
+      id: users.length + 1,
+      email,
+      password: hashedPassword,
+      name,
+      createdAt: new Date()
+    };
+
+    users.push(newUser);
+    
+    const token = jwt.sign(
+      { userId: newUser.id, email: newUser.email },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.status(201).json({
+      success: true,
+      token,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name
+      }
+    });
+
   } catch (err) {
-    console.error('Error sending email:', err);
-    res.status(500).json({ error: 'Failed to send email' });
+    console.error('Registration error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Registration failed' 
+    });
   }
+});
+
+// Login endpoint
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Email and password are required' 
+      });
+    }
+
+    const user = users.find(user => user.email === email);
+    if (!user) {
+      return res.status(401).json({ 
+        success: false,
+        error: 'Invalid credentials' 
+      });
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ 
+        success: false,
+        error: 'Invalid credentials' 
+      });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name
+      }
+    });
+
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Login failed' 
+    });
+  }
+});
+
+// File upload endpoint - FIXED
+app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ 
+      success: false,
+      error: 'No file uploaded' 
+    });
+  }
+  
+  res.json({ 
+    success: true,
+    filePath: `/uploads/${req.file.filename}`
+  });
+});
+
+// Create post endpoint - FIXED
+app.post('/api/posts', authenticateToken, (req, res) => {
+  try {
+    const { title, content, category, attachments = [] } = req.body;
+
+    if (!title || !content || !category) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Title, content, and category are required' 
+      });
+    }
+
+    const newPost = {
+      id: posts.length + 1,
+      title,
+      content,
+      category,
+      attachments,
+      userId: req.user.userId,
+      createdAt: new Date()
+    };
+
+    posts.push(newPost);
+    res.status(201).json({
+      success: true,
+      post: newPost
+    });
+
+  } catch (err) {
+    console.error('Create post error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to create post' 
+    });
+  }
+});
+
+// Get all posts
+app.get('/api/posts', (req, res) => {
+  res.json({
+    success: true,
+    posts: posts
+  });
+});
+
+// Get posts by category
+app.get('/api/posts/:category', (req, res) => {
+  const category = req.params.category.toLowerCase();
+  const filteredPosts = posts.filter(post => 
+    post.category?.toLowerCase() === category
+  );
+  
+  res.json({
+    success: true,
+    posts: filteredPosts || []
+  });
 });
 
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Upload directory: ${uploadDir}`);
+  console.log(`Available endpoints:`);
+  console.log(`- POST /api/auth/register`);
+  console.log(`- POST /api/auth/login`);
+  console.log(`- GET /api/auth/check`);
+  console.log(`- POST /api/upload`);
+  console.log(`- POST /api/posts`);
+  console.log(`- GET /api/posts`);
+  console.log(`- GET /api/posts/:category`);
 });
-
 
 
 // require('dotenv').config();
