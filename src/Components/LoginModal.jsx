@@ -132,66 +132,72 @@ const LoginModal = ({ show, onClose, onLogin }) => {
   const [name, setName] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
+  // Make sure this matches your backend URL exactly
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
     try {
       if (!name || !email || !password) {
-        alert('All fields are required.');
-        setIsLoading(false);
-        return;
+        throw new Error('All fields are required');
       }
 
-      const response = await axios.post(`${apiBaseUrl}/api/register`, {
+      // CORRECTED ENDPOINT: /api/auth/register
+      const response = await axios.post(`${apiBaseUrl}/api/auth/register`, {
         name,
         email: email.trim().toLowerCase(),
         password,
       });
 
-      // Auto-login after registration
+      // Auto-login after successful registration
       await handleLogin(email, password);
       onClose();
-    } catch (error) {
-      console.error('Registration failed:', error.response?.data || error.message);
-      alert(error.response?.data?.error || 'Registration failed. Try again.');
+    } catch (err) {
+      console.error('Registration error:', err);
+      setError(err.response?.data?.error || err.message || 'Registration failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleLogin = async (email, password) => {
+    setIsLoading(true);
+    setError('');
+
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/login`, {
+      // CORRECTED ENDPOINT: /api/auth/login
+      const response = await axios.post(`${apiBaseUrl}/api/auth/login`, {
         email: email.trim().toLowerCase(),
-        password
+        password,
       });
 
-      onLogin(email, password);
+      // Pass both token and user data to parent component
+      onLogin(response.data.token, response.data.user);
       onClose();
-    } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
-      throw error; // Re-throw to be caught in handleRegister
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.response?.data?.error || err.message || 'Login failed');
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
     try {
       if (isRegistering) {
         await handleRegister(e);
       } else {
         await handleLogin(email, password);
       }
-    } catch (error) {
-      alert(error.response?.data?.error || 'Authentication failed. Try again.');
-    } finally {
-      setIsLoading(false);
+    } catch (err) {
+      // Error already handled in individual functions
     }
   };
 
@@ -202,6 +208,8 @@ const LoginModal = ({ show, onClose, onLogin }) => {
       <div className="modal-content">
         <button className="close-btn" onClick={onClose}>×</button>
         <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+        
+        {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           {isRegistering && (
@@ -246,7 +254,10 @@ const LoginModal = ({ show, onClose, onLogin }) => {
           {isRegistering ? 'Already have an account?' : 'Need an account?'}
           <button
             type="button"
-            onClick={() => setIsRegistering(!isRegistering)}
+            onClick={() => {
+              setIsRegistering(!isRegistering);
+              setError('');
+            }}
             className="toggle-btn"
           >
             {isRegistering ? 'Login' : 'Register'}

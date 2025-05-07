@@ -141,8 +141,6 @@
 
 
 
-
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -151,6 +149,8 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
+
 require('dotenv').config();
 
 const app = express();
@@ -161,6 +161,20 @@ const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
+
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  }
+});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -209,12 +223,12 @@ const authenticateToken = (req, res, next) => {
 
 // Routes
 
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK' });
 });
 
-// Auth check endpoint - NEW
+// Auth check
 app.get('/api/auth/check', authenticateToken, (req, res) => {
   const user = users.find(u => u.id === req.user.userId);
   if (!user) return res.sendStatus(404);
@@ -229,24 +243,81 @@ app.get('/api/auth/check', authenticateToken, (req, res) => {
   });
 });
 
-// Register endpoint
+
+
+// // ✅ New `/submit-form` route
+app.post('/submit-form', async (req, res) => {
+  const { name, email, state, designation, contact, gender, message } = req.body;
+
+  if (!name || !email || !state || !designation || !contact || !gender || !message) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: 'yashveersingh7648@gmail.com',
+    subject: `New Application from ${name}`,
+    html: `
+      <h2>New Application Form Submission</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>State:</strong> ${state}</p>
+      <p><strong>Designation:</strong> ${designation}</p>
+      <p><strong>Contact:</strong> ${contact}</p>
+      <p><strong>Gender:</strong> ${gender}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: '✅ Form submitted and email sent successfully!' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: '❌ Failed to send email. Please try again.' });
+  }
+});
+
+app.post('/login-email', async (req, res) => {
+    const { name, email, subject, message } = req.body;
+  
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+  
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: 'yashveersingh7648@gmail.com',
+      subject: `New Message: ${subject}`,
+      html: `
+        <h2>Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong> ${message}</p>
+      `,
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
+    } catch (error) {
+      console.error('❌ Error:', error);
+      res.status(500).json({ error: 'Failed to send email.' });
+    }
+  });
+  
+// Register
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password, name } = req.body;
-    
     if (!email || !password || !name) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'All fields are required' 
-      });
+      return res.status(400).json({ success: false, error: 'All fields are required' });
     }
 
     const userExists = users.some(user => user.email === email);
     if (userExists) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'User already exists' 
-      });
+      return res.status(400).json({ success: false, error: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -259,7 +330,7 @@ app.post('/api/auth/register', async (req, res) => {
     };
 
     users.push(newUser);
-    
+
     const token = jwt.sign(
       { userId: newUser.id, email: newUser.email },
       JWT_SECRET,
@@ -275,42 +346,28 @@ app.post('/api/auth/register', async (req, res) => {
         name: newUser.name
       }
     });
-
   } catch (err) {
     console.error('Registration error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: 'Registration failed' 
-    });
+    res.status(500).json({ success: false, error: 'Registration failed' });
   }
 });
 
-// Login endpoint
+// Login
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
     if (!email || !password) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'Email and password are required' 
-      });
+      return res.status(400).json({ success: false, error: 'Email and password are required' });
     }
 
     const user = users.find(user => user.email === email);
     if (!user) {
-      return res.status(401).json({ 
-        success: false,
-        error: 'Invalid credentials' 
-      });
+      return res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ 
-        success: false,
-        error: 'Invalid credentials' 
-      });
+      return res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 
     const token = jwt.sign(
@@ -331,38 +388,28 @@ app.post('/api/auth/login', async (req, res) => {
 
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: 'Login failed' 
-    });
+    res.status(500).json({ success: false, error: 'Login failed' });
   }
 });
 
-// File upload endpoint - FIXED
+// File Upload
 app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ 
-      success: false,
-      error: 'No file uploaded' 
-    });
+    return res.status(400).json({ success: false, error: 'No file uploaded' });
   }
-  
+
   res.json({ 
     success: true,
     filePath: `/uploads/${req.file.filename}`
   });
 });
 
-// Create post endpoint - FIXED
+// Create Post
 app.post('/api/posts', authenticateToken, (req, res) => {
   try {
     const { title, content, category, attachments = [] } = req.body;
-
     if (!title || !content || !category) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'Title, content, and category are required' 
-      });
+      return res.status(400).json({ success: false, error: 'Title, content, and category are required' });
     }
 
     const newPost = {
@@ -376,40 +423,92 @@ app.post('/api/posts', authenticateToken, (req, res) => {
     };
 
     posts.push(newPost);
-    res.status(201).json({
-      success: true,
-      post: newPost
-    });
 
+    res.status(201).json({ success: true, post: newPost });
   } catch (err) {
     console.error('Create post error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: 'Failed to create post' 
-    });
+    res.status(500).json({ success: false, error: 'Failed to create post' });
   }
 });
 
-// Get all posts
+// Get All Posts
 app.get('/api/posts', (req, res) => {
-  res.json({
-    success: true,
-    posts: posts
-  });
+  res.json({ success: true, posts });
 });
 
-// Get posts by category
+// Get Posts by Category
 app.get('/api/posts/:category', (req, res) => {
   const category = req.params.category.toLowerCase();
-  const filteredPosts = posts.filter(post => 
-    post.category?.toLowerCase() === category
-  );
-  
-  res.json({
-    success: true,
-    posts: filteredPosts || []
-  });
+  const filteredPosts = posts.filter(post => post.category?.toLowerCase() === category);
+
+  res.json({ success: true, posts: filteredPosts || [] });
 });
+
+// ✅ Delete Post by ID (NEW)
+// Delete post by ID (only owner can delete)
+app.delete('/api/posts/:id', authenticateToken, (req, res) => {
+  const postId = parseInt(req.params.id);
+  const postIndex = posts.findIndex(post => post.id === postId);
+
+  if (postIndex === -1) {
+    return res.status(404).json({ success: false, error: 'Post not found' });
+  }
+
+  const post = posts[postIndex];
+
+  // Check ownership
+  if (post.userId !== req.user.userId) {
+    return res.status(403).json({ success: false, error: 'Forbidden: Not your post' });
+  }
+
+  posts.splice(postIndex, 1);
+
+  res.json({ success: true, message: 'Post deleted successfully' });
+});
+
+
+
+
+// ✅ Fix GET post by ID
+app.get('/api/posts/:id', (req, res) => {
+  const { id } = req.params;
+  const post = posts.find(p => p.id === id); // or fetch from DB
+
+  if (!post) {
+    return res.status(404).json({ error: 'Post not found' });
+  }
+
+  res.json({ post });
+});
+
+// ✅ Fix PUT post by ID
+// Example: Express.js route to handle updating a post
+app.put('/api/posts/:id', async (req, res) => {
+  const { title, content } = req.body;
+  const postId = req.params.id;
+
+  if (!title || !content) {
+    return res.status(400).json({ error: 'Title and content are required' });
+  }
+
+  try {
+    const post = await Post.findById(postId); // Assuming you're using MongoDB with Mongoose
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Update the post
+    post.title = title;
+    post.content = content;
+    await post.save();
+
+    res.status(200).json({ success: true, post });
+  } catch (err) {
+    console.error(err);  // Log the error for debugging
+    res.status(500).json({ error: 'Failed to update the post.' });
+  }
+});
+
 
 // Start server
 app.listen(PORT, () => {
@@ -423,6 +522,7 @@ app.listen(PORT, () => {
   console.log(`- POST /api/posts`);
   console.log(`- GET /api/posts`);
   console.log(`- GET /api/posts/:category`);
+  console.log(`- DELETE /api/posts/:id`);
 });
 
 

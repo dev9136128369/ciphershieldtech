@@ -471,10 +471,10 @@ const BlogDashboard = ({ blogs = [], setBlogs, currentUser }) => {
   }, [getFilteredBlogs]);
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this blog?')) {
-      setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
-    }
-  };
+        if (window.confirm('Are you sure you want to delete this blog?')) {
+          setBlogs(blogs.filter(blog => blog.id !== id));
+        }
+      };
 
   const formatDate = (dateString) => {
     try {
@@ -498,7 +498,7 @@ const BlogDashboard = ({ blogs = [], setBlogs, currentUser }) => {
 
   const handleEditBlog = (id, e) => {
     e.stopPropagation();
-    navigate(`/Login/${id}`);
+    navigate(`/dashboard/${id}`);
   };
 
   if (isLoading) {
@@ -572,7 +572,10 @@ const BlogDashboard = ({ blogs = [], setBlogs, currentUser }) => {
                   <FaEdit /> Edit
                 </button>
                 <button 
-                  onClick={(e) => { e.stopPropagation(); handleDelete(blog.id); }} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(blog.id);
+                  }}
                   className="delete-btn"
                 >
                   <FaTrash /> Delete

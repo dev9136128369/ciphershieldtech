@@ -294,6 +294,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
+
 // Lazy Load Components
 const Home = lazy(() => import("./Components/Home"));
 const AboutUs = lazy(() => import("./Components/AboutUs"));
@@ -315,6 +316,10 @@ const DashboardLayout = lazy(() => import("./Components/DashboardLayout"));
 const ArticlePreview = lazy(() => import("./Components/ArticlePreview"));
 const ArticleForm = lazy(() => import("./Components/ArticleForm"));
 const LinkedInArticle = lazy(() => import("./Components/LinkedInArticle"));
+
+const EditPostPage = lazy(() => import("./Components/EditPostPage"));
+
+
 const NotFound = lazy(() => import("./Components/NotFound"));
 
 // Blog Components
@@ -393,6 +398,7 @@ const App = () => {
           <Route path="/article-preview" element={<ArticlePreview />} />
           <Route path="/article-form" element={<ArticleForm />} />
           <Route path="/linkedin-article" element={<LinkedInArticle />} />
+          <Route path="/EditPostPage" element={<EditPostPage />} />
           
           {/* Blog Routes */}
           <Route path="/blog" element={<BlogList blogs={blogs} />} />
@@ -432,6 +438,27 @@ const App = () => {
             // <DashboardLayout/>
           } />
 
+
+<Route path="/login" element={
+          isLoggedIn ? 
+            <Navigate to="/dashboard" replace /> : 
+            <Login setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />
+        } />
+
+        {/* Dashboard Routes */}
+        <Route path="/dashboard/*" element={
+          isLoggedIn ? 
+            <DashboardLayout 
+              currentUser={currentUser}
+              setIsLoggedIn={setIsLoggedIn}
+              blogs={blogs}
+              setBlogs={setBlogs}
+            /> : 
+            <Navigate to="/login" state={{ from: '/dashboard' }} replace />
+        } />
+
+
+
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -439,7 +466,9 @@ const App = () => {
 
       <Footer />
     </Router>
+    
   );
 };
 
 export default App;
+

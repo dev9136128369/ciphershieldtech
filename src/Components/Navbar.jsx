@@ -156,7 +156,11 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
         
-           
+            <li className="nav-item">
+            <Link className="nav-link" to ="/CategoryPage
+            " onClick={() => scrollToSection('heade')}>Portfolio</Link>
+                {/* <a className="nav-link me-2" href="/Career">Career</a> */}
+            </li>
             {/* {isLoggedIn && (
   <Link to="/blog-editor" className="nav-link">
     Create Blog
@@ -167,12 +171,12 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
 
                 {/* <a className="nav-link me-5" href="/ContactUs">Contact Us</a> */}
             </li>
-         <div className="d-flex">
+         {/* <div className="d-flex">
             {isLoggedIn ? (
               <>
                 {/* <Link className="btn btn-primary me-2" to="/dashboard">
                   Dashboard
-                </Link> */}
+                </Link> 
                 <button className="btns " onClick={handleLogout} >
                   Logout
                 </button>
@@ -182,7 +186,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                 Login
               </Link>
             )}
-          </div>
+          </div> */}
         </ul>
         </div>
    

@@ -44,12 +44,79 @@
 
 
 // DashboardLayout.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import BlogDashboard from './Blog/BlogDashboard';
-import CategoryPage from './CategoryPage';
+import BlogEditor from './Blog/BlogEditor';
+import BlogPage from './BlogPage';
+import ManagePostsPage from './ManagePostsPage';
 
-const DashboardLayout = ({ blogs, setBlogs, currentUser, setIsLoggedIn }) => {
+const DashboardLayout = ({ currentUser, setIsLoggedIn, blogs, setBlogs }) => {
   const [activeTab, setActiveTab] = useState('blogs');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // Handle tab changes
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    navigate(`/dashboard/${tab}`);
+  };
+
+  // Centralized blog management functions
+  const handleCreateBlog = () => {
+    navigate('/dashboard/blogs/editor/new');
+  };
+
+  const handleEditBlog = (id) => {
+    navigate(`/dashboard/blogs/editor/${id}`);
+  };
+
+  const handleDeleteBlog = (id) => {
+    if (window.confirm('Are you sure you want to delete this blog?')) {
+      setBlogs(prev => prev.filter(blog => blog.id !== id));
+    }
+  };
+
+  const handlePublishBlog = (blogData, isEditMode) => {
+    if (isEditMode) {
+      setBlogs(prev => prev.map(blog => 
+        blog.id === blogData.id ? blogData : blog
+      ));
+    } else {
+      setBlogs(prev => [...prev, {
+        ...blogData,
+        id: Date.now().toString(), // Generate unique ID
+        author: currentUser,
+        date: new Date().toISOString()
+      }]);
+    }
+    navigate('/dashboard/blogs');
+  };
+
+
+  const handlePublishBlog1 = (blogData, isEditMode) => {
+    if (isEditMode) {
+      setBlogs(prev => prev.map(blog => 
+        blog.id === blogData.id ? blogData : blog
+      ));
+    } else {
+      setBlogs(prev => [...prev, {
+        ...blogData,
+        id: Date.now().toString(), // Generate unique ID
+        author: currentUser,
+        date: new Date().toISOString()
+      }]);
+    }
+    navigate('/editor/blogs');
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-layout">
@@ -60,25 +127,42 @@ const DashboardLayout = ({ blogs, setBlogs, currentUser, setIsLoggedIn }) => {
         </div>
 
         <nav className="sidebar-nav">
-          <button
-            className={`nav-btn ${activeTab === 'blogs' ? 'active' : ''}`}
-            onClick={() => setActiveTab('blogs')}
+        <button
+            className={`nav-btn ${activeTab === 'products' ? 'active' : ''}`}
+            onClick={() => handleTabChange('products')}
           >
-            <i className="fas fa-blog me-2"></i>Products & Services
+            <i className="fas fa-tags me-2"></i>Products & Services
           </button>
 
           <button
-            className={`nav-btn ${activeTab === 'categories' ? 'active' : ''}`}
-            onClick={() => setActiveTab('categories')}
+            className={`nav-btn ${activeTab === 'blogs' ? 'active1' : ''}`}
+            onClick={() => handleTabChange('blogs')}
           >
-            <i className="fas fa-tags me-2"></i>  My Blogs 
+            <i className="fas fa-blog me-2"></i>My Blogs
           </button>
+
+          <button
+            className={`nav-btn ${activeTab === 'create' ? 'active' : ''}`}
+            onClick={() => handleTabChange('create')}
+          >
+            <i className="fas fa-plus me-2"></i>Create Portfolio
+          </button>
+
+          <button
+            className={`nav-btn ${activeTab === 'create1' ? 'active' : ''}`}
+            onClick={() => handleTabChange('create1')}
+          >
+            <i className="fas fa-plus me-2"></i>Create Blog
+          </button>
+
+         
 
           <button
             className="nav-btn logout-btn"
             onClick={() => {
-              setIsLoggedIn(false);
               localStorage.removeItem('token');
+              setIsLoggedIn(false);
+              navigate('/login');
             }}
           >
             <i className="fas fa-sign-out-alt me-2"></i> Logout
@@ -90,17 +174,55 @@ const DashboardLayout = ({ blogs, setBlogs, currentUser, setIsLoggedIn }) => {
       <div className="main-content">
         <div className="content-header">
           <h3 className="dashheading text-center">Dashboard
-      <span className="decorative-line7"></span>
-
+            <span className="decorative-line7"></span>
           </h3>
         </div>
 
         <div className="content-body">
-          {activeTab === 'blogs' ? (
-            <CategoryPage blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} />
-          ) : (
-            <BlogDashboard />
-          )}
+          <Routes>
+
+          <Route path="products" element={<ManagePostsPage />} />
+
+            <Route path="blogs" element={
+              <BlogDashboard 
+                blogs={blogs.filter(blog => blog.author === currentUser)} 
+                onEdit={handleEditBlog}
+                onDelete={handleDeleteBlog}
+                currentUser={currentUser}
+              />
+            } />
+            
+            <Route path="create" element={
+              <BlogPage 
+                onPublish={(blogData) => handlePublishBlog(blogData, false)}
+                currentUser={currentUser}
+              />
+            } />
+            
+            <Route path="blogs/editor/new" element={
+              <BlogEditor 
+                onPublish={(blogData) => handlePublishBlog(blogData, false)}
+                currentUser={currentUser}
+              />
+            } />
+            
+            <Route path="blogs/editor/:id" element={
+              <BlogEditor 
+                blogs={blogs}
+                onPublish={(blogData) => handlePublishBlog(blogData, true)}
+                currentUser={currentUser}
+              />
+            } />
+            
+
+            <Route path="create1" element={
+              <BlogEditor 
+                onPublish={(blogData) => handlePublishBlog1(blogData, false)}
+                currentUser={currentUser}
+              />
+            } />
+            
+          </Routes>
         </div>
       </div>
     </div>
@@ -108,4 +230,3 @@ const DashboardLayout = ({ blogs, setBlogs, currentUser, setIsLoggedIn }) => {
 };
 
 export default DashboardLayout;
-
