@@ -398,8 +398,9 @@ const App = () => {
           <Route path="/article-preview" element={<ArticlePreview />} />
           <Route path="/article-form" element={<ArticleForm />} />
           <Route path="/linkedin-article" element={<LinkedInArticle />} />
-          <Route path="/EditPostPage" element={<EditPostPage />} />
+          <Route path="/editPostPage/:postId" element={<EditPostPage />} />
           
+          <Route path="/BlogDashboard" element={<BlogDashboard />} />
           {/* Blog Routes */}
           <Route path="/blog" element={<BlogList blogs={blogs} />} />
           <Route path="/blog/:slug" element={<BlogDetail blogs={blogs} />} />

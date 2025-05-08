@@ -528,9 +528,9 @@ const BlogDashboard = ({ blogs = [], setBlogs, currentUser }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button onClick={handleCreateNew} className="create-new-btn">
+          {/* <button onClick={handleCreateNew} className="create-new-btn">
             <FaPlus /> Create New Blog
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -541,9 +541,9 @@ const BlogDashboard = ({ blogs = [], setBlogs, currentUser }) => {
           ) : (
             <>
               <p>You don't have any blogs yet.</p>
-              <button onClick={handleCreateNew} className="create-first-btn">
+              {/* <button onClick={handleCreateNew} className="create-first-btn">
                 Create Your First Blog
-              </button>
+              </button> */}
             </>
           )}
         </div>

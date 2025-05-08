@@ -150,17 +150,27 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
 
+
+            <li className="nav-item">
+            <Link className="nav-link" to ="/CategoryPage
+            " onClick={() => scrollToSection('heade')}>Portfolio</Link>
+                {/* <a className="nav-link me-2" href="/Career">Career</a> */}
+            </li>
+
+            <li className="nav-item">
+            <Link className="nav-link" to ="/BlogDashboard
+            " onClick={() => scrollToSection('heade')}>Blog</Link>
+                {/* <a className="nav-link me-2" href="/Career">Career</a> */}
+            </li>
+
+
             <li className="nav-item">
             <Link className="nav-link" to ="/DashboardLayout
             " onClick={() => scrollToSection('heade')}>Dashboard</Link>
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
         
-            <li className="nav-item">
-            <Link className="nav-link" to ="/CategoryPage
-            " onClick={() => scrollToSection('heade')}>Portfolio</Link>
-                {/* <a className="nav-link me-2" href="/Career">Career</a> */}
-            </li>
+          
             {/* {isLoggedIn && (
   <Link to="/blog-editor" className="nav-link">
     Create Blog

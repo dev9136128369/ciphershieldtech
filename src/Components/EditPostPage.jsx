@@ -1,120 +1,180 @@
+// import React, { useEffect, useState } from 'react';
+// import { useParams, useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+
+// const EditPostPage = () => {
+//   const { postId } = useParams();
+//   const [post, setPost] = useState(null);
+//   const [error, setError] = useState(null);
+//   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchPost = async () => {
+//       try {
+//         const res = await axios.get(`${apiBaseUrl}/api/posts/id/${postId}`);
+//         setPost(res.data.post);
+//       } catch (err) {
+//         setError('Failed to fetch post');
+//       }
+//     };
+
+//     fetchPost();
+//   }, [postId]);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       console.log(post);
+//       await axios.put(`${apiBaseUrl}/api/posts/${postId}`, post, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem('token')}`
+//         }
+//       });
+//       navigate('/');
+//     } catch (err) {
+//       alert('Failed to update post');
+//     }
+//   };
+
+//   const handleChange = (e) => {
+//     setPost({ ...post, [e.target.name]: e.target.value });
+//   };
+
+//   if (error) return <p>{error}</p>;
+//   if (!post) return <p>Loading...</p>;
+
+//   return (
+//     <div className="max-w-xl mx-auto mt-10 p-4 bg-white shadow rounded">
+//       <h2 className="text-xl font-semibold mb-4">Edit Post</h2>
+//       <form onSubmit={handleSubmit}>
+//         <input
+//           type="text"
+//           name="title"
+//           value={post.title}
+//           onChange={handleChange}
+//           className="w-full p-2 border mb-4"
+//           placeholder="Title"
+//         />
+//         <textarea
+//           name="content"
+//           value={post.content}
+//           onChange={handleChange}
+//           className="w-full p-2 border mb-4"
+//           placeholder="Content"
+//         />
+//         <button
+//           type="submit"
+//           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//         >
+//           Update
+//         </button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default EditPostPage;
+
+
+
+
+
+
+
+
+
+
+
+//sagar
+
+
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-
 const EditPostPage = () => {
-  const { search } = useLocation(); // Get the URL query parameters
-  const navigate = useNavigate(); // To navigate after editing the post
-  const [post, setPost] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({
+  const { postId } = useParams();
+  const [post, setPost] = useState({
     title: '',
     content: '',
+    category: ''
   });
-
-  const params = new URLSearchParams(search);
-  const postId = params.get('id');
+  const [error, setError] = useState(null);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        setLoading(true);
-        const response = await axios.get(`${apiBaseUrl}/api/posts/${postId}`);
-        if (response.data && response.data.post) {
-          setPost(response.data.post);
-          setFormData({
-            title: response.data.post.title,
-            content: response.data.post.content,
-          });
-        }
+        const res = await axios.get(`${apiBaseUrl}/api/posts/id/${postId}`);
+        setPost(res.data.post);
       } catch (err) {
-        setError('Failed to fetch post.');
-      } finally {
-        setLoading(false);
+        console.error(err);
+        setError('Failed to fetch post');
       }
     };
 
-    if (postId) {
-      fetchPost();
-    } else {
-      setError('Post ID is missing.');
-      setLoading(false);
-    }
+    fetchPost();
   }, [postId]);
 
-  // Handle form data changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  // Handle form submission to update the post
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `${apiBaseUrl}/api/posts/${postId}`,
-        formData, 
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you have authentication
-          },
-        }
-      );
-      if (response.data.success) {
-        alert('Post updated successfully!');
-        navigate(`/view-post/${postId}`); // Redirect to the view page after successful update
-      } else {
-        alert('Failed to update the post.');
-      }
+      await axios.put(`${apiBaseUrl}/api/posts/${postId}`, post, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      navigate('/'); // or redirect to /ManagePostsPage if needed
     } catch (err) {
-      setError('Failed to update post. Please try again.');
+      console.error(err);
+      alert('Failed to update post');
     }
   };
 
-  if (loading) return <p>Loading post...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  const handleChange = (e) => {
+    setPost({ ...post, [e.target.name]: e.target.value });
+  };
+
+  if (error) return <p>{error}</p>;
+  if (!post) return <p>Loading...</p>;
 
   return (
-    <div className="p-4">
-      <h1>Edit Post</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-            Content
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            rows="6"
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
-          Save Changes
+    <div className="max-w-xl mx-auto mt-10 p-4 bg-white shadow rounded">
+      <h2 className="text-xl font-semibold mb-4">Edit Post</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          value={post.title}
+          onChange={handleChange}
+          className="w-full p-2 border mb-4"
+          placeholder="Title"
+        />
+        <textarea
+          name="content"
+          value={post.content}
+          onChange={handleChange}
+          className="w-full p-2 border mb-4"
+          placeholder="Content"
+        />
+        <select
+          name="category"
+          value={post.category}
+          onChange={handleChange}
+          className="w-full p-2 border mb-4"
+        >
+          <option value="">Select category</option>
+          <option value="Products">Products</option>
+          <option value="Services">Services</option>
+        </select>
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Update
         </button>
       </form>
     </div>

@@ -6,7 +6,7 @@ import ImageModal from './ImageModal';
 const categories = ['Products', 'Services'];
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
-const ManagePostsPage = () => {
+const ManagePostsPage = ({ currentUser }) => {
   const [allPosts, setAllPosts] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -68,6 +68,11 @@ const ManagePostsPage = () => {
     } catch (err) {
       alert(err.response?.data?.error || 'Delete failed');
     }
+  };
+
+  const handleEdit = (postId) => {
+    navigate(`/editPostPage/${postId}`);
+
   };
 
   const getFileNameFromUrl = (fileUrl) => {
@@ -190,12 +195,12 @@ const ManagePostsPage = () => {
                   </div>
 
                   <div className="card-footer">
-                  <button
-  onClick={() => navigate(`/EditPostPage?id=${post.id}`)}
-  className="action-btn edit-btn"
->
-  <i className="fas fa-edit"></i> Edit
-</button>
+                    <button
+                      onClick={() => handleEdit(post.id)}
+                      className="action-btn edit-btn"
+                    >
+                      <i className="fas fa-edit"></i> Edit
+                    </button>
                     <button
                       onClick={() => handleDelete(post.id)}
                       className="action-btn delete-btn"
