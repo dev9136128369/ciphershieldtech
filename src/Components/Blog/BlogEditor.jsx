@@ -1339,7 +1339,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const BlogEditor = ({ blogs = [], setBlogs, currentUser }) => {
+const BlogEditor = ({ blogs = [], setBlogs = () => {}, currentUser }) => {
   const { id } = useParams();
   const isEditMode = !!id;
   
@@ -1589,7 +1589,6 @@ const BlogEditor = ({ blogs = [], setBlogs, currentUser }) => {
       setUrlSlug(generatedSlug);
       setIsUrlCreated(true);
       
-      // Add null check for blogs
       if (blogs && blogs.some(blog => blog.urlSlug === generatedSlug && (!isEditMode || blog.id !== id))) {
         setUrlError('This URL is already taken. Please customize it.');
       } else {
@@ -1604,7 +1603,6 @@ const BlogEditor = ({ blogs = [], setBlogs, currentUser }) => {
     if (!slug) return 'URL cannot be empty';
     if (!/^[a-z0-9-]+$/.test(slug)) return 'URL can only contain lowercase letters, numbers and hyphens';
     
-    // Add null check for blogs
     if (blogs && blogs.some(blog => blog.urlSlug === slug && (!isEditMode || blog.id !== id))) {
       return 'This URL is already taken';
     }
@@ -1616,47 +1614,51 @@ const BlogEditor = ({ blogs = [], setBlogs, currentUser }) => {
       alert('Title and content are required');
       return;
     }
-  
+    
     if (!isUrlCreated) {
       alert('Please create a URL for your article first');
       return;
     }
-  
+    
     const urlValidationError = validateUrlSlug(urlSlug);
     if (urlValidationError) {
       setUrlError(urlValidationError);
       alert(`URL Error: ${urlValidationError}`);
       return;
     }
-  
-    const blogData = {
+    
+    const updatedBlog = {
       id: isEditMode ? id : uuidv4(),
       title,
       content,
       media,
       bannerImage,
-      titleStyles: titleFormatting,
-      seoTitle,
-      seoDescription,
-      seoKeywords,
+      seoTitle: seoTitle || title,
+      seoDescription: seoDescription || content.substring(0, 160),
+      seoKeywords: seoKeywords || '',
       urlSlug,
-      author: currentUser,
-      createdAt: isEditMode ? existingBlog.createdAt : new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      date: isEditMode ? existingBlog.date : new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      likes: isEditMode ? existingBlog.likes : 0,
+      comments: isEditMode ? existingBlog.comments : [],
+      titleStyles: titleFormatting,
+      author: currentUser
     };
-  
-    if (isEditMode) {
-      const updatedBlogs = blogs.map(blog =>
-        blog.id === id ? blogData : blog
-      );
-      setBlogs(updatedBlogs);
-    } else {
-      setBlogs([...blogs, blogData]);
+    
+    try {
+      if (isEditMode) {
+        setBlogs(blogs.map(blog => blog.id === id ? updatedBlog : blog));
+      } else {
+        setBlogs([...blogs, updatedBlog]);
+      }
+      
+      alert(`Blog ${isEditMode ? 'updated' : 'published'} successfully!`);
+      navigate('/BlogDashboard');
+    } catch (error) {
+      console.error('Error saving blog:', error);
+      alert('Failed to save blog. Please try again.');
     }
-  
-    navigate('/BlogDashboard'); // redirect to blog list or detail view
   };
-  
 
   const SettingsModal = () => (
     <div className="settings-modal-overlay">
@@ -1782,12 +1784,12 @@ const BlogEditor = ({ blogs = [], setBlogs, currentUser }) => {
 
   return (
     <div className="blog-editor-container">
-      {/* <button 
+      <button 
         className="back-button"
         onClick={() => navigate('/DashboardLayout')}
       >
         <FaArrowLeft /> Back to Dashboard
-      </button> */}
+      </button>
       
       <div className="editor-header">
         <h2>{isEditMode ? 'Edit Blog Post' : 'Create New Blog Post'}</h2>
