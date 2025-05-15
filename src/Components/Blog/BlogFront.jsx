@@ -118,7 +118,7 @@ const BlogFront = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.pageTitle}>All Blogs are Here!</h1>
+      <h1 style={styles.pageTitle}>Manage All Blogs</h1>
 
       {posts.length === 0 ? (
         <p>No blogs available.</p>

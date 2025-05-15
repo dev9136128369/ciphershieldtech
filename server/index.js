@@ -75,7 +75,9 @@ const blogPostSchema = new mongoose.Schema({
     type: { type: String, enum: ['image', 'video'], required: true },
     caption: { type: String, default: '' },
     isLocal: { type: Boolean, default: true },
-    width: { type: String, default: '100%' }
+    width: { type: String, default: '100%' },
+    originalUrl: { type: String }, // Only for videos
+    embedUrl: { type: String }     // Only for videos
   }],
   bannerImage: {
     url: String,
@@ -166,6 +168,8 @@ async function ensureUniqueSlug(baseSlug, postId = null) {
   return slug;
 }
 
+
+
 app.post('/api/blogs/publish', 
   upload.fields([
     { name: 'bannerImage', maxCount: 1 },
@@ -175,33 +179,43 @@ app.post('/api/blogs/publish',
     try {
       const blogData = JSON.parse(req.body.blogData);
 
-      // Process files
+      // Process banner image
       const bannerImage = req.files['bannerImage'] ? {
         url: `/uploads/${req.files['bannerImage'][0].filename}`,
         isLocal: true
       } : null;
 
+      // Process media files (images only)
       const mediaFiles = req.files['mediaFiles'] || [];
-      const mediaUrls = blogData.mediaUrls || [];
-      const mediaCaptions = blogData.mediaCaptions || [];
-      const mediaTypes = blogData.mediaTypes || [];
+      const media = [];
 
-      const media = [
-        ...mediaFiles.map((file, index) => ({
+      // Handle uploaded files (images)
+      mediaFiles.forEach(file => {
+        media.push({
           url: `/uploads/${file.filename}`,
-          type: file.mimetype.startsWith('image') ? 'image' : 'video',
-          caption: mediaCaptions[index] || '',
+          type: 'image',
+          caption: '',
           isLocal: true,
           width: '100%'
-        })),
-        ...mediaUrls.map((url, index) => ({
-          url,
-          type: mediaTypes[index] || (url.includes('youtube') || url.includes('vimeo') ? 'video' : 'image'),
-          caption: mediaCaptions[index + mediaFiles.length] || '',
-          isLocal: false,
-          width: '100%'
-        }))
-      ];
+        });
+      });
+
+      // Handle video URLs from blogData.media
+      if (blogData.media && Array.isArray(blogData.media)) {
+        blogData.media.forEach(item => {
+          if (item.type === 'video') {
+            media.push({
+              url: item.embedUrl, // The embeddable URL
+              type: 'video',
+              caption: item.caption || '',
+              isLocal: false,
+              width: item.width || '100%',
+              originalUrl: item.originalUrl, // Original user-provided URL
+              embedUrl: item.embedUrl        // Processed embed URL
+            });
+          }
+        });
+      }
 
       // Ensure slug is unique
       const baseSlug = blogData.urlSlug || generateSlug(blogData.title);
@@ -230,6 +244,7 @@ app.post('/api/blogs/publish',
     } catch (error) {
       console.error('Error:', error);
 
+      // Clean up uploaded files if error occurs
       if (req.files) {
         Object.values(req.files).flat().forEach(file => {
           fs.unlinkSync(path.join(UPLOAD_DIR, file.filename));
@@ -242,6 +257,9 @@ app.post('/api/blogs/publish',
       });
     }
 });
+
+
+
 
 app.put('/api/blogs/:id', async (req, res) => {
   try {
@@ -449,58 +467,142 @@ app.put(
   '/Components/Blog/blogpost/:id',
   upload.fields([
     { name: 'bannerImage', maxCount: 1 },
-    { name: 'media' }
+    { name: 'media', maxCount: 10 }
   ]),
   async (req, res) => {
     try {
       const { id } = req.params;
       const { title, content, titleStyles } = req.body;
 
-      const updatedData = {
-        title,
-        content,
-        titleStyles: JSON.parse(titleStyles)
-      };
-
-      // Handle banner image
-      if (req.files['bannerImage']) {
-        updatedData.bannerImage = `/uploads/${req.files['bannerImage'][0].filename}`;
-      }
-
-      // Handle media files
-      if (req.files['media']) {
-        const mediaFiles = req.files['media'].map(file => `/uploads/${file.filename}`);
-        updatedData.media = mediaFiles;
-      }
-
-      const updatedPost = await BlogPost.findByIdAndUpdate(id, updatedData, { new: true });
-
-      if (!updatedPost) {
+      // Find the existing post
+      const existingPost = await BlogPost.findById(id);
+      if (!existingPost) {
         return res.status(404).json({ message: 'Blog post not found' });
       }
 
-      res.status(200).json({ message: 'Blog post updated', post: updatedPost });
+      // Parse title styles if it's a string
+      const parsedTitleStyles = typeof titleStyles === 'string' 
+        ? JSON.parse(titleStyles) 
+        : titleStyles;
+
+      // Prepare update data
+      const updateData = {
+        title,
+        content,
+        titleStyles: parsedTitleStyles
+      };
+
+      // Handle banner image update
+      if (req.files['bannerImage']) {
+        // Delete old banner image if it exists
+        if (existingPost.bannerImage?.url && existingPost.bannerImage.isLocal) {
+          try {
+            const oldFilePath = path.join(UPLOAD_DIR, path.basename(existingPost.bannerImage.url));
+            if (fs.existsSync(oldFilePath)) {
+              fs.unlinkSync(oldFilePath);
+            }
+          } catch (err) {
+            console.error('Error deleting old banner image:', err);
+          }
+        }
+
+        updateData.bannerImage = {
+          url: `/uploads/${req.files['bannerImage'][0].filename}`,
+          isLocal: true
+        };
+      }
+
+      // Handle media files update
+      if (req.files['media']) {
+        // First delete any existing local media files that are being replaced
+        // (This is a simplified approach - you might want more sophisticated logic)
+        for (const mediaItem of existingPost.media) {
+          if (mediaItem.isLocal) {
+            try {
+              const oldFilePath = path.join(UPLOAD_DIR, path.basename(mediaItem.url));
+              if (fs.existsSync(oldFilePath)) {
+                fs.unlinkSync(oldFilePath);
+              }
+            } catch (err) {
+              console.error('Error deleting old media file:', err);
+            }
+          }
+        }
+
+        // Create new media array with the uploaded files
+        updateData.media = req.files['media'].map(file => ({
+          url: `/uploads/${file.filename}`,
+          type: file.mimetype.startsWith('image') ? 'image' : 'video',
+          caption: '', // You might want to get this from the request
+          isLocal: true,
+          width: '100%'
+        }));
+      }
+
+      // Update the post
+      const updatedPost = await BlogPost.findByIdAndUpdate(
+        id, 
+        updateData, 
+        { new: true }
+      );
+
+      res.status(200).json({ 
+        message: 'Blog post updated successfully',
+        post: updatedPost
+      });
+
     } catch (error) {
       console.error('Update error:', error);
-      res.status(500).json({ message: 'Server error' });
+      
+      // Clean up any uploaded files if there was an error
+      if (req.files) {
+        Object.values(req.files).flat().forEach(file => {
+          try {
+            fs.unlinkSync(path.join(UPLOAD_DIR, file.filename));
+          } catch (err) {
+            console.error('Error cleaning up uploaded file:', err);
+          }
+        });
+      }
+
+      res.status(500).json({ 
+        message: 'Server error during update',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
     }
   }
 );
-
 // PUT /api/posts/id/:postId
-app.put('/api/posts/id/:postId', upload.single('attachment'), async (req, res) => {
+
+
+app.put('/api/posts/id/:postId', upload.single('image'), async (req, res) => { // Changed 'attachment' to 'image' to match frontend
   try {
     const { title, content, category } = req.body;
     const { postId } = req.params;
 
-    const existingPost = await Article.findById(postId);
-    if (!existingPost) return res.status(404).json({ message: 'Post not found' });
+    // Validate input
+    if (!title || !content || !category) {
+      return res.status(400).json({ message: 'Title, content, and category are required' });
+    }
 
-    // Delete old file if new one is uploaded
+    const existingPost = await Article.findById(postId);
+    if (!existingPost) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // File handling
     if (req.file) {
+      // Delete old file if it exists
       if (existingPost.attachments && existingPost.attachments.length > 0) {
         const oldFilePath = path.join(UPLOAD_DIR, path.basename(existingPost.attachments[0]));
-        if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
+        try {
+          if (fs.existsSync(oldFilePath)) {
+            fs.unlinkSync(oldFilePath);
+          }
+        } catch (err) {
+          console.error('Error deleting old file:', err);
+          // Continue with update even if file deletion fails
+        }
       }
 
       existingPost.attachments = [`/uploads/${req.file.filename}`];
@@ -510,13 +612,29 @@ app.put('/api/posts/id/:postId', upload.single('attachment'), async (req, res) =
     existingPost.title = title;
     existingPost.content = content;
     existingPost.category = category;
+    existingPost.updatedAt = Date.now(); // Add update timestamp
 
     const updatedPost = await existingPost.save();
 
-    res.json({ message: 'Post updated', post: updatedPost });
+    res.json({ 
+      message: 'Post updated successfully',
+      post: {
+        _id: updatedPost._id,
+        title: updatedPost.title,
+        content: updatedPost.content,
+        category: updatedPost.category,
+        attachments: updatedPost.attachments,
+        createdAt: updatedPost.createdAt,
+        updatedAt: updatedPost.updatedAt
+      }
+    });
+
   } catch (error) {
-    console.error('Update Error:', error.message);
-    res.status(500).json({ message: 'Failed to update post' });
+    console.error('Update Error:', error);
+    res.status(500).json({ 
+      message: 'Failed to update post',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -596,279 +714,3 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
   console.log(`📁 Uploads available at /uploads`);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const express = require("express");
-// const cors = require("cors");
-// const mongoose = require("mongoose");
-// const fs = require("fs");
-// const path = require("path");
-// const multer = require("multer");
-// const nodemailer = require('nodemailer');
-// const { v4: uuidv4 } = require('uuid');
-// require('dotenv').config();
-
-// const app = express();
-
-// // MongoDB Connection
-// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ciphershield').then(() => {
-//   console.log('✅ Connected to MongoDB');
-// }).catch(err => {
-//   console.error('❌ MongoDB connection error:', err);
-// });
-
-// // Schema & Model
-// const articleSchema = new mongoose.Schema({
-//   _id: { type: String, default: uuidv4 },
-//   title: { type: String, required: true },
-//   content: { type: String, required: true },
-//   category: { type: String, required: true },
-//   attachments: [String],
-//   createdAt: { type: Date, default: Date.now },
-//   updatedAt: { type: Date, default: Date.now }
-// });
-// const Article = mongoose.model("Article", articleSchema);
-
-// // Server Config
-// const PORT = process.env.PORT || 8000;
-// const UPLOAD_DIR = path.join(__dirname, "uploads");
-
-// // Create upload directory
-// if (!fs.existsSync(UPLOAD_DIR)) {
-//   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-// }
-
-// // Middleware
-
-// app.use(cors({
-//   origin: 'http://localhost:5173', // This allows requests from localhost:5173
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-// }));
-// app.use(express.json());
-// app.use("/uploads", express.static(UPLOAD_DIR));
-
-// // Multer config
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-//   filename: (req, file, cb) => {
-//     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
-//     cb(null, uniqueName);
-//   }
-// });
-// const upload = multer({
-//   storage,
-//   fileFilter: (req, file, cb) => {
-//     const allowed = ["image/jpeg", "image/png", "application/pdf", "text/plain"];
-//     cb(allowed.includes(file.mimetype) ? null : new Error("Invalid file type"), true);
-//   },
-//   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-// });
-
-// // Nodemailer config
-// const transporter = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 465,
-//   secure: true,
-//   auth: {
-//     user: process.env.EMAIL_USER,
-//     pass: process.env.EMAIL_PASS
-//   },
-//   tls: { rejectUnauthorized: false }
-// });
-
-// // Routes
-// app.get("/api/health", (req, res) => {
-//   res.json({
-//     status: "OK",
-//     server: "Blog API",
-//     database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
-//     time: new Date().toISOString()
-//   });
-// });
-
-// app.get("/api/articles", async (req, res) => {
-//   try {
-//     const articles = await Article.find().sort({ createdAt: -1 });
-//     res.json(articles);
-//   } catch (err) {
-//     console.error("Get articles error:", err);
-//     res.status(500).json({ error: "Failed to fetch articles" });
-//   }
-// });
-
-// app.post("/api/articles", upload.array('files'), async (req, res) => {
-//   try {
-//     const { title, content, category } = req.body;
-//     if (!title || !content || !category) {
-//       return res.status(400).json({ error: "Title, content, and category are required." });
-//     }
-
-//     const attachments = req.files.map(file => `/uploads/${file.filename}`);
-//     const newArticle = new Article({ title, content, category, attachments });
-//     const saved = await newArticle.save();
-//     res.status(201).json(saved);
-//   } catch (err) {
-//     console.error("Create article error:", err);
-//     res.status(500).json({ error: "Failed to create article" });
-//   }
-// });
-
-// app.delete("/api/articles/:id", async (req, res) => {
-//   try {
-//     const deleted = await Article.findByIdAndDelete(req.params.id);
-//     if (!deleted) return res.status(404).json({ error: "Article not found" });
-//     res.json({ success: true, message: "Article deleted" });
-//   } catch (err) {
-//     console.error("Delete article error:", err);
-//     res.status(500).json({ error: "Failed to delete article" });
-//   }
-// });
-
-// // Contact Form Routes
-// app.post('/submit-form', async (req, res) => {
-//   const { name, email, state, designation, contact, gender, message } = req.body;
-//   if (!name || !email || !state || !designation || !contact || !gender || !message) {
-//     return res.status(400).json({ error: 'All fields are required.' });
-//   }
-
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: 'yashveersingh7648@gmail.com',
-//     subject: `New Application from ${name}`,
-//     html: `
-//       <h2>New Application</h2>
-//       <p><strong>Name:</strong> ${name}</p>
-//       <p><strong>Email:</strong> ${email}</p>
-//       <p><strong>State:</strong> ${state}</p>
-//       <p><strong>Designation:</strong> ${designation}</p>
-//       <p><strong>Contact:</strong> ${contact}</p>
-//       <p><strong>Gender:</strong> ${gender}</p>
-//       <p><strong>Message:</strong> ${message}</p>
-//     `
-//   };
-
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ success: true, message: '✅ Email sent!' });
-//   } catch (err) {
-//     console.error('Email error:', err);
-//     res.status(500).json({ error: '❌ Failed to send email.' });
-//   }
-// });
-
-// app.post('/login-email', async (req, res) => {
-//   const { name, email, subject, message } = req.body;
-//   if (!name || !email || !subject || !message) {
-//     return res.status(400).json({ error: 'All fields are required.' });
-//   }
-
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: 'yashveersingh7648@gmail.com',
-//     subject: `New Message: ${subject}`,
-//     html: `
-//       <h2>Contact Form</h2>
-//       <p><strong>Name:</strong> ${name}</p>
-//       <p><strong>Email:</strong> ${email}</p>
-//       <p><strong>Subject:</strong> ${subject}</p>
-//       <p><strong>Message:</strong> ${message}</p>
-//     `
-//   };
-
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
-//   } catch (err) {
-//     console.error('Email error:', err);
-//     res.status(500).json({ error: '❌ Failed to send email.' });
-//   }
-// });
-
-// // Global Error Handler
-// app.use((err, req, res, next) => {
-//   if (err instanceof multer.MulterError) {
-//     return res.status(400).json({ error: "File upload error", message: err.message });
-//   }
-//   console.error("Unhandled error:", err.stack);
-//   res.status(500).json({ error: "Internal Server Error" });
-// });
-
-// // Start Server
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running at http://localhost:${PORT}`);
-//   console.log(`📁 Uploads available at /uploads`);
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
