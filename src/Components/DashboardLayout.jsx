@@ -110,6 +110,11 @@ const DashboardLayout = ({ currentUser, setIsLoggedIn, blogs, setBlogs }) => {
     navigate('/editor/blogs');
   };
 
+
+  const handleCreateNew = () => {
+    navigate('/blog/new');
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -148,14 +153,18 @@ const DashboardLayout = ({ currentUser, setIsLoggedIn, blogs, setBlogs }) => {
             <i className="fas fa-plus me-2"></i>Create Portfolio
           </button>
 
-          <button
-            className={`nav-btn ${activeTab === 'create1' ? 'active' : ''}`}
+          {/* <button
+            className={nav-btn ${activeTab === 'create1' ? 'active' : ''}}
             onClick={() => handleTabChange('create1')}
           >
             <i className="fas fa-plus me-2"></i>Create Blog
-          </button>
+          </button> */}
 
-         
+          <button  
+          className={`nav-btn ${activeTab === 'create1' ? 'active' : ''}`}
+          onClick={handleCreateNew} >
+          <i className="fas fa-plus me-2"></i>Create Your First Blog
+              </button>
 
           <button
             className="nav-btn logout-btn"
@@ -217,7 +226,7 @@ const DashboardLayout = ({ currentUser, setIsLoggedIn, blogs, setBlogs }) => {
 
             <Route path="create1" element={
               <BlogEditor 
-                onPublish={(blogData) => handlePublishBlog1(blogData, false)}
+                onPublish={(blogData) => handlePublishBlog(blogData, false)}
                 currentUser={currentUser}
               />
             } />

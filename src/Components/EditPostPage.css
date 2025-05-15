@@ -1,0 +1,113 @@
+/* Clean light orange theme without background */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.edit-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+.edit-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px 35px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(255, 165, 0, 0.15);
+  border: 1px solid #ffc58a;
+}
+
+.edit-title {
+  text-align: center;
+  color: #e67e22;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.edit-form label {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 6px;
+  color: #d35400;
+  font-weight: 500;
+}
+
+.edit-form input[type="text"],
+.edit-form select,
+.edit-form textarea,
+.edit-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #f7b26d;
+  border-radius: 8px;
+  background-color: #fffefb;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus,
+.edit-form select:focus {
+  border-color: #ffa94d;
+  outline: none;
+  background-color: #fffaf2;
+}
+
+.edit-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.edit-form button {
+  background-color: #ff922b;
+  color: white;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(255, 138, 0, 0.2);
+}
+
+.edit-form button:hover {
+  background-color: #e67e22;
+}
+
+.preview-image {
+  margin-bottom: 20px;
+}
+
+.preview-image img {
+  max-width: 100%;
+  max-height: 280px;
+  border-radius: 8px;
+  border: 1px solid #ffc078;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(255, 173, 94, 0.15);
+}
+
+.error-message {
+  text-align: center;
+  color: red;
+  font-weight: 500;
+  margin-top: 20px;
+}
+
+.loading-message {
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+  margin-top: 20px;
+}

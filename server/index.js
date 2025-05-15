@@ -1,129 +1,556 @@
-//sagar
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const path = require('path');
-const fs = require('fs');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
 const nodemailer = require('nodemailer');
-const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
+const slugify = require('slugify');
 
 const app = express();
-const PORT = process.env.PORT || 8000;
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
-
-// Define MongoDB models
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: { type: String, unique: true },
-  password: String,
-  createdAt: { type: Date, default: Date.now }
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ciphershield').then(() => {
+  console.log('✅ Connected to MongoDB');
+}).catch(err => {
+  console.error('❌ MongoDB connection error:', err);
 });
-const User = mongoose.model('User', userSchema);
 
-const postSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  category: String,
+// Schema & Model
+const articleSchema = new mongoose.Schema({
+  _id: { type: String, default: uuidv4 },
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  category: { type: String, required: true },
   attachments: [String],
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+const Article = mongoose.model("Article", articleSchema);
+
+app.use('/uploads', express.static('server/uploads'));
+
+
+//partner schema 
+
+// Add this with your other schemas
+const partnerSchema = new mongoose.Schema({
+  _id: { type: String, default: uuidv4 },
+  name: String,
+  companyName: String,
+  companyWebsite: String,
+  numberOfEmployees: Number,
+  turnover: String,
+  numberOfBranches: Number,
+  area: String,
+  areaInSqFt: Number,
+  bankName: String,
+  bankAddress: String,
+  accountNumber: String,
+  ifsc: String,
+  panCard: String,  // Store file path
+  msmemCard: String, // Store file path
+  aadhaarCard: String, // Store file path
+  gstNumber: String,
+  state: String,
+  city: String,
+  pinCode: String,
+  mobile: String,
+  email: String,
+  address: String,
   createdAt: { type: Date, default: Date.now }
 });
-const Post = mongoose.model('Post', postSchema);
 
-// Configure file storage
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+const Partner = mongoose.model("Partner", partnerSchema);
+
+// blog Schema 
+
+const blogPostSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  media: [{
+    url: { type: String, required: true },
+    type: { type: String, enum: ['image', 'video'], required: true },
+    caption: { type: String, default: '' },
+    isLocal: { type: Boolean, default: true },
+    width: { type: String, default: '100%' }
+  }],
+  bannerImage: {
+    url: String,
+    isLocal: Boolean
+  },
+  seoTitle: String,
+  seoDescription: String,
+  seoKeywords: [String],
+  urlSlug: { type: String, required: true, unique: true },
+  titleStyles: mongoose.Schema.Types.Mixed,
+  contentStyles:mongoose.Schema.Types.Mixed,
+  author: {
+    id: String,
+    name: String,
+    email: String
+  }
+}, { timestamps: true });
+
+const BlogPost = mongoose.model('BlogPost', blogPostSchema);
+
+// Server Config
+const PORT = process.env.PORT || 8000;
+const UPLOAD_DIR = path.join(__dirname, "uploads");
+
+// Create upload directory
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
+// Middleware
+
+app.use(cors({
+  origin: 'http://localhost:5173', // This allows requests from localhost:5173
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.use(express.json());
+app.use("/uploads", express.static(UPLOAD_DIR));
+
+// Multer config
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowed = ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/quicktime"];
+    cb(allowed.includes(file.mimetype) ? null : new Error("Invalid file type"), true);
+  },
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
+
+// Nodemailer config
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    pass: process.env.EMAIL_PASS
   },
-  tls: {
-    rejectUnauthorized: false,
-  }
+  tls: { rejectUnauthorized: false }
 });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB
-
-// Middleware
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'], credentials: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/uploads', express.static(uploadDir));
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// Helper function to validate ObjectId
-const isValidObjectId = (id) => {
-  return mongoose.Types.ObjectId.isValid(id) && (new mongoose.Types.ObjectId(id)).toString() === id;
-};
-
-// Auth middleware
-const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (!token) return res.sendStatus(401);
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
 
 // Routes
-app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
-app.get('/api/auth/check', authenticateToken, async (req, res) => {
-  const user = await User.findById(req.user.userId).select('-password');
-  if (!user) return res.sendStatus(404);
-  res.json({ success: true, user });
+
+function generateSlug(title) {
+  return slugify(title, { lower: true, strict: true });
+}
+
+// Ensures the slug is unique in the database
+async function ensureUniqueSlug(baseSlug, postId = null) {
+  let slug = baseSlug;
+  let counter = 1;
+
+  let existingPost = await BlogPost.findOne({ urlSlug: slug });
+  while (existingPost && (!postId || existingPost._id.toString() !== postId.toString())) {
+    slug = `${baseSlug}-${counter++}`;
+    existingPost = await BlogPost.findOne({ urlSlug: slug });
+  }
+
+  return slug;
+}
+
+app.post('/api/blogs/publish', 
+  upload.fields([
+    { name: 'bannerImage', maxCount: 1 },
+    { name: 'mediaFiles', maxCount: 10 }
+  ]), 
+  async (req, res) => {
+    try {
+      const blogData = JSON.parse(req.body.blogData);
+
+      // Process files
+      const bannerImage = req.files['bannerImage'] ? {
+        url: `/uploads/${req.files['bannerImage'][0].filename}`,
+        isLocal: true
+      } : null;
+
+      const mediaFiles = req.files['mediaFiles'] || [];
+      const mediaUrls = blogData.mediaUrls || [];
+      const mediaCaptions = blogData.mediaCaptions || [];
+      const mediaTypes = blogData.mediaTypes || [];
+
+      const media = [
+        ...mediaFiles.map((file, index) => ({
+          url: `/uploads/${file.filename}`,
+          type: file.mimetype.startsWith('image') ? 'image' : 'video',
+          caption: mediaCaptions[index] || '',
+          isLocal: true,
+          width: '100%'
+        })),
+        ...mediaUrls.map((url, index) => ({
+          url,
+          type: mediaTypes[index] || (url.includes('youtube') || url.includes('vimeo') ? 'video' : 'image'),
+          caption: mediaCaptions[index + mediaFiles.length] || '',
+          isLocal: false,
+          width: '100%'
+        }))
+      ];
+
+      // Ensure slug is unique
+      const baseSlug = blogData.urlSlug || generateSlug(blogData.title);
+      const uniqueSlug = await ensureUniqueSlug(baseSlug, blogData._id);
+
+      const completeBlogData = {
+        ...blogData,
+        media,
+        bannerImage,
+        urlSlug: uniqueSlug
+      };
+
+      let blogPost;
+      if (blogData._id) {
+        blogPost = await BlogPost.findByIdAndUpdate(blogData._id, completeBlogData, { new: true });
+      } else {
+        blogPost = new BlogPost(completeBlogData);
+        await blogPost.save();
+      }
+
+      res.status(blogData._id ? 200 : 201).json({ 
+        message: `Blog ${blogData._id ? 'updated' : 'published'} successfully!`, 
+        blogPost 
+      });
+
+    } catch (error) {
+      console.error('Error:', error);
+
+      if (req.files) {
+        Object.values(req.files).flat().forEach(file => {
+          fs.unlinkSync(path.join(UPLOAD_DIR, file.filename));
+        });
+      }
+
+      res.status(500).json({ 
+        message: 'Error processing blog', 
+        error: error.message 
+      });
+    }
 });
 
+app.put('/api/blogs/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      title,
+      titleFormatting,
+      content,
+      media,
+      bannerImage,
+      seoTitle,
+      seoDescription,
+      seoKeywords,
+      urlSlug,
+    } = req.body;
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      id,
+      {
+        title,
+        titleFormatting,
+        content,
+        media,
+        bannerImage,
+        seoTitle,
+        seoDescription,
+        seoKeywords,
+        urlSlug,
+      },
+      { new: true } // return the updated blog
+    );
+
+    if (!updatedBlog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+
+    res.status(200).json({ message: 'Blog updated successfully', blog: updatedBlog });
+  } catch (err) {
+    console.error('Error updating blog:', err);
+    res.status(500).json({ error: 'Error updating blog', details: err.message });
+  }
+});
+
+
+
+
+
+
+
+// Add this with your other routes
+app.post("/api/partner-registration", upload.fields([
+  { name: 'panCard', maxCount: 1 },
+  { name: 'msmemCard', maxCount: 1 },
+  { name: 'aadhaarCard', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const { 
+      name, companyName, companyWebsite, numberOfEmployees, 
+      turnover, numberOfBranches, area, areaInSqFt,
+      bankName, bankAddress, accountNumber, ifsc,
+      gstNumber, state, city, pinCode, mobile, email, address
+    } = req.body;
+
+    // Get file paths
+    const panCardPath = req.files['panCard'] ? `/uploads/${req.files['panCard'][0].filename}` : null;
+    const msmemCardPath = req.files['msmemCard'] ? `/uploads/${req.files['msmemCard'][0].filename}` : null;
+    const aadhaarCardPath = req.files['aadhaarCard'] ? `/uploads/${req.files['aadhaarCard'][0].filename}` : null;
+
+    const newPartner = new Partner({
+      name,
+      companyName,
+      companyWebsite,
+      numberOfEmployees: parseInt(numberOfEmployees),
+      turnover,
+      numberOfBranches: parseInt(numberOfBranches),
+      area,
+      areaInSqFt: parseInt(areaInSqFt),
+      bankName,
+      bankAddress,
+      accountNumber,
+      ifsc,
+      panCard: panCardPath,
+      msmemCard: msmemCardPath,
+      aadhaarCard: aadhaarCardPath,
+      gstNumber,
+      state,
+      city,
+      pinCode,
+      mobile,
+      email,
+      address
+    });
+
+    await newPartner.save();
+    res.status(201).json({ success: true, message: "Partner registered successfully" });
+  } catch (err) {
+    console.error("Partner registration error:", err);
+    res.status(500).json({ error: "Failed to register partner" });
+  }
+});
+
+
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "OK",
+    server: "Blog API",
+    database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+    time: new Date().toISOString()
+  });
+});
+
+
+app.get("/Components/Blog/blogpost", async (req, res) => {
+  try {
+    const articles = await BlogPost.find().sort({ createdAt: -1 });
+    res.json(articles);
+  } catch (err) {
+    console.error("Get articles error:", err);
+    res.status(500).json({ error: "Failed to fetch articles" });
+  }
+});
+
+app.get("/api/articles", async (req, res) => {
+  try {
+    const articles = await Article.find().sort({ createdAt: -1 });
+    res.json(articles);
+  } catch (err) {
+    console.error("Get articles error:", err);
+    res.status(500).json({ error: "Failed to fetch articles" });
+  }
+});
+
+app.post("/api/articles", upload.array('files'), async (req, res) => {
+  try {
+    const { title, content, category } = req.body;
+    if (!title || !content || !category) {
+      return res.status(400).json({ error: "Title, content, and category are required." });
+    }
+
+    const attachments = req.files.map(file => `/uploads/${file.filename}`);
+    const newArticle = new Article({ title, content, category, attachments });
+    const saved = await newArticle.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    console.error("Create article error:", err);
+    res.status(500).json({ error: "Failed to create article" });
+  }
+});
+
+
+// Deleting Blog 
+app.delete(`/Components/Blog/blogpost/:id`,async(req,res)=>{
+    try {
+    const deleted = await BlogPost.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "blog not found" });
+    res.json({ success: true, message: "blog deleted" });
+  } catch (err) {
+    console.error("Delete blog error:", err);
+    res.status(500).json({ error: "Failed to delete blog" });
+  }
+});
+app.delete("/api/articles/:id", async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const deleted = await Article.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Article not found" });
+    res.json({ success: true, message: "Article deleted" });
+  } catch (err) {
+    console.error("Delete article error:", err);
+    res.status(500).json({ error: "Failed to delete article" });
+  }
+});
+
+// To Edit The portfolio
+
+app.get(`/api/posts/id/:postId`, async (req, res) => {
+  try {
+    const post = await Article.findById(req.params.postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    res.json({ post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// get blog for edit
+
+app.get(`/Components/Blog/blogpost/:postId`, async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    res.json({ post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
+app.put(
+  '/Components/Blog/blogpost/:id',
+  upload.fields([
+    { name: 'bannerImage', maxCount: 1 },
+    { name: 'media' }
+  ]),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, content, titleStyles } = req.body;
+
+      const updatedData = {
+        title,
+        content,
+        titleStyles: JSON.parse(titleStyles)
+      };
+
+      // Handle banner image
+      if (req.files['bannerImage']) {
+        updatedData.bannerImage = `/uploads/${req.files['bannerImage'][0].filename}`;
+      }
+
+      // Handle media files
+      if (req.files['media']) {
+        const mediaFiles = req.files['media'].map(file => `/uploads/${file.filename}`);
+        updatedData.media = mediaFiles;
+      }
+
+      const updatedPost = await BlogPost.findByIdAndUpdate(id, updatedData, { new: true });
+
+      if (!updatedPost) {
+        return res.status(404).json({ message: 'Blog post not found' });
+      }
+
+      res.status(200).json({ message: 'Blog post updated', post: updatedPost });
+    } catch (error) {
+      console.error('Update error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+);
+
+// PUT /api/posts/id/:postId
+app.put('/api/posts/id/:postId', upload.single('attachment'), async (req, res) => {
+  try {
+    const { title, content, category } = req.body;
+    const { postId } = req.params;
+
+    const existingPost = await Article.findById(postId);
+    if (!existingPost) return res.status(404).json({ message: 'Post not found' });
+
+    // Delete old file if new one is uploaded
+    if (req.file) {
+      if (existingPost.attachments && existingPost.attachments.length > 0) {
+        const oldFilePath = path.join(UPLOAD_DIR, path.basename(existingPost.attachments[0]));
+        if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
+      }
+
+      existingPost.attachments = [`/uploads/${req.file.filename}`];
+    }
+
+    // Update fields
+    existingPost.title = title;
+    existingPost.content = content;
+    existingPost.category = category;
+
+    const updatedPost = await existingPost.save();
+
+    res.json({ message: 'Post updated', post: updatedPost });
+  } catch (error) {
+    console.error('Update Error:', error.message);
+    res.status(500).json({ message: 'Failed to update post' });
+  }
+});
+
+
+
+// Contact Form Routes
 app.post('/submit-form', async (req, res) => {
   const { name, email, state, designation, contact, gender, message } = req.body;
   if (!name || !email || !state || !designation || !contact || !gender || !message) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: 'yashveersingh7648@gmail.com',
+    subject: `New Application from ${name}`,
+    html: `
+      <h2>New Application</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>State:</strong> ${state}</p>
+      <p><strong>Designation:</strong> ${designation}</p>
+      <p><strong>Contact:</strong> ${contact}</p>
+      <p><strong>Gender:</strong> ${gender}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `
+  };
+
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: 'yashveersingh7648@gmail.com',
-      subject: `New Application from ${name}`,
-      html: `
-        <h2>New Application Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>State:</strong> ${state}</p>
-        <p><strong>Designation:</strong> ${designation}</p>
-        <p><strong>Contact:</strong> ${contact}</p>
-        <p><strong>Gender:</strong> ${gender}</p>
-        <p><strong>Message:</strong> ${message}</p>
-      `
-    });
-    res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
-  } catch (error) {
-    res.status(500).json({ error: '❌ Email failed.' });
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: '✅ Email sent!' });
+  } catch (err) {
+    console.error('Email error:', err);
+    res.status(500).json({ error: '❌ Failed to send email.' });
   }
 });
 
@@ -133,185 +560,41 @@ app.post('/login-email', async (req, res) => {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: 'yashveersingh7648@gmail.com',
+    subject: `New Message: ${subject}`,
+    html: `
+      <h2>Contact Form</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Subject:</strong> ${subject}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `
+  };
+
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: 'yashveersingh7648@gmail.com',
-      subject: `New Message: ${subject}`,
-      html: `
-        <h2>Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <p><strong>Message:</strong> ${message}</p>
-      `
-    });
+    await transporter.sendMail(mailOptions);
     res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to send email.' });
-  }
-});
-
-app.post('/api/auth/register', async (req, res) => {
-  const { email, password, name } = req.body;
-  if (!email || !password || !name) {
-    return res.status(400).json({ success: false, error: 'All fields are required' });
-  }
-
-  const existing = await User.findOne({ email });
-  if (existing) return res.status(400).json({ success: false, error: 'User already exists' });
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ name, email, password: hashedPassword });
-
-  const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
-
-  res.status(201).json({
-    success: true,
-    token,
-    user: { id: user._id, email: user.email, name: user.name }
-  });
-});
-
-app.post('/api/auth/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(401).json({ success: false, error: 'Invalid credentials' });
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(401).json({ success: false, error: 'Invalid credentials' });
-
-  const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
-
-  res.json({
-    success: true,
-    token,
-    user: { id: user._id, email: user.email, name: user.name }
-  });
-});
-
-app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
-  if (!req.file) return res.status(400).json({ success: false, error: 'No file uploaded' });
-  res.json({ success: true, filePath: `/uploads/${req.file.filename}` });
-});
-
-app.post('/api/posts', authenticateToken, async (req, res) => {
-  const { title, content, category, attachments = [] } = req.body;
-  if (!title || !content || !category) {
-    return res.status(400).json({ success: false, error: 'Title, content, and category are required' });
-  }
-
-  try {
-    const post = await Post.create({
-      title,
-      content,
-      category,
-      attachments,
-      userId: req.user.userId
-    });
-
-    res.status(201).json({ success: true, post });
   } catch (err) {
-    console.error('❌ Error creating post:', err);
-    res.status(500).json({ success: false, error: 'Failed to create post' });
+    console.error('Email error:', err);
+    res.status(500).json({ error: '❌ Failed to send email.' });
   }
 });
 
-app.get('/api/posts', async (req, res) => {
-  try {
-    const posts = await Post.find().populate('userId', 'name email');
-    res.json({ success: true, posts });
-  } catch (err) {
-    res.status(500).json({ success: false, error: 'Failed to fetch posts' });
+// Global Error Handler
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: "File upload error", message: err.message });
   }
+  console.error("Unhandled error:", err.stack);
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
-app.get('/api/posts/:category', async (req, res) => {
-  try {
-    const posts = await Post.find({ category: req.params.category });
-    res.json({ success: true, posts });
-  } catch (err) {
-    res.status(500).json({ success: false, error: 'Failed to fetch posts' });
-  }
-});
-
-app.get('/api/posts/id/:id', async (req, res) => {
-  if (!isValidObjectId(req.params.id)) {
-    return res.status(400).json({ error: 'Invalid post ID' });
-  }
-  
-  try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-    res.json({ success: true, post });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.put('/api/posts/id/:id', authenticateToken, async (req, res) => {
-  if (!isValidObjectId(req.params.id)) {
-    return res.status(400).json({ error: 'Invalid post ID' });
-  }
-
-  try {
-    const { title, content } = req.body;
-    const post = await Post.findById(req.params.id);
-
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-    if (post.userId.toString() !== req.user.userId) return res.status(403).json({ error: 'Forbidden' });
-
-    post.title = title;
-    post.content = content;
-    await post.save();
-
-    res.status(200).json({ success: true, post });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.delete('/api/posts/:id', authenticateToken, async (req, res) => {
-  const postId = req.params.id;
-  console.log("Post ID received:", postId); // Log the post ID to check if it's being received correctly
-
-  if (!isValidObjectId(postId)) {
-    return res.status(400).json({ error: 'Invalid post ID' });
-  }
-
-  try {
-    const post = await Post.findById(postId);
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-
-    // Check if the logged-in user is the author of the post
-    if (post.userId.toString() !== req.user.userId) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
-
-    await Post.findByIdAndDelete(postId);
-    res.json({ success: true, message: 'Post deleted successfully' });
-  } catch (err) {
-    console.error('❌ Error while deleting post:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.delete('/api/delete-file/:filePath', authenticateToken, async (req, res) => {
-  try {
-    const filePath = path.join(__dirname, req.params.filePath);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      return res.json({ success: true, message: 'File deleted successfully' });
-    }
-    res.status(404).json({ error: 'File not found' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to delete file' });
-  }
-});
-
-// Start server
+// Start Server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`📁 Uploads available at /uploads`);
 });
 
 
@@ -330,116 +613,169 @@ app.listen(PORT, () => {
 
 
 
-//yashveer
 
-// const express = require('express');
-// const cors = require('cors');
-// const bodyParser = require('body-parser');
-// const path = require('path');
-// const fs = require('fs');
-// const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
-// const multer = require('multer');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const express = require("express");
+// const cors = require("cors");
+// const mongoose = require("mongoose");
+// const fs = require("fs");
+// const path = require("path");
+// const multer = require("multer");
 // const nodemailer = require('nodemailer');
-
+// const { v4: uuidv4 } = require('uuid');
 // require('dotenv').config();
 
 // const app = express();
-// const PORT = process.env.PORT || 8000;
 
-// // Configure file storage
-// const uploadDir = path.join(__dirname, 'uploads');
-// if (!fs.existsSync(uploadDir)) {
-//   fs.mkdirSync(uploadDir, { recursive: true });
+// // MongoDB Connection
+// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ciphershield').then(() => {
+//   console.log('✅ Connected to MongoDB');
+// }).catch(err => {
+//   console.error('❌ MongoDB connection error:', err);
+// });
+
+// // Schema & Model
+// const articleSchema = new mongoose.Schema({
+//   _id: { type: String, default: uuidv4 },
+//   title: { type: String, required: true },
+//   content: { type: String, required: true },
+//   category: { type: String, required: true },
+//   attachments: [String],
+//   createdAt: { type: Date, default: Date.now },
+//   updatedAt: { type: Date, default: Date.now }
+// });
+// const Article = mongoose.model("Article", articleSchema);
+
+// // Server Config
+// const PORT = process.env.PORT || 8000;
+// const UPLOAD_DIR = path.join(__dirname, "uploads");
+
+// // Create upload directory
+// if (!fs.existsSync(UPLOAD_DIR)) {
+//   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 // }
 
+// // Middleware
 
+// app.use(cors({
+//   origin: 'http://localhost:5173', // This allows requests from localhost:5173
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+// }));
+// app.use(express.json());
+// app.use("/uploads", express.static(UPLOAD_DIR));
+
+// // Multer config
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+//   filename: (req, file, cb) => {
+//     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+//     cb(null, uniqueName);
+//   }
+// });
+// const upload = multer({
+//   storage,
+//   fileFilter: (req, file, cb) => {
+//     const allowed = ["image/jpeg", "image/png", "application/pdf", "text/plain"];
+//     cb(allowed.includes(file.mimetype) ? null : new Error("Invalid file type"), true);
+//   },
+//   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+// });
+
+// // Nodemailer config
 // const transporter = nodemailer.createTransport({
 //   host: 'smtp.gmail.com',
 //   port: 465,
 //   secure: true,
 //   auth: {
-//     user: process.env.EMAIL_USER, 
-//     pass: process.env.EMAIL_PASS,
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS
 //   },
-//   tls: {
-//     rejectUnauthorized: false,
-//   }
+//   tls: { rejectUnauthorized: false }
 // });
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, uploadDir);
-//   },
-//   filename: (req, file, cb) => {
-//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//     cb(null, uniqueSuffix + path.extname(file.originalname));
-//   }
-// });
-
-// const upload = multer({ 
-//   storage: storage,
-//   limits: { fileSize: 10 * 1024 * 1024 } // 10MB
-// });
-
-// // Middleware
-// app.use(cors({
-//   origin: ['http://localhost:5173', 'http://localhost:3000'],
-//   credentials: true
-// }));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use('/uploads', express.static(uploadDir));
-
-// // Database simulation
-// let users = [];
-// let posts = [];
-
-// // JWT Configuration
-// const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// // Auth middleware
-// const authenticateToken = (req, res, next) => {
-//   const authHeader = req.headers['authorization'];
-//   const token = authHeader && authHeader.split(' ')[1];
-  
-//   if (!token) return res.sendStatus(401);
-
-//   jwt.verify(token, JWT_SECRET, (err, user) => {
-//     if (err) return res.sendStatus(403);
-//     req.user = user;
-//     next();
-//   });
-// };
 
 // // Routes
-
-// // Health check
-// app.get('/api/health', (req, res) => {
-//   res.json({ status: 'OK' });
-// });
-
-// // Auth check
-// app.get('/api/auth/check', authenticateToken, (req, res) => {
-//   const user = users.find(u => u.id === req.user.userId);
-//   if (!user) return res.sendStatus(404);
-  
+// app.get("/api/health", (req, res) => {
 //   res.json({
-//     success: true,
-//     user: {
-//       id: user.id,
-//       email: user.email,
-//       name: user.name
-//     }
+//     status: "OK",
+//     server: "Blog API",
+//     database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+//     time: new Date().toISOString()
 //   });
 // });
 
+// app.get("/api/articles", async (req, res) => {
+//   try {
+//     const articles = await Article.find().sort({ createdAt: -1 });
+//     res.json(articles);
+//   } catch (err) {
+//     console.error("Get articles error:", err);
+//     res.status(500).json({ error: "Failed to fetch articles" });
+//   }
+// });
 
+// app.post("/api/articles", upload.array('files'), async (req, res) => {
+//   try {
+//     const { title, content, category } = req.body;
+//     if (!title || !content || !category) {
+//       return res.status(400).json({ error: "Title, content, and category are required." });
+//     }
 
-// // // ✅ New `/submit-form` route
+//     const attachments = req.files.map(file => `/uploads/${file.filename}`);
+//     const newArticle = new Article({ title, content, category, attachments });
+//     const saved = await newArticle.save();
+//     res.status(201).json(saved);
+//   } catch (err) {
+//     console.error("Create article error:", err);
+//     res.status(500).json({ error: "Failed to create article" });
+//   }
+// });
+
+// app.delete("/api/articles/:id", async (req, res) => {
+//   try {
+//     const deleted = await Article.findByIdAndDelete(req.params.id);
+//     if (!deleted) return res.status(404).json({ error: "Article not found" });
+//     res.json({ success: true, message: "Article deleted" });
+//   } catch (err) {
+//     console.error("Delete article error:", err);
+//     res.status(500).json({ error: "Failed to delete article" });
+//   }
+// });
+
+// // Contact Form Routes
 // app.post('/submit-form', async (req, res) => {
 //   const { name, email, state, designation, contact, gender, message } = req.body;
-
 //   if (!name || !email || !state || !designation || !contact || !gender || !message) {
 //     return res.status(400).json({ error: 'All fields are required.' });
 //   }
@@ -449,7 +785,7 @@ app.listen(PORT, () => {
 //     to: 'yashveersingh7648@gmail.com',
 //     subject: `New Application from ${name}`,
 //     html: `
-//       <h2>New Application Form Submission</h2>
+//       <h2>New Application</h2>
 //       <p><strong>Name:</strong> ${name}</p>
 //       <p><strong>Email:</strong> ${email}</p>
 //       <p><strong>State:</strong> ${state}</p>
@@ -457,264 +793,65 @@ app.listen(PORT, () => {
 //       <p><strong>Contact:</strong> ${contact}</p>
 //       <p><strong>Gender:</strong> ${gender}</p>
 //       <p><strong>Message:</strong> ${message}</p>
-//     `,
+//     `
 //   };
 
 //   try {
 //     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ success: true, message: '✅ Form submitted and email sent successfully!' });
-//   } catch (error) {
-//     console.error('Error sending email:', error);
-//     res.status(500).json({ error: '❌ Failed to send email. Please try again.' });
+//     res.status(200).json({ success: true, message: '✅ Email sent!' });
+//   } catch (err) {
+//     console.error('Email error:', err);
+//     res.status(500).json({ error: '❌ Failed to send email.' });
 //   }
 // });
 
 // app.post('/login-email', async (req, res) => {
-//     const { name, email, subject, message } = req.body;
-  
-//     if (!name || !email || !subject || !message) {
-//       return res.status(400).json({ error: 'All fields are required.' });
-//     }
-  
-//     const mailOptions = {
-//       from: process.env.EMAIL_USER,
-//       to: 'yashveersingh7648@gmail.com',
-//       subject: `New Message: ${subject}`,
-//       html: `
-//         <h2>Contact Form Submission</h2>
-//         <p><strong>Name:</strong> ${name}</p>
-//         <p><strong>Email:</strong> ${email}</p>
-//         <p><strong>Subject:</strong> ${subject}</p>
-//         <p><strong>Message:</strong> ${message}</p>
-//       `,
-//     };
-  
-//     try {
-//       await transporter.sendMail(mailOptions);
-//       res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
-//     } catch (error) {
-//       console.error('❌ Error:', error);
-//       res.status(500).json({ error: 'Failed to send email.' });
-//     }
-//   });
-  
-// // Register
-// app.post('/api/auth/register', async (req, res) => {
-//   try {
-//     const { email, password, name } = req.body;
-//     if (!email || !password || !name) {
-//       return res.status(400).json({ success: false, error: 'All fields are required' });
-//     }
-
-//     const userExists = users.some(user => user.email === email);
-//     if (userExists) {
-//       return res.status(400).json({ success: false, error: 'User already exists' });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const newUser = {
-//       id: users.length + 1,
-//       email,
-//       password: hashedPassword,
-//       name,
-//       createdAt: new Date()
-//     };
-
-//     users.push(newUser);
-
-//     const token = jwt.sign(
-//       { userId: newUser.id, email: newUser.email },
-//       JWT_SECRET,
-//       { expiresIn: '1h' }
-//     );
-
-//     res.status(201).json({
-//       success: true,
-//       token,
-//       user: {
-//         id: newUser.id,
-//         email: newUser.email,
-//         name: newUser.name
-//       }
-//     });
-//   } catch (err) {
-//     console.error('Registration error:', err);
-//     res.status(500).json({ success: false, error: 'Registration failed' });
-//   }
-// });
-
-// // Login
-// app.post('/api/auth/login', async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     if (!email || !password) {
-//       return res.status(400).json({ success: false, error: 'Email and password are required' });
-//     }
-
-//     const user = users.find(user => user.email === email);
-//     if (!user) {
-//       return res.status(401).json({ success: false, error: 'Invalid credentials' });
-//     }
-
-//     const validPassword = await bcrypt.compare(password, user.password);
-//     if (!validPassword) {
-//       return res.status(401).json({ success: false, error: 'Invalid credentials' });
-//     }
-
-//     const token = jwt.sign(
-//       { userId: user.id, email: user.email },
-//       JWT_SECRET,
-//       { expiresIn: '1h' }
-//     );
-
-//     res.json({
-//       success: true,
-//       token,
-//       user: {
-//         id: user.id,
-//         email: user.email,
-//         name: user.name
-//       }
-//     });
-
-//   } catch (err) {
-//     console.error('Login error:', err);
-//     res.status(500).json({ success: false, error: 'Login failed' });
-//   }
-// });
-
-// // File Upload
-// app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ success: false, error: 'No file uploaded' });
+//   const { name, email, subject, message } = req.body;
+//   if (!name || !email || !subject || !message) {
+//     return res.status(400).json({ error: 'All fields are required.' });
 //   }
 
-//   res.json({ 
-//     success: true,
-//     filePath: `/uploads/${req.file.filename}`
-//   });
-// });
-
-// // Create Post
-// app.post('/api/posts', authenticateToken, (req, res) => {
-//   try {
-//     const { title, content, category, attachments = [] } = req.body;
-//     if (!title || !content || !category) {
-//       return res.status(400).json({ success: false, error: 'Title, content, and category are required' });
-//     }
-
-//     const newPost = {
-//       id: posts.length + 1,
-//       title,
-//       content,
-//       category,
-//       attachments,
-//       userId: req.user.userId,
-//       createdAt: new Date()
-//     };
-
-//     posts.push(newPost);
-
-//     res.status(201).json({ success: true, post: newPost });
-//   } catch (err) {
-//     console.error('Create post error:', err);
-//     res.status(500).json({ success: false, error: 'Failed to create post' });
-//   }
-// });
-
-// // Get All Posts
-// app.get('/api/posts', (req, res) => {
-//   res.json({ success: true, posts });
-// });
-
-// // Get Posts by Category
-// app.get('/api/posts/:category', (req, res) => {
-//   const category = req.params.category.toLowerCase();
-//   const filteredPosts = posts.filter(post => post.category?.toLowerCase() === category);
-
-//   res.json({ success: true, posts: filteredPosts || [] });
-// });
-
-// // ✅ Delete Post by ID (NEW)
-// // Delete post by ID (only owner can delete)
-// app.delete('/api/posts/:id', authenticateToken, (req, res) => {
-//   const postId = parseInt(req.params.id);
-//   const postIndex = posts.findIndex(post => post.id === postId);
-
-//   if (postIndex === -1) {
-//     return res.status(404).json({ success: false, error: 'Post not found' });
-//   }
-
-//   const post = posts[postIndex];
-
-//   // Check ownership
-//   if (post.userId !== req.user.userId) {
-//     return res.status(403).json({ success: false, error: 'Forbidden: Not your post' });
-//   }
-
-//   posts.splice(postIndex, 1);
-
-//   res.json({ success: true, message: 'Post deleted successfully' });
-// });
-
-
-
-
-// // ✅ Fix GET post by ID
-// app.get('/api/posts/:id', (req, res) => {
-//   const { id } = req.params;
-//   const post = posts.find(p => p.id === id); // or fetch from DB
-
-//   if (!post) {
-//     return res.status(404).json({ error: 'Post not found' });
-//   }
-
-//   res.json({ post });
-// });
-
-// // ✅ Fix PUT post by ID
-// // Example: Express.js route to handle updating a post
-// app.put('/api/posts/id/:id', async (req, res) => {
-//   const { title, content } = req.body;
-//   const postId = req.params.id;
-
-//   if (!title || !content) {
-//     return res.status(400).json({ error: 'Title and content are required' });
-//   }
+//   const mailOptions = {
+//     from: process.env.EMAIL_USER,
+//     to: 'yashveersingh7648@gmail.com',
+//     subject: `New Message: ${subject}`,
+//     html: `
+//       <h2>Contact Form</h2>
+//       <p><strong>Name:</strong> ${name}</p>
+//       <p><strong>Email:</strong> ${email}</p>
+//       <p><strong>Subject:</strong> ${subject}</p>
+//       <p><strong>Message:</strong> ${message}</p>
+//     `
+//   };
 
 //   try {
-//     const post = await Post.findById(postId); // Assuming you're using MongoDB with Mongoose
-//     if (!post) {
-//       return res.status(404).json({ error: 'Post not found' });
-//     }
-
-//     // Update the post
-//     post.title = title;
-//     post.content = content;
-//     await post.save();
-
-//     res.status(200).json({ success: true, post });
+//     await transporter.sendMail(mailOptions);
+//     res.status(200).json({ success: true, message: '✅ Email sent successfully!' });
 //   } catch (err) {
-//     console.error(err);  // Log the error for debugging
-//     res.status(500).json({ error: 'Failed to update the post.' });
+//     console.error('Email error:', err);
+//     res.status(500).json({ error: '❌ Failed to send email.' });
 //   }
 // });
 
+// // Global Error Handler
+// app.use((err, req, res, next) => {
+//   if (err instanceof multer.MulterError) {
+//     return res.status(400).json({ error: "File upload error", message: err.message });
+//   }
+//   console.error("Unhandled error:", err.stack);
+//   res.status(500).json({ error: "Internal Server Error" });
+// });
 
-// // Start server
+// // Start Server
 // app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-//   console.log(`Upload directory: ${uploadDir}`);
-//   console.log(`Available endpoints:`);
-//   console.log(`- POST /api/auth/register`);
-//   console.log(`- POST /api/auth/login`);
-//   console.log(`- GET /api/auth/check`);
-//   console.log(`- POST /api/upload`);
-//   console.log(`- POST /api/posts`);
-//   console.log(`- GET /api/posts`);
-//   console.log(`- GET /api/posts/:category`);
-//   console.log(`- DELETE /api/posts/:id`);
+//   console.log(`🚀 Server running at http://localhost:${PORT}`);
+//   console.log(`📁 Uploads available at /uploads`);
 // });
+
+
+
+
+
 
 
 

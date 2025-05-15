@@ -248,7 +248,6 @@
 
 
 
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -266,52 +265,62 @@ const ManagePostsPage = ({ currentUser }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchAllPosts = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const result = {};
+  const fetchAllPosts = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const result = {};
 
-        categories.forEach(category => {
-          result[category] = [];
-        });
+      // Initialize empty arrays for each category
+      categories.forEach(category => {
+        result[category] = [];
+      });
 
-        const response = await axios.get(`${apiBaseUrl}/api/posts`);
-        const allPostsData = response.data?.posts || [];
+      const response = await axios.get(`${apiBaseUrl}/api/articles`);
+      console.log("API Response:", response.data);
+      
+      // Fix: Get data directly from response.data (not response.data.posts)
+      const allPostsData = response.data || [];
 
-        categories.forEach(category => {
-          result[category] = allPostsData.filter(post =>
-            post.category?.toLowerCase() === category.toLowerCase()
-          );
-        });
+      // Filter posts by category
+      categories.forEach(category => {
+        result[category] = allPostsData.filter(post =>
+          post.category?.toLowerCase() === category.toLowerCase()
+        );
+      });
 
-        setAllPosts(result);
-      } catch (err) {
-        console.error('Error fetching posts:', err);
-        setError('Failed to load posts. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      console.log("Processed Posts:", result); // Check the processed data
+      setAllPosts(result);
+    } catch (err) {
+      console.error('Error fetching posts:', err);
+      setError('Failed to load posts. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchAllPosts();
-  }, [apiBaseUrl]);
+  fetchAllPosts();
+}, [apiBaseUrl]);
 
   const handleDelete = async (postId) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
 
     try {
-      const response = await axios.delete(`${apiBaseUrl}/api/posts/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      console.log(postId);
+      const response = await axios.delete(`http://localhost:8000/api/articles/${postId}` 
+        //,{ headers: {
+        //   Authorization: Bearer `${localStorage.getItem('token')}`
+        // }
+      // }
+    );
 
       if (response.data.success) {
         setAllPosts(prev => {
           const updated = { ...prev };
           for (const category in updated) {
-            updated[category] = updated[category].filter(post => post._id !== postId); // Updated to use _id
+            updated[category] = updated[category].filter(
+              post => (post._id || post.id) !== postId
+            );
           }
           return updated;
         });
@@ -394,82 +403,85 @@ const ManagePostsPage = ({ currentUser }) => {
           </h2>
 
           {!Array.isArray(allPosts[category]) || allPosts[category].length === 0 ? (
-            <p className="no-posts-message">No {category.toLowerCase()} available.</p>
+            <p className="no-posts-message">
+              No {category.toLowerCase()} available.
+            </p>
           ) : (
             <div className="posts-grid">
-              {allPosts[category].map(post => (
-                <div key={post._id} className="post-card"> {/* Updated to use _id */}
-                  <div className="card-header">
-                    <h3 className="post-title">{post.title || 'Untitled'}</h3>
-                    <span className="post-date">{formatDate(post.createdAt)}</span>
+              {allPosts[category].map(post => {
+                const postId = post._id || post.id;
+
+                return (
+                  <div key={postId} className="post-card">
+                    <div className="card-header">
+                      <h3 className="post-title">{post.title || 'Untitled'}</h3>
+                      <span className="post-date">{formatDate(post.createdAt)}</span>
+                    </div>
+
+                    <div className="card-body">
+                      <p className="post-content">{post.content || 'No description available'}</p>
+
+                      {post.attachments?.length > 0 && (
+                        <div className="post-attachments">
+                          <h4 className="attachments-title">Files:</h4>
+                          <ul className="attachments-list">
+                            {post.attachments.map((fileUrl, index) => {
+                              const filename = getFileNameFromUrl(fileUrl);
+                              const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${apiBaseUrl}${fileUrl}`;
+
+                              return (
+                                <li key={index}>
+                                  {isImageFile(filename) ? (
+                                    <div className="image-attachment">
+                                      <img
+                                        src={fullUrl}
+                                        alt={filename}
+                                        className="thumbnail-image"
+                                        onClick={() => handleImageClick(fileUrl)}
+                                      />
+                                    </div>
+                                  ) : (
+                                    <a
+                                      href={fullUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="attachment-link"
+                                    >
+                                      <i className="fas fa-file-alt"></i> {filename}
+                                    </a>
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="card-footer">
+                      <button
+                        onClick={() => handleEdit(postId)}
+                        className="action-btn edit-btn"
+                      >
+                        <i className="fas fa-edit"></i> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(postId)}
+                        className="action-btn delete-btn"
+                      >
+                        <i className="fas fa-trash"></i> Delete
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="card-body">
-                    <p className="post-content">{post.content || 'No description available'}</p>
-
-                    {post.attachments?.length > 0 && (
-                      <div className="post-attachments">
-                        <h4 className="attachments-title">Files:</h4>
-                        <ul className="attachments-list">
-                          {post.attachments.map((fileUrl, index) => {
-                            const filename = getFileNameFromUrl(fileUrl);
-                            const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${apiBaseUrl}${fileUrl}`;
-
-                            return (
-                              <li key={index}>
-                                {isImageFile(filename) ? (
-                                  <div className="image-attachment">
-                                    <img
-                                      src={fullUrl}
-                                      alt={filename}
-                                      className="thumbnail-image"
-                                      onClick={() => handleImageClick(fileUrl)}
-                                    />
-                                  </div>
-                                ) : (
-                                  <a
-                                    href={fullUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="attachment-link"
-                                  >
-                                    <i className="fas fa-file-alt"></i> {filename}
-                                  </a>
-                                )}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="card-footer">
-                    <button
-                      onClick={() => handleEdit(post._id)} // Updated to use _id
-                      className="action-btn edit-btn"
-                    >
-                      <i className="fas fa-edit"></i> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(post._id)} // Updated to use _id
-                      className="action-btn delete-btn"
-                    >
-                      <i className="fas fa-trash"></i> Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </section>
       ))}
 
       {showImageModal && (
-        <ImageModal
-          imageUrl={selectedImage}
-          onClose={() => setShowImageModal(false)}
-        />
+        <ImageModal imageUrl={selectedImage} onClose={() => setShowImageModal(false)} />
       )}
     </div>
   );

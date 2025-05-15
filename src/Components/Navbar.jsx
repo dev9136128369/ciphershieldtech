@@ -158,11 +158,16 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
             </li>
 
             <li className="nav-item">
-            <Link className="nav-link" to ="/BlogDashboard
+            <Link className="nav-link" to ="/BlogFront
             " onClick={() => scrollToSection('heade')}>Blog</Link>
                 {/* <a className="nav-link me-2" href="/Career">Career</a> */}
             </li>
-
+            
+<li className="nav-item">
+            <Link className="nav-link" to ="/partners
+            " onClick={() => scrollToSection('heade')}>partners</Link>
+                {/* <a className="nav-link me-2" href="/Career">Career</a> */}
+            </li>
 
             <li className="nav-item">
             <Link className="nav-link" to ="/DashboardLayout

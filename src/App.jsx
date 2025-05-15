@@ -46,18 +46,18 @@
 
 // const App = () => {
 //   // SEO H1 & H2 को रिमूव करने का कोड
- 
+
 //    // Combined SEO elements removal in a single useEffect
 //    useEffect(() => {
 //     if (process.env.NODE_ENV === 'development') {
 //       const seoH1 = document.getElementById("seo-h1");
 //       const seoH2 = document.getElementById("seo-h2");
-      
+
 //       if (seoH1) seoH1.remove();
 //       if (seoH2) seoH2.remove();
 //     }
 //   }, []);
- 
+
 //   return (
 //     <Router>
 //       <Helmet>
@@ -238,11 +238,11 @@
 //           <Route path="/article-preview" element={<ArticlePreview />} />
 //           <Route path="/article-form" element={<ArticleForm />} />
 //           <Route path="/linkedin-article" element={<LinkedInArticle />} />
-          
+
 //           {/* Blog Routes */}
 //           <Route path="/blog" element={<BlogList blogs={blogs} />} />
 //           <Route path="/blog/:slug" element={<BlogDetail blogs={blogs} />} />
-          
+
 //           {/* Auth Routes */}
 //           <Route path="/login" element={
 //             isLoggedIn ? <Navigate to="/editor" replace /> : 
@@ -316,8 +316,9 @@ const DashboardLayout = lazy(() => import("./Components/DashboardLayout"));
 const ArticlePreview = lazy(() => import("./Components/ArticlePreview"));
 const ArticleForm = lazy(() => import("./Components/ArticleForm"));
 const LinkedInArticle = lazy(() => import("./Components/LinkedInArticle"));
-
+const EditBlog = lazy(() => import("./Components/Blog/EditBlog"));
 const EditPostPage = lazy(() => import("./Components/EditPostPage"));
+const Partners = lazy(() => import("./Components/Partners.jsx"));
 
 
 const NotFound = lazy(() => import("./Components/NotFound"));
@@ -328,6 +329,7 @@ const BlogDetail = lazy(() => import("./Components/Blog/BlogDetail"));
 const BlogEditor = lazy(() => import("./Components/Blog/BlogEditor"));
 const BlogDashboard = lazy(() => import("./Components/Blog/BlogDashboard"));
 const Login = lazy(() => import("./Components/Auth/Login"));
+const BlogFront = lazy(() => import("./Components/Blog/BlogFront"));
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -377,7 +379,7 @@ const App = () => {
       </Helmet>
 
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      
+
       <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
         <Routes>
           {/* Public Routes */}
@@ -399,65 +401,107 @@ const App = () => {
           <Route path="/article-form" element={<ArticleForm />} />
           <Route path="/linkedin-article" element={<LinkedInArticle />} />
           <Route path="/editPostPage/:postId" element={<EditPostPage />} />
-          
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/EditBlog/:postId" element={<EditBlog />} />
           <Route path="/BlogDashboard" element={<BlogDashboard />} />
           {/* Blog Routes */}
           <Route path="/blog" element={<BlogList blogs={blogs} />} />
           <Route path="/blog/:slug" element={<BlogDetail blogs={blogs} />} />
-          
+          <Route path="/BlogFront" element={<BlogFront />} />
 
-          
 
-       
+
+
           {/* Auth Routes */}
           <Route path="/login" element={
-        
+
             <Login setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />
           } />
 
+          <Route path="/EditBlog:id" element={
+              <Navigate to="/EditBlog" />
+          } />
+
+
           <Route path="/editor" element={
-            isLoggedIn ? 
-              <BlogEditor blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} /> : 
+            isLoggedIn ?
+              <BlogEditor blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} /> :
               <Navigate to="/login" state={{ from: '/DashboardLayout' }} replace />
           } />
 
+          <Route path="/BlogFront" element={
+              <Navigate to="/BlogFront" />
+          } />
+
           <Route path="/Login/:id" element={
-            isLoggedIn ? 
-              <BlogEditor blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} /> : 
+            isLoggedIn ?
+              <BlogEditor blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} /> :
               <Navigate to="/login" state={{ from: window.location.pathname }} replace />
           } />
 
+
+
           <Route path="DashboardLayout" element={
-            isLoggedIn ? 
-              <DashboardLayout 
+            isLoggedIn ?
+              <DashboardLayout
                 blogs={blogs}
                 setBlogs={setBlogs}
                 currentUser={currentUser}
                 setIsLoggedIn={setIsLoggedIn}
-              /> : 
+              /> :
               <Navigate to="/login" state={{ from: '/DashboardLayout' }} replace />
             // <DashboardLayout/>
           } />
 
 
-<Route path="/login" element={
-          isLoggedIn ? 
-            <Navigate to="/dashboard" replace /> : 
-            <Login setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />
-        } />
+          <Route path="/login" element={
+            isLoggedIn ?
+              <Navigate to="/dashboard" replace /> :
+              <Login setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />
+          } />
 
-        {/* Dashboard Routes */}
-        <Route path="/dashboard/*" element={
-          isLoggedIn ? 
-            <DashboardLayout 
-              currentUser={currentUser}
-              setIsLoggedIn={setIsLoggedIn}
-              blogs={blogs}
-              setBlogs={setBlogs}
-            /> : 
-            <Navigate to="/login" state={{ from: '/dashboard' }} replace />
-        } />
+          {/* Dashboard Routes */}
+          <Route path="/dashboard/*" element={
+            isLoggedIn ?
+              <DashboardLayout
+                currentUser={currentUser}
+                setIsLoggedIn={setIsLoggedIn}
+                blogs={blogs}
+                setBlogs={setBlogs}
+              /> :
+              <Navigate to="/login" state={{ from: '/dashboard' }} replace />
+          } />
 
+          <Route
+            path="/dashboard/edit/:id"
+            element={
+              <BlogEditor
+                blogs={blogs}
+                setBlogs={setBlogs}
+                currentUser={currentUser}
+              />
+            }
+          />
+          <Route
+            path="/blog/new"
+            element={
+              <BlogEditor
+                blogs={blogs}
+                setBlogs={setBlogs}
+                currentUser={currentUser}
+              />
+            }
+          />
+          <Route
+            path="/blog/:slugOrId"
+            element={
+              <BlogDetail
+                blogs={blogs}
+                setBlogs={setBlogs}
+                currentUser={currentUser}
+              />
+            }
+          />
 
 
           {/* 404 Route */}
@@ -467,7 +511,7 @@ const App = () => {
 
       <Footer />
     </Router>
-    
+
   );
 };
 
