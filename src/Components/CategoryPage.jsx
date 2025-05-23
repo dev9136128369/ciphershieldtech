@@ -591,7 +591,10 @@ const CategoryPage = ({ currentUser }) => {
 
   return (
     <div className="category-page-container">
-      <h1 className="category-title">Manage Products & Services</h1>
+      <h1 className="category-title">Manage Products & Services
+  <span className="decorative-line4"></span>
+
+      </h1>
 
       {categories.map(category => (
         <section key={category} className="category-section">
@@ -610,13 +613,9 @@ const CategoryPage = ({ currentUser }) => {
 
                 return (
                   <div key={postId} className="post-card">
-                    <div className="card-header">
-                      <h3 className="post-title">{post.title || 'Untitled'}</h3>
-                      <span className="post-date">{formatDate(post.createdAt)}</span>
-                    </div>
+                   
 
                     <div className="card-body">
-                      <p className="post-content">{post.content || 'No description available'}</p>
 
                       {post.attachments?.length > 0 && (
                         <div className="post-attachments">
@@ -654,6 +653,12 @@ const CategoryPage = ({ currentUser }) => {
                         </div>
                       )}
                     </div>
+ <div className="card-header">
+                      <h3 className="post-title">{post.title || 'Untitled'}</h3>
+                      {/* <span className="post-date">{formatDate(post.createdAt)}</span> */}
+                      
+                    </div>
+                      <p className="post-content ms-3">{post.content || 'No description available'}</p>
 
                   </div>
                 );

@@ -129,7 +129,7 @@ const BlogFront = () => {
             return (
               <div key={postId} style={styles.card}>
                 {/* Banner Image Section */}
-                <h3 style={{color: "black",fontSize:'20px',fontWeight:'bold'}}>Banner Image</h3>
+                {/* <h3 style={{color: "black",fontSize:'20px',fontWeight:'bold'}}>Banner Image</h3> */}
                 {post.bannerImage && (
                   <img
                     src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
@@ -157,6 +157,7 @@ const BlogFront = () => {
                                 e.target.onerror = null;
                                 e.target.src = '/placeholder-image.jpg';
                               }}
+                              className='BlogFrontimg'
                             />
                           </div>
                         ) : null;
@@ -178,7 +179,9 @@ const BlogFront = () => {
       )}
 
       {showImageModal && (
-        <ImageModal imageUrl={selectedImage} onClose={() => setShowImageModal(false)} />
+        <ImageModal imageUrl={selectedImage} onClose={() => setShowImageModal(false)}
+        className="imageModel"
+        />
       )}
     </div>
   );
@@ -281,3 +284,222 @@ const styles = {
 };
 
 export default BlogFront;
+
+
+
+// src/pages/BlogFront.jsx
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useNavigate, Link } from 'react-router-dom';
+// import ImageModal from '../ImageModal';
+// import './BlogFront.css'; // Import the CSS file
+
+// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+// const BlogFront = () => {
+//   const [posts, setPosts] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const [showImageModal, setShowImageModal] = useState(false);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//       try {
+//         setIsLoading(true);
+//         const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost`);
+//         setPosts(response.data || []);
+//       } catch (err) {
+//         console.error('Error fetching posts:', err);
+//         setError('Failed to load posts. Please try again.');
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchPosts();
+//   }, []);
+
+//   // Banner Image handling
+//   const getProperImageUrl = (url) => {
+//     if (!url) return '';
+//     if (url.startsWith('http') || url.startsWith('blob:')) return url;
+//     if (url.startsWith('/uploads')) return `${apiBaseUrl}${url}`;
+//     return `${apiBaseUrl}/uploads/${url}`;
+//   };
+
+//   // Media files handling
+//   const isImageFile = (filename) => {
+//     if (typeof filename !== 'string') return false;
+//     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+//     return imageExtensions.some((ext) => filename.toLowerCase().endsWith(ext));
+//   };
+
+//   const handleImageClick = (imageUrl) => {
+//     setSelectedImage(imageUrl.startsWith('http') ? imageUrl : `${apiBaseUrl}${imageUrl}`);
+//     setShowImageModal(true);
+//   };
+
+//   const handleEdit = (postId, e) => {
+//     e.stopPropagation();
+//     navigate(`/EditBlog/${postId}`);
+//   };
+
+//   const handleDelete = async (postId, e) => {
+//     e.stopPropagation();
+//     try {
+//       const confirmDelete = window.confirm('Are you sure you want to delete this blog post?');
+//       if (!confirmDelete) return;
+      
+//       await axios.delete(`${apiBaseUrl}/Components/Blog/blogpost/${postId}`);
+//       setPosts(posts.filter(post => post._id !== postId));
+//       alert('Blog post deleted successfully');
+//     } catch (err) {
+//       console.error('Error deleting post:', err);
+//       alert('Failed to delete blog post');
+//     }
+//   };
+
+//   const renderTitle = (title, titleStyles = {}) => {
+//     const {
+//       bold = false,
+//       italic = false,
+//       underline = false,
+//       fontSize = '24',
+//       color = '#000000',
+//       backgroundColor = '#ffffff',
+//       align = 'left',
+//     } = titleStyles;
+
+//     return (
+//       <h2
+//         className="blog-title"
+//         style={{
+//           fontWeight: bold ? 'bold' : 'normal',
+//           fontStyle: italic ? 'italic' : 'normal',
+//           textDecoration: underline ? 'underline' : 'none',
+//           fontSize: `${fontSize}px`,
+//           color,
+//           backgroundColor,
+//           textAlign: align,
+//         }}
+//       >
+//         {title || 'Untitled'}
+//       </h2>
+//     );
+//   };
+
+//   if (isLoading) {
+//     return (
+//       <div className="loading-spinner">
+//         <div className="spinner"></div>
+//       </div>
+//     );
+//   }
+
+//   if (error) {
+//     return (
+//       <div className="error-message">
+//         <p>{error}</p>
+//         <button onClick={() => window.location.reload()}>Retry</button>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="blog-front-container">
+//       <h1 className="page-title">Manage All Blogs</h1>
+
+//       {posts.length === 0 ? (
+//         <p>No blogs available.</p>
+//       ) : (
+//         <div className="blog-grid">
+//           {posts.map((post) => {
+//             const postId = post._id || post.id;
+//             return (
+//               <div 
+//                 key={postId} 
+//                 className="blog-card"
+//                 onClick={() => navigate(`/blog/${postId}`)}
+//               >
+//                 {/* Banner Image Section */}
+//                 {post.bannerImage && (
+//                   <img
+//                     src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
+//                     alt="Banner"
+//                     className="banner-image"
+//                     onClick={(e) => {
+//                       e.stopPropagation();
+//                       handleImageClick(getProperImageUrl(post.bannerImage.url || post.bannerImage));
+//                     }}
+//                   />
+//                 )}
+
+//                 {/* Media Files Section */}
+//                 {Array.isArray(post.media) && post.media.length > 0 && (
+//                   <div className="media-container">
+//                     <div className="media-grid">
+//                       {post.media.map((file, index) => {
+//                         const fileUrl = typeof file === 'string' ? file : file?.url || '';
+//                         return isImageFile(fileUrl) ? (
+//                           <div key={index} className="media-item">
+//                             <img
+//                               src={getProperImageUrl(fileUrl)}
+//                               alt={`Media ${index}`}
+//                               className="media-image"
+//                               onClick={(e) => {
+//                                 e.stopPropagation();
+//                                 handleImageClick(getProperImageUrl(fileUrl));
+//                               }}
+//                               onError={(e) => {
+//                                 e.target.onerror = null;
+//                                 e.target.src = '/placeholder-image.jpg';
+//                               }}
+//                             />
+//                           </div>
+//                         ) : null;
+//                       })}
+//                     </div>
+//                   </div>
+//                 )}
+
+//                 {renderTitle(post.title, post.titleStyles)}
+
+//                 <div
+//                   className="blog-content"
+//                   dangerouslySetInnerHTML={{ __html: post.content || '<p>No content</p>' }}
+//                 />
+
+//                 <div className="action-buttons">
+//                   <button 
+//                     className="edit-button"
+//                     onClick={(e) => handleEdit(postId, e)}
+//                   >
+//                     Edit
+//                   </button>
+//                   <button 
+//                     className="delete-button"
+//                     onClick={(e) => handleDelete(postId, e)}
+//                   >
+//                     Delete
+//                   </button>
+//                 </div>
+//               </div>
+//             );
+//           })}
+//         </div>
+//       )}
+
+//       {showImageModal && (
+//         <ImageModal 
+//           imageUrl={selectedImage} 
+//           onClose={() => setShowImageModal(false)}
+//           className="image-modal"
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default BlogFront;

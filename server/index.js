@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 const slugify = require('slugify');
-
+const router = express.Router();
 const app = express();
 
 // MongoDB Connection
@@ -50,9 +50,10 @@ const partnerSchema = new mongoose.Schema({
   bankAddress: String,
   accountNumber: String,
   ifsc: String,
-  panCard: String,  // Store file path
-  msmemCard: String, // Store file path
-  aadhaarCard: String, // Store file path
+  panCard: String,      // File path
+  msmemCard: String,    // File path
+  aadhaarCard: String,  // File path
+  photo: String,       
   gstNumber: String,
   state: String,
   city: String,
@@ -63,38 +64,104 @@ const partnerSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+
 const Partner = mongoose.model("Partner", partnerSchema);
 
 // blog Schema 
 
+// const blogPostSchema = new mongoose.Schema({
+//   title: { type: String, required: true },
+//   content: { type: String, required: true },
+//   media: [{
+//     url: { type: String, required: true },
+//     type: { type: String, enum: ['image', 'video'], required: true },
+//     caption: { type: String, default: '' },
+//     isLocal: { type: Boolean, default: true },
+//     width: { type: String, default: '100%' },
+//     originalUrl: { type: String }, // Only for videos
+//     embedUrl: { type: String }     // Only for videos
+//   }],
+//   bannerImage: {
+//     url: String,
+//     isLocal: Boolean
+//   },
+//   seoTitle: String,
+//   seoDescription: String,
+//   seoKeywords: [String],
+//   urlSlug: { type: String, required: true, unique: true },
+//   titleStyles: mongoose.Schema.Types.Mixed,
+//   contentStyles:mongoose.Schema.Types.Mixed,
+//   author: {
+//     id: String,
+//     name: String,
+//     email: String
+//   }
+// }, { timestamps: true });
+
+
+const testLoginSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }, 
+  role:{ type: String,default:"manager" }
+});
+
+const Testlogin = mongoose.model('Testlogin', testLoginSchema);
+
+
+
+
 const blogPostSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  content: { type: String, required: true },
+  content: { type: String, required: true }, // HTML content
+  plainText: { type: String, required: true }, // Plain text version
+  contentStyle: { // Stores styling information
+    formats: [mongoose.Schema.Types.Mixed], // Array of format objects
+    blocks: [{ // Array of content blocks with styling
+      insert: mongoose.Schema.Types.Mixed, // The actual content
+      attributes: mongoose.Schema.Types.Mixed // Styling attributes
+    }]
+  },
   media: [{
-    url: { type: String, required: true },
     type: { type: String, enum: ['image', 'video'], required: true },
+    url: { type: String }, // URL for external media or path for uploaded
+    originalUrl: { type: String }, // Original URL for videos
+    embedUrl: { type: String }, // Embed URL for videos
     caption: { type: String, default: '' },
-    isLocal: { type: Boolean, default: true },
     width: { type: String, default: '100%' },
-    originalUrl: { type: String }, // Only for videos
-    embedUrl: { type: String }     // Only for videos
+    fileId: { type: String } // Reference to file storage if uploaded
   }],
   bannerImage: {
     url: String,
-    isLocal: Boolean
+    fileId: String // Reference to file storage if uploaded
   },
   seoTitle: String,
   seoDescription: String,
   seoKeywords: [String],
   urlSlug: { type: String, required: true, unique: true },
-  titleStyles: mongoose.Schema.Types.Mixed,
-  contentStyles:mongoose.Schema.Types.Mixed,
+  titleStyles: { // Formatting for the title
+    bold: Boolean,
+    italic: Boolean,
+    underline: Boolean,
+    fontSize: String,
+    color: String,
+    backgroundColor: String,
+    align: String
+  },
   author: {
-    id: String,
+    id: { type: String, required: true },
     name: String,
     email: String
+  },
+  status: { 
+    type: String, 
+    enum: ['draft', 'published', 'archived'], 
+    default: 'draft' 
   }
-}, { timestamps: true });
+}, { 
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 
@@ -168,6 +235,96 @@ async function ensureUniqueSlug(baseSlug, postId = null) {
   return slug;
 }
 
+// Comment
+
+// app.post('/api/blogs/publish', 
+//   upload.fields([
+//     { name: 'bannerImage', maxCount: 1 },
+//     { name: 'mediaFiles', maxCount: 10 }
+//   ]), 
+//   async (req, res) => {
+//     try {
+//       const blogData = JSON.parse(req.body.blogData);
+
+//       // Process banner image
+//       const bannerImage = req.files['bannerImage'] ? {
+//         url: `/uploads/${req.files['bannerImage'][0].filename}`,
+//         isLocal: true
+//       } : null;
+
+//       // Process media files (images only)
+//       const mediaFiles = req.files['mediaFiles'] || [];
+//       const media = [];
+
+//       // Handle uploaded files (images)
+//       mediaFiles.forEach(file => {
+//         media.push({
+//           url: `/uploads/${file.filename}`,
+//           type: 'image',
+//           caption: '',
+//           isLocal: true,
+//           width: '100%'
+//         });
+//       });
+
+//       // Handle video URLs from blogData.media
+//       if (blogData.media && Array.isArray(blogData.media)) {
+//         blogData.media.forEach(item => {
+//           if (item.type === 'video') {
+//             media.push({
+//               url: item.embedUrl, // The embeddable URL
+//               type: 'video',
+//               caption: item.caption || '',
+//               isLocal: false,
+//               width: item.width || '100%',
+//               originalUrl: item.originalUrl, // Original user-provided URL
+//               embedUrl: item.embedUrl        // Processed embed URL
+//             });
+//           }
+//         });
+//       }
+
+//       // Ensure slug is unique
+//       const baseSlug = blogData.urlSlug || generateSlug(blogData.title);
+//       const uniqueSlug = await ensureUniqueSlug(baseSlug, blogData._id);
+
+//       const completeBlogData = {
+//         ...blogData,
+//         media,
+//         bannerImage,
+//         urlSlug: uniqueSlug
+//       };
+
+//       let blogPost;
+//       if (blogData._id) {
+//         blogPost = await BlogPost.findByIdAndUpdate(blogData._id, completeBlogData, { new: true });
+//       } else {
+//         blogPost = new BlogPost(completeBlogData);
+//         await blogPost.save();
+//       }
+
+//       res.status(blogData._id ? 200 : 201).json({ 
+//         message: `Blog ${blogData._id ? 'updated' : 'published'} successfully!`, 
+//         blogPost 
+//       });
+
+//     } catch (error) {
+//       console.error('Error:', error);
+
+//       // Clean up uploaded files if error occurs
+//       if (req.files) {
+//         Object.values(req.files).flat().forEach(file => {
+//           fs.unlinkSync(path.join(UPLOAD_DIR, file.filename));
+//         });
+//       }
+
+//       res.status(500).json({ 
+//         message: 'Error processing blog', 
+//         error: error.message 
+//       });
+//     }
+// });
+
 
 
 app.post('/api/blogs/publish', 
@@ -178,44 +335,55 @@ app.post('/api/blogs/publish',
   async (req, res) => {
     try {
       const blogData = JSON.parse(req.body.blogData);
+      console.log('Received files:', req.files); // Debugging
 
       // Process banner image
-      const bannerImage = req.files['bannerImage'] ? {
-        url: `/uploads/${req.files['bannerImage'][0].filename}`,
-        isLocal: true
-      } : null;
+      let bannerImage = null;
+      if (req.files['bannerImage']) {
+        bannerImage = {
+          url: `/uploads/${req.files['bannerImage'][0].filename}`,
+          fileId: req.files['bannerImage'][0].filename
+        };
+      }
 
-      // Process media files (images only)
-      const mediaFiles = req.files['mediaFiles'] || [];
+      // Process media files
       const media = [];
+      const mediaFiles = req.files['mediaFiles'] || [];
 
-      // Handle uploaded files (images)
+      // Handle uploaded media files
       mediaFiles.forEach(file => {
+        const matchingItem = blogData.media.find(m => 
+          m.file && m.file.name === file.originalname
+        );
+        
         media.push({
+          type: matchingItem?.type || 'image',
           url: `/uploads/${file.filename}`,
-          type: 'image',
-          caption: '',
-          isLocal: true,
-          width: '100%'
+          fileId: file.filename,
+          caption: matchingItem?.caption || '',
+          width: matchingItem?.width || '100%',
+          ...(matchingItem?.type === 'video' ? {
+            originalUrl: matchingItem.originalUrl,
+            embedUrl: matchingItem.embedUrl
+          } : {})
         });
       });
 
-      // Handle video URLs from blogData.media
-      if (blogData.media && Array.isArray(blogData.media)) {
-        blogData.media.forEach(item => {
-          if (item.type === 'video') {
-            media.push({
-              url: item.embedUrl, // The embeddable URL
-              type: 'video',
-              caption: item.caption || '',
-              isLocal: false,
-              width: item.width || '100%',
-              originalUrl: item.originalUrl, // Original user-provided URL
-              embedUrl: item.embedUrl        // Processed embed URL
-            });
-          }
-        });
-      }
+      // Handle external media (non-file items)
+      blogData.media.forEach(item => {
+        if (!item.file) {
+          media.push({
+            type: item.type,
+            url: item.type === 'video' ? item.embedUrl : item.url,
+            caption: item.caption || '',
+            width: item.width || '100%',
+            ...(item.type === 'video' ? {
+              originalUrl: item.originalUrl,
+              embedUrl: item.embedUrl
+            } : {})
+          });
+        }
+      });
 
       // Ensure slug is unique
       const baseSlug = blogData.urlSlug || generateSlug(blogData.title);
@@ -225,12 +393,17 @@ app.post('/api/blogs/publish',
         ...blogData,
         media,
         bannerImage,
-        urlSlug: uniqueSlug
+        urlSlug: uniqueSlug,
+        status: 'published'
       };
 
       let blogPost;
       if (blogData._id) {
-        blogPost = await BlogPost.findByIdAndUpdate(blogData._id, completeBlogData, { new: true });
+        blogPost = await BlogPost.findByIdAndUpdate(
+          blogData._id, 
+          completeBlogData, 
+          { new: true }
+        );
       } else {
         blogPost = new BlogPost(completeBlogData);
         await blogPost.save();
@@ -243,11 +416,15 @@ app.post('/api/blogs/publish',
 
     } catch (error) {
       console.error('Error:', error);
-
+      
       // Clean up uploaded files if error occurs
       if (req.files) {
         Object.values(req.files).flat().forEach(file => {
-          fs.unlinkSync(path.join(UPLOAD_DIR, file.filename));
+          try {
+            fs.unlinkSync(path.join(UPLOAD_DIR, file.filename));
+          } catch (err) {
+            console.error('Failed to delete file:', file.filename, err);
+          }
         });
       }
 
@@ -257,8 +434,6 @@ app.post('/api/blogs/publish',
       });
     }
 });
-
-
 
 
 app.put('/api/blogs/:id', async (req, res) => {
@@ -314,7 +489,8 @@ app.put('/api/blogs/:id', async (req, res) => {
 app.post("/api/partner-registration", upload.fields([
   { name: 'panCard', maxCount: 1 },
   { name: 'msmemCard', maxCount: 1 },
-  { name: 'aadhaarCard', maxCount: 1 }
+  { name: 'aadhaarCard', maxCount: 1 },
+  { name: 'photo', maxCount: 1 }
 ]), async (req, res) => {
   try {
     const { 
@@ -328,7 +504,7 @@ app.post("/api/partner-registration", upload.fields([
     const panCardPath = req.files['panCard'] ? `/uploads/${req.files['panCard'][0].filename}` : null;
     const msmemCardPath = req.files['msmemCard'] ? `/uploads/${req.files['msmemCard'][0].filename}` : null;
     const aadhaarCardPath = req.files['aadhaarCard'] ? `/uploads/${req.files['aadhaarCard'][0].filename}` : null;
-
+    const photoPath = req.files['photo'] ? `/uploads/${req.files['photo'][0].filename}` : null;
     const newPartner = new Partner({
       name,
       companyName,
@@ -345,6 +521,7 @@ app.post("/api/partner-registration", upload.fields([
       panCard: panCardPath,
       msmemCard: msmemCardPath,
       aadhaarCard: aadhaarCardPath,
+      photo: photoPath,
       gstNumber,
       state,
       city,
@@ -463,6 +640,53 @@ app.get(`/Components/Blog/blogpost/:postId`, async (req, res) => {
 
 
 
+
+app.get('/api/auth/test-logins',async (req, res) => {
+  try {
+    const logins = await Testlogin.find({});
+    res.json(logins);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching logins' });
+  }
+});
+
+
+
+
+
+ app.delete('/auth/test-logins/:id',async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { adminEmail } = req.body; // Expect admin's email in request body
+
+    // Find the admin user
+    const admin = await Testlogin.findOne({ email: adminEmail, role: 'admin' });
+    if (!admin) {
+      return res.status(403).json({ message: 'Only admin can delete users' });
+    }
+
+    // Find the user to delete
+    const userToDelete = await Testlogin.findById(id);
+    if (!userToDelete) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Prevent admin from deleting themselves or other admins
+    if (userToDelete.role === 'admin') {
+      return res.status(403).json({ message: 'Cannot delete admin users' });
+    }
+
+    await Testlogin.findByIdAndDelete(id);
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting user' });
+  }
+});
+
+
+
+
+
 app.put(
   '/Components/Blog/blogpost/:id',
   upload.fields([
@@ -572,7 +796,42 @@ app.put(
     }
   }
 );
-// PUT /api/posts/id/:postId
+
+
+
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user
+    console.log(req.body);
+    const user = await Testlogin.findOne({ email });
+    
+    if (!user) {
+      console.log(user);
+      return res.status(401).json({ success: false, message: 'Invalid credentials:user' });
+    }
+
+    if (password !== user.password) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        email: user.email,
+        role:user.role
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
 
 
 app.put('/api/posts/id/:postId', upload.single('image'), async (req, res) => { // Changed 'attachment' to 'image' to match frontend
@@ -638,7 +897,54 @@ app.put('/api/posts/id/:postId', upload.single('image'), async (req, res) => { /
   }
 });
 
+//After Login Can Add Credentials 
 
+app.post('/api/auth/add-test-login',async(req,res)=>{
+  try {
+    console.log(req.body);
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both email and password are required'
+      });
+    }
+    console.log(req.body);
+    // Check if email already exists
+    const existingLogin = await Testlogin.findOne({ email });
+    if (existingLogin) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already exists in test logins'
+      });
+    }
+
+    // Create new test login
+    const newTestLogin = await Testlogin.create({
+      email,
+      password, 
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Test login credentials added successfully',
+      data: {
+        id: newTestLogin._id,
+        email: newTestLogin.email
+      }
+    });
+
+  } catch (error) {
+    console.error('Error adding test login:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+});
 
 // Contact Form Routes
 app.post('/submit-form', async (req, res) => {
@@ -649,7 +955,7 @@ app.post('/submit-form', async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: 'yashveersingh7648@gmail.com',
+    to: 'ciphershieldtechnologies@gmail.com',
     subject: `New Application from ${name}`,
     html: `
       <h2>New Application</h2>
@@ -680,7 +986,7 @@ app.post('/login-email', async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: 'yashveersingh7648@gmail.com',
+    to: 'ciphershieldtechnologies@gmail.com',
     subject: `New Message: ${subject}`,
     html: `
       <h2>Contact Form</h2>
@@ -708,6 +1014,38 @@ app.use((err, req, res, next) => {
   console.error("Unhandled error:", err.stack);
   res.status(500).json({ error: "Internal Server Error" });
 });
+
+// Get single blog post by ID
+app.get('/Components/Blog/blogpost/:id', (req, res) => {
+  const id = req.params.id;
+  const blogDataPath = path.join(__dirname, 'blogs.json');
+
+  try {
+    const data = fs.readFileSync(blogDataPath, 'utf8');
+    const blogs = JSON.parse(data);
+    const post = blogs.find((p) => p._id === id);
+
+    if (!post) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+
+    res.json(post);
+  } catch (error) {
+    console.error('Error reading blog file:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+// Get all blog posts
+app.get('/Components/Blog/blogpost', async (req, res) => {
+  try {
+    const posts = await BlogPost.find().sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (err) {
+    console.error("Get blog posts error:", err);
+    res.status(500).json({ error: "Failed to fetch blog posts" });
+  }
+});
+
 
 // Start Server
 app.listen(PORT, () => {

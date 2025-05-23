@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const initialData = {
   name: '',
@@ -23,10 +23,17 @@ const initialData = {
   mobile: '',
   email: '',
   address: '',
+  photo: null,
 };
 
 const PartnerForm = () => {
   const [formData, setFormData] = useState(initialData);
+  const fileRefs = {
+    photo: useRef(),
+    panCard: useRef(),
+    msmemCard: useRef(),
+    aadhaarCard: useRef(),
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -36,38 +43,104 @@ const PartnerForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  const formDataToSend = new FormData();
-  
-  // Append all fields
-  Object.entries(formData).forEach(([key, value]) => {
-    if (value !== null) {
-      formDataToSend.append(key, value);
-    }
-  });
+  const validateForm = () => {
+    const requiredFields = [
+      'name', 'companyName', 'companyWebsite', 'numberOfEmployees',
+      'turnover', 'numberOfBranches', 'area', 'areaInSqFt', 'bankName',
+      'bankAddress', 'accountNumber', 'ifsc', 'gstNumber', 'state', 'city',
+      'pinCode', 'mobile', 'email', 'address', 'photo', 'panCard', 'msmemCard', 'aadhaarCard'
+    ];
 
-  try {
-    const response = await fetch('http://localhost:8000/api/partner-registration', {
-      method: 'POST',
-      body: formDataToSend,
-      // Note: Don't set Content-Type header for FormData - the browser will set it automatically
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        alert(`Please fill the required field: ${field}`);
+        return false;
+      }
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    // Mobile validation: 10 digits
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(formData.mobile)) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return false;
+    }
+
+    // PIN code validation: 6 digits
+    const pinRegex = /^[0-9]{6}$/;
+    if (!pinRegex.test(formData.pinCode)) {
+      alert("Please enter a valid 6-digit PIN code.");
+      return false;
+    }
+
+    // IFSC code: 4 letters, 0, then 6 alphanum
+    const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/i;
+    if (!ifscRegex.test(formData.ifsc)) {
+      alert("Please enter a valid IFSC code (e.g., HDFC0001234).");
+      return false;
+    }
+
+    // Account number: 9-18 digits
+    const accountRegex = /^[0-9]{9,18}$/;
+    if (!accountRegex.test(formData.accountNumber)) {
+      alert("Please enter a valid account number (at least 9 digits).");
+      return false;
+    }
+
+    // Website URL validation
+    const websiteRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+    if (!websiteRegex.test(formData.companyWebsite)) {
+      alert("Please enter a valid company website URL.");
+      return false;
+    }
+
+    // GST Number validation (15 characters - Indian GST format)
+    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
+    if (!gstRegex.test(formData.gstNumber)) {
+      alert("Please enter a valid GST Number (e.g., 22AAAAA0000A1Z5).");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const formDataToSend = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
     });
 
-    const result = await response.json();
-    
-    if (response.ok) {
-      alert("Registration successful!");
-      setFormData(initialData);
-    } else {
-      throw new Error(result.error || 'Submission failed');
+    try {
+      const response = await fetch('http://localhost:8000/api/partner-registration', {
+        method: 'POST',
+        body: formDataToSend,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Registration successful!");
+        setFormData(initialData);
+        Object.values(fileRefs).forEach(ref => {
+          if (ref.current) ref.current.value = "";
+        });
+      } else {
+        throw new Error(result.error || 'Submission failed');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      alert(error.message || "Registration failed. Please try again.");
     }
-  } catch (error) {
-    console.error('Submission error:', error);
-    alert(error.message || "Registration failed. Please try again.");
-  }
-};
+  };
 
   return (
     <>
@@ -80,6 +153,26 @@ const PartnerForm = () => {
           border: 1px solid #ff8000;
           border-radius: 1rem;
           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+          position: relative;
+        }
+        .photo-upload {
+          position: absolute;
+          top: 2rem;
+          right: 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        }
+        .photo-label {
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #374151;
+          margin-bottom: 0.25rem;
+        }
+        .photo-input {
+          border: 1px solid #fdba74;
+          border-radius: 0.5rem;
+          padding: 0.5rem;
         }
         .partner-heading {
           font-size: 1.875rem;
@@ -147,9 +240,22 @@ const PartnerForm = () => {
       `}</style>
 
       <div className="partner-container">
+        <div className="photo-upload">
+          <label className="photo-label">Upload Profile Photo</label>
+          <input
+            type="file"
+            name="photo"
+            accept="image/*"
+            onChange={handleChange}
+            className="photo-input"
+            ref={fileRefs.photo}
+          />
+        </div>
+
         <h1 className="partner-heading">Partner Registration Form</h1>
         <form onSubmit={handleSubmit} className="partner-form">
-          {[['name', 'Full Name'],
+          {[
+            ['name', 'Full Name'],
             ['companyName', 'Company Name'],
             ['companyWebsite', 'Company Website'],
             ['numberOfEmployees', 'Number of Employees'],
@@ -166,14 +272,16 @@ const PartnerForm = () => {
             ['city', 'City'],
             ['pinCode', 'Pin Code'],
             ['mobile', 'Mobile Number'],
-            ['email', 'Email Address']
+            ['email', 'Email Address'],
           ].map(([name, label]) => (
             <div key={name} className="partner-input-group">
               <label className="partner-label">{label}</label>
               <input
                 type={
-                  name.includes("email")
-                    ? "email"
+                  name === 'companyWebsite'
+                    ? 'url'
+                    : name.includes("email")
+                    ? 'email'
                     : name.includes("number") || name.includes("pin") || name.includes("mobile")
                     ? "number"
                     : "text"
@@ -196,9 +304,10 @@ const PartnerForm = () => {
             />
           </div>
 
-          {[['panCard', 'PAN Card'],
+          {[
+            ['panCard', 'PAN Card'],
             ['msmemCard', 'MSME Certificate'],
-            ['aadhaarCard', 'Aadhaar Card']
+            ['aadhaarCard', 'Aadhaar Card'],
           ].map(([name, label]) => (
             <div key={name} className="partner-input-group">
               <label className="partner-label">{label}</label>
@@ -208,12 +317,15 @@ const PartnerForm = () => {
                 onChange={handleChange}
                 accept=".pdf,.jpg,.jpeg,.png"
                 className="partner-file-input"
+                ref={fileRefs[name]}
               />
             </div>
           ))}
 
           <div className="partner-button-container partner-full-width">
-            <button type="submit" className="partner-button">Submit</button>
+            <button type="submit" className="partner-button">
+              Submit
+            </button>
           </div>
         </form>
       </div>

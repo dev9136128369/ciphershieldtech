@@ -108,12 +108,12 @@ const BlogPage = () => {
 
   return (
     <>
-      <section className="innerBanner">
+      {/* <section className="innerBanner">
         <img className="bannerImage" src="/Images/blogsBanner.jpg" alt="Blog Banner" />
         <div className="bannerContent">
           <h1>Products</h1>
         </div>
-      </section>
+      </section> */}
 
       <div className="blog-container">
         {error && <div className="error-message">{error}</div>}
