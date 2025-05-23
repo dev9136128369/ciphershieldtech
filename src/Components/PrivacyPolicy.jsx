@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
 
    <div className="container mx-auto mt-20 pray mt-5">
         <h1 className="text-center font-bold text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">   Privacy Policy - CipherShield Technologies
-      <span className="decorative-line2"></span>
+      <span className="decorative-line5"></span>
 
         </h1>
     </div>
@@ -64,7 +64,7 @@ const PrivacyPolicy = () => {
 
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">USER INFORMATION
-      <span className="decorative-line1"></span>
+      <span className="decorative-line5"></span>
 
         </h2>
     </div>
@@ -82,7 +82,7 @@ const PrivacyPolicy = () => {
 
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">COOKIES
-      <span className="decorative-line1"></span>
+      <span className="decorative-line5"></span>
 
         </h2>
     </div>
@@ -97,7 +97,7 @@ const PrivacyPolicy = () => {
 
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">LINKS TO THE OTHER SITES
-      <span className="decorative-line1"></span>
+      <span className="decorative-line5"></span>
 
         </h2>
     </div>
@@ -108,7 +108,7 @@ const PrivacyPolicy = () => {
 
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INFORMATION SHARING
-      <span className="decorative-line1"></span>
+      <span className="decorative-line5"></span>
 
         </h2>
     </div>
@@ -126,7 +126,7 @@ const PrivacyPolicy = () => {
 
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">INFORMATION SECURITY
-      <span className="decorative-line1"></span>
+      <span className="decorative-line5"></span>
 
         </h2>
     </div>
@@ -143,7 +143,7 @@ const PrivacyPolicy = () => {
 
     <div className="container mx-auto mt-20">
         <h2 className=" text-center font-bold f1 text-4xl underline mb-4 drop-shadow-2xl text-indigo-900">Grievance Redressal
-      <span className="decorative-line1"></span>
+      <span className="decorative-line5"></span>
 
         </h2>
     </div>

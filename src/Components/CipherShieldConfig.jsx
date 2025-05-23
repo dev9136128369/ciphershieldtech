@@ -130,78 +130,151 @@
 
 
 
-import GreetingWidget from './widgets/GreetingWidget';
+// import GreetingWidget from './widgets/GreetingWidget';
+// import MainMenuWidget from './widgets/MainMenuWidget';
+// import ServicesMenuWidget from './widgets/ServicesMenuWidget';
+// import PricingWidget from './widgets/PricingWidget';
+// import SupportWidget from './widgets/SupportWidget';
+// import ExpertWidget from './widgets/ExpertWidget';
+
+// const config = {
+//   botName: "CipherShield Assistant",
+//   initialMessages: [
+//     {
+//       widget: "greetingWidget",
+//       delay: 300
+//     }
+//   ],
+//   widgets: [
+//     {
+//       widgetName: "greetingWidget",
+//       widgetFunc: (props) => <GreetingWidget {...props} />
+//     },
+//     {
+//       widgetName: "mainMenuWidget",
+//       widgetFunc: (props) => <MainMenuWidget {...props} />
+//     },
+//     {
+//       widgetName: "servicesMenuWidget",
+//       widgetFunc: (props) => <ServicesMenuWidget {...props} />
+//     },
+//     {
+//       widgetName: "pricingWidget",
+//       widgetFunc: (props) => <PricingWidget {...props} />
+//     },
+//     {
+//       widgetName: "supportWidget",
+//       widgetFunc: (props) => <SupportWidget {...props} />
+//     },
+//     {
+//       widgetName: "expertWidget",
+//       widgetFunc: (props) => <ExpertWidget {...props} />
+//     }
+//   ],
+//   customStyles: {
+//     botMessageBox: {
+//       backgroundColor: "#4a6fa5",
+//       color: "#ffffff",
+//       fontSize: "14px",
+//       borderRadius: "15px 15px 0 15px",
+//       padding: "12px"
+//     },
+//     chatButton: {
+//       backgroundColor: "#4a6fa5",
+//       color: "#ffffff"
+//     },
+//     userMessageBox: {
+//       backgroundColor: "#e8f1f8",
+//       color: "#333333",
+//       borderRadius: "15px 15px 15px 0",
+//       padding: "12px"
+//     },
+//     chatInput: {
+//       border: "1px solid #4a6fa5",
+//       borderRadius: "20px",
+//       padding: "12px 20px"
+//     }
+//   },
+//   state: {
+//     userData: {
+//       name: "",
+//       phone: "",
+//       interest: ""
+//     },
+//     currentQuestion: ""
+//   }
+// };
+
+// export default config;
+
+
+// 23-05-25
+import React from 'react';
 import MainMenuWidget from './widgets/MainMenuWidget';
 import ServicesMenuWidget from './widgets/ServicesMenuWidget';
-import PricingWidget from './widgets/PricingWidget';
-import SupportWidget from './widgets/SupportWidget';
 import ExpertWidget from './widgets/ExpertWidget';
+import SupportWidget from './widgets/SupportWidget';
+import ConsultancyWidget from './widgets/ConsultancyWidget';
+import GreetingWidget from './widgets/GreetingWidget';
+import AIAutomationWidget from './widgets/AIAutomationWidget';
+import CybersecurityWidget from './widgets/CybersecurityWidget';
+import PortfolioRedirectWidget from './widgets/PortfolioRedirectWidget';
 
 const config = {
-  botName: "CipherShield Assistant",
-  initialMessages: [
-    {
-      widget: "greetingWidget",
-      delay: 300
-    }
-  ],
+  botName: "CipherShield Bot",
+  initialMessages: [<GreetingWidget />],
+  customComponents: {
+    header: () => <div className="chatbot-header">CipherShield Technologies</div>
+  },
   widgets: [
     {
-      widgetName: "greetingWidget",
-      widgetFunc: (props) => <GreetingWidget {...props} />
+      widgetName: 'mainMenuWidget',
+      widgetFunc: (props) => <MainMenuWidget {...props} />,
     },
     {
-      widgetName: "mainMenuWidget",
-      widgetFunc: (props) => <MainMenuWidget {...props} />
+      widgetName: 'servicesMenuWidget',
+      widgetFunc: (props) => <ServicesMenuWidget {...props} />,
     },
     {
-      widgetName: "servicesMenuWidget",
-      widgetFunc: (props) => <ServicesMenuWidget {...props} />
+      widgetName: 'expertWidget',
+      widgetFunc: (props) => <ExpertWidget {...props} />,
     },
     {
-      widgetName: "pricingWidget",
-      widgetFunc: (props) => <PricingWidget {...props} />
+      widgetName: 'supportWidget',
+      widgetFunc: (props) => <SupportWidget {...props} />,
     },
     {
-      widgetName: "supportWidget",
-      widgetFunc: (props) => <SupportWidget {...props} />
+      widgetName: 'consultancyWidget',
+      widgetFunc: (props) => <ConsultancyWidget {...props} />,
     },
     {
-      widgetName: "expertWidget",
-      widgetFunc: (props) => <ExpertWidget {...props} />
-    }
+      widgetName: 'aiAutomationWidget',
+      widgetFunc: (props) => <AIAutomationWidget {...props} />,
+    },
+    {
+      widgetName: 'cybersecurityWidget',
+      widgetFunc: (props) => <CybersecurityWidget {...props} />,
+    },
+    {
+  widgetName: 'portfolioRedirect',
+  widgetFunc: (props) => <PortfolioRedirectWidget {...props} />,
+}
   ],
   customStyles: {
     botMessageBox: {
-      backgroundColor: "#4a6fa5",
-      color: "#ffffff",
-      fontSize: "14px",
-      borderRadius: "15px 15px 0 15px",
-      padding: "12px"
+      backgroundColor: '#376B7E',
     },
     chatButton: {
-      backgroundColor: "#4a6fa5",
-      color: "#ffffff"
+      backgroundColor: '#376B7E',
     },
-    userMessageBox: {
-      backgroundColor: "#e8f1f8",
-      color: "#333333",
-      borderRadius: "15px 15px 15px 0",
-      padding: "12px"
-    },
-    chatInput: {
-      border: "1px solid #4a6fa5",
-      borderRadius: "20px",
-      padding: "12px 20px"
-    }
   },
   state: {
     userData: {
-      name: "",
-      phone: "",
-      interest: ""
-    },
-    currentQuestion: ""
+      name: '',
+      phone: '',
+      email: '',
+      interest: ''
+    }
   }
 };
 

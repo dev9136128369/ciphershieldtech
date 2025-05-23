@@ -268,9 +268,9 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/AboutUs" onClick={scrollToTop}>About Us</Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <Link className="nav-link" to="/Services" onClick={scrollToTop}>Services</Link>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <Link className="nav-link" to="/Automation" onClick={scrollToTop}>Automation</Link>
                         </li>
@@ -292,11 +292,11 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/partners" onClick={scrollToTop}>Partners</Link>
                         </li>
-                        {isLoggedIn && (
+                        {/* {isLoggedIn && (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/DashboardLayout" onClick={scrollToTop}>Dashboard</Link>
                             </li>
-                        )}
+                        )} */}
                         <li className="nav-item">
                             <Link className="nav-link" to="/ContactUs" onClick={scrollToTop}>Contact Us</Link>
                         </li>

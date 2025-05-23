@@ -239,9 +239,12 @@ const PartnerForm = () => {
         }
       `}</style>
 
+        <h1 className="partner-heading">Partner Registration Form</h1>
+
       <div className="partner-container">
-        <div className="photo-upload">
           <label className="photo-label">Upload Profile Photo</label>
+
+        <div className="photo-upload">
           <input
             type="file"
             name="photo"
@@ -252,7 +255,6 @@ const PartnerForm = () => {
           />
         </div>
 
-        <h1 className="partner-heading">Partner Registration Form</h1>
         <form onSubmit={handleSubmit} className="partner-form">
           {[
             ['name', 'Full Name'],

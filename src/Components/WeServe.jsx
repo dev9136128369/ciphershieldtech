@@ -231,6 +231,56 @@ const We_Serve = () => {
             </p>
           </div>
         </div>
+<div className='container text-center weserve'>
+  <h3>Our Services
+      <span className="decorative-line4"></span>
+
+  </h3>
+</div>
+        <div className="container d-flex flex-wrap justify-content-center mb-5">
+          <div className="appboxes">
+            <h3 className="card-title fs-2 mb-3">AI and Automation Solutions</h3>
+            <p className="card-text text-justify">
+              <b>Boost Efficiency:</b> Automate repetitive tasks, streamline workflows, and reduce
+              overhead costs.<br />
+              <b>Smarter Decision Making:</b> Use AI-driven insights to make data-backed decisions
+              that improve performance and profits.<br />
+              <b>Tailored to Your Needs:</b> Our AI solutions are customized to solve specific
+              challenges within your business.
+            </p>
+          </div>
+
+          <div className="appboxes">
+            <h3 className="card-title fs-2 mb-3">Cybersecurity and Risk Management</h3>
+            <p className="card-text text-justify">
+              <b>AI for Cybersecurity:</b> Protect your data and systems with AI-driven security
+              tools that identify and mitigate threats before they impact your business.<br />
+              <b>Predictive Risk Assessment:</b> Utilize AI to predict and prevent future risks,
+              reducing the chance of financial loss.
+            </p>
+          </div>
+
+          <div className="appboxes">
+            <h3 className="card-title fs-2 mb-3">Predictive Analytics and Business Intelligence</h3>
+            <p className="card-text text-justify">
+              <b>Data-Driven Insights:</b> Use AI and machine learning to analyze historical and
+              real-time data, predicting trends and optimizing strategies.<br />
+              <b>Cost-Effective Forecasting:</b> Make smarter financial and operational decisions
+              with AI-based forecasting tools.
+            </p>
+          </div>
+
+          <div className="appboxes">
+            <h3 className="card-title fs-2 mb-3">Scalable Automation for Every Industry</h3>
+            <p className="card-text text-justify">
+              <b>Manufacturing:</b> Optimize supply chains, reduce downtime, and improve production
+              lines with AI-powered robots and automation tools.<br />
+              <b>Healthcare:</b> Enhance patient care, streamline administrative tasks, and
+              accelerate medical research with AI and machine learning.<br />
+              <b>Finance:</b> Improve risk management, automate processes.
+            </p>
+          </div>
+        </div>
     </div>
     </>
   )

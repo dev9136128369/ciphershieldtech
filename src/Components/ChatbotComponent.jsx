@@ -144,11 +144,21 @@ import MessageParser from './MessageParser';
 import ActionProvider from './ActionProvider';
 import config from './CipherShieldConfig';
 import 'react-chatbot-kit/build/main.css';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-const ChatbotComponent = () => {
+const ChatbotComponent = ({ navigate }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+ const updatedConfig = {
+    ...config,
+    state: {
+      ...config.state,
+      navigate: navigate 
+    }
+  };
   return (
+
+    <Router>
     <div className="chatbot-container">
       {isOpen && (
         <div className="chatbot-window">
@@ -174,6 +184,7 @@ const ChatbotComponent = () => {
         )}
       </button>
     </div>
+    </Router>
   );
 };
 
