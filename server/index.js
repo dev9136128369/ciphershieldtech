@@ -1016,35 +1016,89 @@ app.use((err, req, res, next) => {
 });
 
 // Get single blog post by ID
-app.get('/Components/Blog/blogpost/:id', (req, res) => {
-  const id = req.params.id;
-  const blogDataPath = path.join(__dirname, 'blogs.json');
+// app.get('/Components/Blog/blogpost/:id', (req, res) => {
+//   const id = req.params.id;
+//   const blogDataPath = path.join(__dirname, 'blogs.json');
 
-  try {
-    const data = fs.readFileSync(blogDataPath, 'utf8');
-    const blogs = JSON.parse(data);
-    const post = blogs.find((p) => p._id === id);
+//   try {
+//     const data = fs.readFileSync(blogDataPath, 'utf8');
+//     const blogs = JSON.parse(data);
+//     const post = blogs.find((p) => p._id === id);
 
-    if (!post) {
-      return res.status(404).json({ message: 'Blog not found' });
-    }
+//     if (!post) {
+//       return res.status(404).json({ message: 'Blog not found' });
+//     }
 
-    res.json(post);
-  } catch (error) {
-    console.error('Error reading blog file:', error.message);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.json(post);
+//   } catch (error) {
+//     console.error('Error reading blog file:', error.message);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 // Get all blog posts
-app.get('/Components/Blog/blogpost', async (req, res) => {
-  try {
-    const posts = await BlogPost.find().sort({ createdAt: -1 });
-    res.json(posts);
-  } catch (err) {
-    console.error("Get blog posts error:", err);
-    res.status(500).json({ error: "Failed to fetch blog posts" });
+// app.get('/Components/Blog/blogpost', async (req, res) => {
+//   try {
+//     const posts = await BlogPost.find().sort({ createdAt: -1 });
+//     res.json(posts);
+//   } catch (err) {
+//     console.error("Get blog posts error:", err);
+//     res.status(500).json({ error: "Failed to fetch blog posts" });
+//   }
+// });
+
+
+
+// Route to get blog post by slug
+const blogPosts = [
+  {
+    slug: 'fhfgh',
+    title: 'Sample Blog Post',
+    content: '<p>This is a sample blog post content.</p>',
+    bannerImage: '/uploads/sample-image.jpg',
+  },
+  // Add more posts here if needed
+];
+
+// Route to get blog post by slug
+app.get('/Components/Blog/blogslug/:slug', (req, res) => {
+  const slug = req.params.slug;
+
+  const post = blogPosts.find(p => p.slug === slug);
+
+  if (!post) {
+    return res.status(404).json({ message: 'Blog post not found' });
   }
+
+  res.json({ post });
 });
+
+// router.get('/:id', async (req, res) => {
+//   try {
+//     // Validate ID format
+//     if (!/^[0-9a-fA-F]{24}$/.test(req.params.id)) {
+//       return res.status(400).json({ message: 'Invalid blog ID format' });
+//     }
+
+//     const blog = await Blog.findById(req.params.id);
+    
+//     if (!blog) {
+//       return res.status(404).json({ message: 'Blog not found' });
+//     }
+
+//     res.status(200).json(blog);
+//   } catch (error) {
+//     console.error('Error fetching blog:', error);
+    
+//     if (error.name === 'CastError') {
+//       return res.status(400).json({ message: 'Invalid blog ID' });
+//     }
+    
+//     res.status(500).json({ 
+//       message: 'Error fetching blog', 
+//       error: error.message 
+//     });
+//   }
+// });
 
 
 // Start Server

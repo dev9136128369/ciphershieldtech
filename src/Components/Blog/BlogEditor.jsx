@@ -426,7 +426,7 @@ const BlogEditor = ({ blogs = [], setBlogs = () => { }, currentUser }) => {
                   Your article URL:
                 </p>
                 <div className="url-display">
-                  http://localhost:5173/blogs/{urlSlug}
+                  http://localhost:5173/blog/{urlSlug}
                 </div>
               </div>
             ) : (

@@ -415,11 +415,18 @@ const App = () => {
 
           {/* Blog Routes */}
           {/* <Route path="/blog" element={<BlogList blogs={blogs} />} /> */}
-          <Route path="/blog/:slug" element={<BlogDetail blogs={blogs} />} />
+          {/* <Route path="/blog/:slug" element={<BlogDetail blogs={blogs} />} /> */}
           <Route path="/BlogFront" element={<BlogFront />} />
 
-       <Route path="/blog" element={<BlogFront />} />
-  <Route path="/blog/:id" element={<BlogDetail />} />
+       {/* <Route path="/blogs" element={<BlogFront />} />
+        <Route path="/blogs/:slug" element={<BlogDetail />} /> */}
+          {/* <Route path="/" element={<BlogList />} />
+        <Route path="/blogs/:slug" element={<BlogDetail />} /> */}
+
+
+  <Route path="/blog" element={<BlogFront />} />
+     <Route path="/blog/:slug" element={<BlogDetail />} />
+
 
           <Route path="/AllPermissions" element={<AllPermissions />} />
 

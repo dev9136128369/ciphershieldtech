@@ -524,61 +524,293 @@
 
 // BlogDetails.jsx
 // BlogPost.jsx
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useParams, useNavigate } from 'react-router-dom';
+// import ImageModal from '../ImageModal';
+
+// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+// const BlogDetail = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const [post, setPost] = useState(null);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const [showImageModal, setShowImageModal] = useState(false);
+
+//   useEffect(() => {
+//     const fetchPost = async () => {
+//       try {
+//         setIsLoading(true);
+        
+//         // Check for valid ID param
+//         if (!id) {
+//           setError('No blog post ID provided. Please select a post.');
+//           setPost(null);
+//           setIsLoading(false);
+//           return;
+//         }
+
+//         const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost/${id}`);
+
+//         if (!response.data) {
+//           throw new Error('Blog post not found');
+//         }
+
+//         setPost(response.data);
+//         setError(null);
+//       } catch (err) {
+//         console.error('Error fetching post:', err);
+//         setError(err.response?.data?.message || err.message || 'Failed to load post. Please try again.');
+//         setPost(null);
+        
+//         // Redirect to blog list if post not found (404)
+//         if (err.response?.status === 404 || err.message === 'Blog post not found') {
+//           navigate('/blog', { replace: true });
+//         }
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchPost();
+//   }, [id, navigate]);
+
+//   const getProperImageUrl = (url) => {
+//     if (!url) return '';
+//     if (url.startsWith('http') || url.startsWith('blob:')) return url;
+//     if (url.startsWith('/uploads')) return `${apiBaseUrl}${url}`;
+//     return `${apiBaseUrl}/uploads/${url}`;
+//   };
+
+//   const isImageFile = (filename) => {
+//     if (typeof filename !== 'string') return false;
+//     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+//     return imageExtensions.some((ext) => filename.toLowerCase().endsWith(ext));
+//   };
+
+//   const handleImageClick = (imageUrl) => {
+//     setSelectedImage(imageUrl.startsWith('http') ? imageUrl : `${apiBaseUrl}${imageUrl}`);
+//     setShowImageModal(true);
+//   };
+
+//   if (isLoading) {
+//     return (
+//       <div className="loading-spinner">
+//         <div className="spinner"></div>
+//         <p>Loading blog post...</p>
+//       </div>
+//     );
+//   }
+
+//   if (error) {
+//     return (
+//       <div className="error-message">
+//         <p>{error}</p>
+//         <button 
+//           onClick={() => window.location.reload()} 
+//           className="retry-button"
+//         >
+//           Retry
+//         </button>
+//         <button 
+//           onClick={() => navigate('/blog')} 
+//           className="back-button"
+//         >
+//           Back to Blog List
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   if (!post) {
+//     return (
+//       <div className="not-found">
+//         <p>Post not found</p>
+//         <button 
+//           onClick={() => navigate('/blog')} 
+//           className="back-button"
+//         >
+//           Back to Blog List
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="blog-detail-container">
+//       {post.bannerImage && (
+//         <img
+//           src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
+//           alt="Banner"
+//           className="banner-image"
+//           onClick={() => handleImageClick(getProperImageUrl(post.bannerImage.url || post.bannerImage))}
+//         />
+//       )}
+
+//       <h1 className="blog-title">{post.title || 'Untitled'}</h1>
+
+//       <div className="blog-meta">
+//         {post.createdAt && (
+//           <span className="post-date">
+//             Published on: {new Date(post.createdAt).toLocaleDateString()}
+//           </span>
+//         )}
+//         {post.updatedAt && post.updatedAt !== post.createdAt && (
+//           <span className="post-date">
+//             | Last updated: {new Date(post.updatedAt).toLocaleDateString()}
+//           </span>
+//         )}
+//       </div>
+
+//       <div
+//         className="blog-content"
+//         dangerouslySetInnerHTML={{ __html: post.content || '<p>No content</p>' }}
+//       />
+
+//       {Array.isArray(post.media) && post.media.length > 0 && (
+//         <div className="media-gallery">
+//           <h3>Media Gallery</h3>
+//           <div className="media-grid">
+//             {post.media.map((file, index) => {
+//               const fileUrl = typeof file === 'string' ? file : file?.url || '';
+//               return isImageFile(fileUrl) ? (
+//                 <div key={index} className="media-item">
+//                   <img
+//                     src={getProperImageUrl(fileUrl)}
+//                     alt={`Media ${index}`}
+//                     className="media-image"
+//                     onClick={() => handleImageClick(getProperImageUrl(fileUrl))}
+//                     onError={(e) => {
+//                       e.target.onerror = null;
+//                       e.target.src = '/placeholder-image.jpg';
+//                     }}
+//                   />
+//                   {file.caption && <p className="media-caption">{file.caption}</p>}
+//                 </div>
+//               ) : null;
+//             })}
+//           </div>
+//         </div>
+//       )}
+
+//       {showImageModal && (
+//         <ImageModal
+//           imageUrl={selectedImage}
+//           onClose={() => setShowImageModal(false)}
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default BlogDetail;
+
+
+
+// 24-05-25
+// src/pages/SingleBlog.js
+// src/pages/BlogDetails.jsx
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useParams, useNavigate } from 'react-router-dom';
+
+// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+// const BlogDetail = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+
+//   const [post, setPost] = useState(null);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState('');
+
+//   // Helper to get full image url from relative path
+//   const getProperImageUrl = (url) => {
+//     if (!url) return '';
+//     if (url.startsWith('http') || url.startsWith('blob:')) return url;
+//     if (url.startsWith('/uploads')) return `${apiBaseUrl}${url}`;
+//     return `${apiBaseUrl}/uploads/${url}`;
+//   };
+
+//   useEffect(() => {
+//     const fetchPost = async () => {
+//       try {
+//         setIsLoading(true);
+//         setError('');
+//         const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost/${id}`);
+//         setPost(response.data.post);  // <-- IMPORTANT: extract the nested post object here
+//       } catch (err) {
+//         console.error(err);
+//         setError('Failed to fetch blog post. Please try again.');
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     if (id) fetchPost();
+//   }, [id]);
+
+//   if (isLoading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   if (error) {
+//     return (
+//       <div>
+//         <p>{error}</p>
+//         <button onClick={() => navigate(0)}>Retry</button>
+//       </div>
+//     );
+//   }
+
+//   if (!post) {
+//     return <p>No blog post found.</p>;
+//   }
+
+//   return (
+//     <div style={{ maxWidth: '700px', margin: 'auto', padding: '1rem' }}>
+//       <h1>{post.title || 'Untitled'}</h1>
+
+//       {post.bannerImage && (
+//         <img
+//           src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
+//           alt="Banner"
+//           style={{ maxWidth: '100%', marginBottom: '1rem' }}
+//         />
+//       )}
+
+//       {post.content ? (
+//         <div dangerouslySetInnerHTML={{ __html: post.content }} />
+//       ) : (
+//         <p>No content available.</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default BlogDetail;
+
+
+
+
+// BlogDetail.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import ImageModal from '../ImageModal';
-import './BlogPost.css';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const BlogDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [showImageModal, setShowImageModal] = useState(false);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Check for valid ID param
-        if (!id) {
-          setError('No blog post ID provided. Please select a post.');
-          setPost(null);
-          setIsLoading(false);
-          return;
-        }
-
-        const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost/${id}`);
-
-        if (!response.data) {
-          throw new Error('Blog post not found');
-        }
-
-        setPost(response.data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching post:', err);
-        setError(err.response?.data?.message || err.message || 'Failed to load post. Please try again.');
-        setPost(null);
-        
-        // Redirect to blog list if post not found (404)
-        if (err.response?.status === 404 || err.message === 'Blog post not found') {
-          navigate('/blog', { replace: true });
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPost();
-  }, [id, navigate]);
-
+  // Helper to get full image URL
   const getProperImageUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http') || url.startsWith('blob:')) return url;
@@ -586,123 +818,64 @@ const BlogDetail = () => {
     return `${apiBaseUrl}/uploads/${url}`;
   };
 
-  const isImageFile = (filename) => {
-    if (typeof filename !== 'string') return false;
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-    return imageExtensions.some((ext) => filename.toLowerCase().endsWith(ext));
-  };
+  // Generate slug for matching
+  const generateSlug = (title = '') =>
+    title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/--+/g, '-')
+      .trim();
 
-  const handleImageClick = (imageUrl) => {
-    setSelectedImage(imageUrl.startsWith('http') ? imageUrl : `${apiBaseUrl}${imageUrl}`);
-    setShowImageModal(true);
-  };
+  useEffect(() => {
+    const fetchPostBySlug = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost`);
+        const posts = response.data || [];
+        // Find post matching slug
+        const matchedPost = posts.find(p => generateSlug(p.title) === slug);
+        if (!matchedPost) {
+          setError('Blog post not found.');
+          setPost(null);
+        } else {
+          setPost(matchedPost);
+          setError(null);
+        }
+      } catch (err) {
+        console.error('Error fetching blog post:', err);
+        setError('Failed to fetch blog post.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (isLoading) {
-    return (
-      <div className="loading-spinner">
-        <div className="spinner"></div>
-        <p>Loading blog post...</p>
-      </div>
-    );
-  }
+    fetchPostBySlug();
+  }, [slug]);
 
-  if (error) {
-    return (
-      <div className="error-message">
-        <p>{error}</p>
-        <button 
-          onClick={() => window.location.reload()} 
-          className="retry-button"
-        >
-          Retry
-        </button>
-        <button 
-          onClick={() => navigate('/blog')} 
-          className="back-button"
-        >
-          Back to Blog List
-        </button>
-      </div>
-    );
-  }
-
-  if (!post) {
-    return (
-      <div className="not-found">
-        <p>Post not found</p>
-        <button 
-          onClick={() => navigate('/blog')} 
-          className="back-button"
-        >
-          Back to Blog List
-        </button>
-      </div>
-    );
-  }
+  if (loading) return <div>Loading blog post...</div>;
+  if (error) return (
+    <div>
+      <p>{error}</p>
+      <button onClick={() => navigate(-1)}>Go Back</button>
+    </div>
+  );
+  if (!post) return null;
 
   return (
-    <div className="blog-detail-container">
+    <div style={{ maxWidth: '800px', margin: 'auto', padding: '1rem', textAlign: 'center'}}>
       {post.bannerImage && (
         <img
           src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
           alt="Banner"
-          className="banner-image"
-          onClick={() => handleImageClick(getProperImageUrl(post.bannerImage.url || post.bannerImage))}
+          style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', marginBottom: '1rem' }}
         />
       )}
-
-      <h1 className="blog-title">{post.title || 'Untitled'}</h1>
-
-      <div className="blog-meta">
-        {post.createdAt && (
-          <span className="post-date">
-            Published on: {new Date(post.createdAt).toLocaleDateString()}
-          </span>
-        )}
-        {post.updatedAt && post.updatedAt !== post.createdAt && (
-          <span className="post-date">
-            | Last updated: {new Date(post.updatedAt).toLocaleDateString()}
-          </span>
-        )}
-      </div>
-
-      <div
-        className="blog-content"
-        dangerouslySetInnerHTML={{ __html: post.content || '<p>No content</p>' }}
-      />
-
-      {Array.isArray(post.media) && post.media.length > 0 && (
-        <div className="media-gallery">
-          <h3>Media Gallery</h3>
-          <div className="media-grid">
-            {post.media.map((file, index) => {
-              const fileUrl = typeof file === 'string' ? file : file?.url || '';
-              return isImageFile(fileUrl) ? (
-                <div key={index} className="media-item">
-                  <img
-                    src={getProperImageUrl(fileUrl)}
-                    alt={`Media ${index}`}
-                    className="media-image"
-                    onClick={() => handleImageClick(getProperImageUrl(fileUrl))}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/placeholder-image.jpg';
-                    }}
-                  />
-                  {file.caption && <p className="media-caption">{file.caption}</p>}
-                </div>
-              ) : null;
-            })}
-          </div>
-        </div>
-      )}
-
-      {showImageModal && (
-        <ImageModal
-          imageUrl={selectedImage}
-          onClose={() => setShowImageModal(false)}
-        />
-      )}
+      <h1>{post.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: post.content || '<p>No content</p>' }} />
+      <button onClick={() => navigate(-1)} style={{ marginTop: '2rem' }}>
+        Back to Blogs
+      </button>
     </div>
   );
 };

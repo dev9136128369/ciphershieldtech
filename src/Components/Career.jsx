@@ -872,7 +872,7 @@ const Career = () => {
                                                                <span className="decorative-line1"></span>
 
                             </h2>
-                            <p className="section-text">
+                            <p className="section-text text-justify">
                                 At <strong>CipherShield Technologies</strong>, we are passionate about <strong>technology solutions</strong> and innovation. We strive to provide the best solutions for our clients and foster a work environment where everyone can grow, learn, and contribute. If you're a driven individual with a strong background in development and a desire to work on exciting projects, we want to hear from you.
                             </p>
                         </div>
@@ -897,7 +897,7 @@ const Career = () => {
                         <div className="col-12 text-center mb-4">
                             <h3 className="job-position-heading">
                                 Python Developer (2+ Years Experience) - Apply Now!
-                                                                                              <span className="decorative-line5"></span>
+                              <span className="decorative-line5"></span>
 
                             </h3>
                         </div>
@@ -917,11 +917,11 @@ const Career = () => {
                             <div className="job-card h-100">
                                 <div className="job-card-body">
                                     <h4 className="job-card-title">About Us:</h4>
-                                    <p className="job-card-text">
+                                    <p className="job-card-text text-justify">
                                         CipherShield Technologies is an innovative AI-driven company focused on automation solutions to transform businesses. As part of our mission, we specialize in creating efficient, scalable software and data solutions tailored for a range of industries. Our team values creativity, efficiency, and adaptability to leverage advanced technologies for positive impact.
                                     </p>
                                     <h4 className="job-card-title">Position Overview:</h4>
-                                    <p className="job-card-text">
+                                    <p className="job-card-text text-justify">
                                         We are seeking a talented and experienced Python Developer to join our growing team. The ideal candidate will have a strong foundation in Python and a passion for developing robust, scalable, and intelligent applications. AI, and software development teams to implement advanced features, particularly for our AI-augmented applications.
                                     </p>
                                 </div>
@@ -932,7 +932,7 @@ const Career = () => {
                             <div className="job-card h-100">
                                 <div className="job-card-body">
                                     <h4 className="job-card-title">Key Responsibilities:</h4>
-                                    <p className="job-card-text">
+                                    <p className="job-card-text text-justify">
                                         • Design, develop, and deploy Python applications and services, with a strong focus on automation and AI capabilities.<br />
                                         • Collaborate with cross-functional teams to integrate Python-based solutions into existing platforms and products.<br />
                                         • Enhance the efficiency and performance of applications by optimizing code, debugging issues, and implementing security best practices.<br />
@@ -949,7 +949,7 @@ const Career = () => {
                             <div className="job-card h-100">
                                 <div className="job-card-body">
                                     <h4 className="job-card-title">Requirements:</h4>
-                                    <p className="job-card-text">
+                                    <p className="job-card-text text-justify">
                                         • Bachelor's degree in Computer Science, Engineering, or a related field (or equivalent work experience).<br />
                                         • <strong>Proven experience</strong> (2+ years) as a Python Developer in a professional setting, with a portfolio or code samples showcasing expertise.<br />
                                         • Strong knowledge of Python libraries and frameworks (e.g., Django, Flask, FastAPI).<br />
@@ -1001,7 +1001,7 @@ const Career = () => {
                         <div className="col-12 text-center mb-4">
                             <h3 className="job-position-heading">
                                 Java Developer (2+ Years Experience)
-                                                                                               <span className="decorative-line5"></span>
+                               <span className="decorative-line5"></span>
 
                             </h3>
                         </div>
@@ -1115,7 +1115,7 @@ const Career = () => {
                 </div>
 
                 {/* Application Form */}
-                <div className="container application-form mb-5">
+                {/* <div className="container application-form mb-5">
                     <div className="row">
                         <div className="col-lg-6 mb-4 mb-lg-0">
                             <form onSubmit={handleSubmit} className="form-container">
@@ -1270,7 +1270,172 @@ const Career = () => {
                             </picture>
                         </div>
                     </div>
-                </div>
+                </div> */}
+
+                <div className="container application-form mb-5">
+  <div className="row">
+    <div className="col-lg-6 mb-4 mb-lg-0">
+      <form onSubmit={handleSubmit} className="form-container">
+        <h2 className="form-heading text-center mb-4">
+          Application Form
+          <span className="heading-line"></span>
+        </h2>
+
+        <div className="row">
+          <div className="mb-3 col-md-6">
+            <label htmlFor="txtName" className="form-label">Name:</label>
+            <input
+              type="text"
+              className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+              name="name"
+              id="txtName"
+              placeholder="Enter Your Name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+          </div>
+
+          <div className="mb-3 col-md-6">
+            <label htmlFor="txtEmailId" className="form-label">Email:</label>
+            <input
+              type="email"
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              name="email"
+              id="txtEmailId"
+              placeholder="Enter Your Email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="mb-3 col-md-6">
+            <label htmlFor="inputState" className="form-label">State:</label>
+            <input
+              type="text"
+              className={`form-control ${errors.state ? 'is-invalid' : ''}`}
+              name="state"
+              id="inputState"
+              placeholder="Enter Your State"
+              value={formData.state}
+              onChange={handleChange}
+            />
+            {errors.state && <div className="invalid-feedback">{errors.state}</div>}
+          </div>
+
+          <div className="mb-3 col-md-6">
+            <label htmlFor="inputdesination" className="form-label">Designation:</label>
+            <input
+              type="text"
+              className={`form-control ${errors.designation ? 'is-invalid' : ''}`}
+              name="designation"
+              id="inputdesination"
+              placeholder="Enter Your Designation"
+              value={formData.designation}
+              onChange={handleChange}
+            />
+            {errors.designation && <div className="invalid-feedback">{errors.designation}</div>}
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="mb-3 col-md-6">
+            <label htmlFor="inputNumber" className="form-label">Contact:</label>
+            <input
+              type="tel"
+              className={`form-control ${errors.contact ? 'is-invalid' : ''}`}
+              name="contact"
+              id="inputNumber"
+              placeholder="Enter Your Number"
+              value={formData.contact}
+              onChange={handleChange}
+            />
+            {errors.contact && <div className="invalid-feedback">{errors.contact}</div>}
+          </div>
+
+          <div className="mb-3 col-md-6">
+            <label className="form-label d-block">Gender:</label>
+            <div className="d-flex align-items-center gap">
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="gender"
+                  id="male"
+                  value="male"
+                  checked={formData.gender === 'male'}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="male">Male</label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="gender"
+                  id="female"
+                  value="female"
+                  checked={formData.gender === 'female'}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="female">Female</label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="gender"
+                  id="others"
+                  value="others"
+                  checked={formData.gender === 'others'}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="others">Others</label>
+              </div>
+            </div>
+            {errors.gender && <div className="invalid-feedback d-block">{errors.gender}</div>}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="txtBody" className="form-label">Message:</label>
+          <textarea
+            className={`form-control ${errors.message ? 'is-invalid' : ''}`}
+            name="message"
+            rows="4"
+            id="txtBody"
+            placeholder="Your Message"
+            value={formData.message}
+            onChange={handleChange}
+          />
+          {errors.message && <div className="invalid-feedback">{errors.message}</div>}
+        </div>
+
+        <div className="text-center">
+          <button type="submit" className="btn btn-primary btn-lg mx-2">Submit</button>
+          <button type="reset" className="btn btn-outline-secondary btn-lg">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <div className="col-lg-6 d-flex align-items-center justify-content-center">
+      <picture>
+        <source srcSet={`${img3Webp}`} type="image/webp" />
+        <source srcSet={`${img3Jpeg}`} type="image/jpeg" />
+        <img
+          src={img3Jpg}
+          alt="Join Our Team"
+          className="img-fluid rounded"
+          loading="lazy"
+        />
+      </picture>
+    </div>
+  </div>
+</div>
+
             </div>
         </>
     );

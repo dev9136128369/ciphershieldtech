@@ -44,27 +44,60 @@
 // export default BlogList;
 
 
-import React from 'react';
+// import React from 'react';
 
-const BlogList = ({ blogs }) => {
+// const BlogList = ({ blogs }) => {
+//   return (
+//     <div className="blog-list-container">
+//       <h2>All Blog Posts</h2>
+//       {blogs.length === 0 ? (
+//         <p>No blog posts available.</p>
+//       ) : (
+//         <div className="blog-grid">
+//           {blogs.map(blog => (
+//             <div key={blog.id} className="blog-card">
+//               <h3>{blog.title}</h3>
+//               <p>{blog.content.substring(0, 150)}...</p>
+//               <a href={`/blog/${blog.id}`}>Read More</a>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default BlogList;
+
+
+
+
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const BlogList = () => {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/blogs')
+      .then(res => setBlogs(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
   return (
-    <div className="blog-list-container">
-      <h2>All Blog Posts</h2>
-      {blogs.length === 0 ? (
-        <p>No blog posts available.</p>
-      ) : (
-        <div className="blog-grid">
-          {blogs.map(blog => (
-            <div key={blog.id} className="blog-card">
-              <h3>{blog.title}</h3>
-              <p>{blog.content.substring(0, 150)}...</p>
-              <a href={`/blog/${blog.id}`}>Read More</a>
-            </div>
-          ))}
-        </div>
-      )}
+    <div>
+      <h2>All Blogs</h2>
+      <ul>
+        {blogs.map(blog => (
+          <li key={blog._id}>
+            <Link to={`/blog/${blog._id}`}>{blog.title}</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
 export default BlogList;
+

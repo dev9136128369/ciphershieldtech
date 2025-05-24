@@ -249,7 +249,7 @@ const AboutUs = () => {
           </div>
           <div className="row trainningcard2 animated-text mt-4 mb-5 pb-5 justify-content-center">
             <div className="col-md-4 col-sm-12 mb-3">
-              <div className="carde h-100">
+              <div className="carde1 h-100">
                 <div className="card-body">
                   <h5 className="card-titles"><b>Proven ROI</b></h5>
                   <p>Our solutions help businesses cut costs, increase operational efficiency, and drive profitability.</p>
@@ -257,7 +257,7 @@ const AboutUs = () => {
               </div>
             </div>
             <div className="col-md-4 col-sm-12 mb-3">
-              <div className="carde h-100">
+              <div className="carde1 h-100">
                 <div className="card-body">
                   <h5 className="card-titles"><b>Future-Proof</b></h5>
                   <p>We deliver solutions that evolve with technology, ensuring your business remains competitive.</p>
@@ -265,7 +265,7 @@ const AboutUs = () => {
               </div>
             </div>
             <div className="col-md-4 col-sm-12 mb-3">
-              <div className="carde h-100">
+              <div className="carde1 h-100">
                 <div className="card-body">
                   <h5 className="card-titles"><b>Industry Expertise</b></h5>
                   <p>Our solutions are tailored to the unique needs of each industry we serve, ensuring maximum impact.</p>
