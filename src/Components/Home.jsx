@@ -320,7 +320,7 @@ const Home = () => {
                 <div className="container py-5">
                     <div className="row justify-content-center">
                         <div className="col-lg-8 col-md-10">
-                            <h3 className="text-center mb-5">
+                            <h3 className="text-center mb-5 pb-5">
                                 AI & Deep Learning in Business
                                 <span className="decorative-line"></span>
                             </h3>
@@ -339,7 +339,7 @@ const Home = () => {
                                     sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
                                     loading="lazy"
                                     alt="AI Deep Learning" 
-                                    className="img-fluid w-100"
+                                    className="img-fluid w-100 "
                                 />
                             </picture>
                         </div>

@@ -91,8 +91,11 @@ const We_Serve = () => {
 
 <div className=" row language mb-5">
   <div className="col-lg-6 col-md-6 col-12 languagepart1 mt-5">
-    <h2>Tailored AI Solutions for Key Industries</h2>
-    <p className="textparte mt-4 mb-5 text-justify">
+    <h2>Tailored AI Solutions for Key Industries
+       <span className="decorative-lines8"></span>
+
+    </h2>
+    <p className="textparte mt-4 mb-5 text-justify pt-2">
       We specialize in delivering targeted AI and automation solutions for the industries that matter most.
       Artificial Intelligence (AI) has become a transformative force in various industries, driving efficiency, enhancing customer experiences, and unlocking new business opportunities. AI's flexibility and versatility enable businesses in every sector to leverage customized solutions that address their unique challenges.
     </p>

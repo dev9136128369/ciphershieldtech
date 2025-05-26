@@ -146,28 +146,32 @@ const Footer = () => {
         </div>
        
        
-        <div className="row Policy animate__animated animate__slideInUp" id="AcceptCokkies">
-            <div className="col-lg-12 col-md-12 col-sm-12 tranceparant">
-                <div className="col-lg-7 col-md-7 col-sm-7 lefttermpart">
+        <div className="row Policy animate__animated animate__slideInUp text-center" id="AcceptCokkies">
+            {/* <div className="col-lg-12 col-md-12 col-sm-12 tranceparant text-center">
+                <div className="col-lg-7 col-md-7 col-sm-7 lefttermpart text-center"> */}
                     <ul typeof="none">
-                        <li><a href="/PrivacyPolicy"> PrivacyPolicy  |</a></li>
-                        <li><a href="/RefundPolicy"> Return-Policy  |</a></li>
-                        <li>Tearm Of Use |</li>
-                        <li>Security |</li>
+                        <li> All rights reserved By:Ciphershield Technologies.   |<a href="/PrivacyPolicy"> PrivacyPolicy  |</a><a href="/RefundPolicy"> Return-Policy  |</a></li>
+                        {/* <li><a href="/PrivacyPolicy"> PrivacyPolicy  |</a></li>
+                        <li><a href="/RefundPolicy"> Return-Policy  |</a></li> */}
+                        {/* <li>Security |</li>
                         <li>Policy |</li>
-                        <li>Infringement |</li>
+                        <li>Infringement |</li> */}
                     </ul>
+                {/* </div>
+
+                <div className="col-lg-2 col-md-2 col-sm-2 ModdilePart pt-3"> */}
+                    {/* <p>© 2024-2025 ciphershieldtech.com</p> */}
+          {/* Developed by <Link to="https://andwebtech.com/" target="_blank" rel="noopener noreferrer">
+A & D Technology
+
+</Link> */}
                 </div>
 
-                <div className="col-lg-2 col-md-2 col-sm-2 ModdilePart">
-                    <p>© 2024-2025 ciphershieldtech.com</p>
-                </div>
-
-                <div className="col-lg-3 col-md-3 col-sm-3 righttermpart">
+                {/* <div className="col-lg-3 col-md-3 col-sm-3 righttermpart">
                     <p>Need help? Visit the <a href="#">Help Center </a>or <a href="/Contactus">Contact Us</a></p>
-                </div>
-            </div>
-        </div>
+                </div> */}
+            {/* </div>
+        </div> */}
 
     </footer> 
     </div>

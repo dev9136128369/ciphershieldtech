@@ -215,7 +215,11 @@ const AboutUs = () => {
         <div className="aboutcontainer  mt-4">
           <div className="row text-center Aboutrow align-items-center">
             <div className="col-lg-6 col-md-12 text-section">
-              <h1>AI Solutions & Automation - CipherShield Technologies</h1>
+              <h1>AI Solutions & Automation - CipherShield Technologies 
+       <span className="decorative-lines8"></span>
+
+
+              </h1>
               <h2>Empowering Businesses with Smart AI Solutions</h2>
               <p>
                 CipherShield Technologies is dedicated to delivering advanced AI, machine learning, and automation solutions that redefine how businesses operate.
