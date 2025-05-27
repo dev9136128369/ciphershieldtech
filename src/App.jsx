@@ -321,7 +321,7 @@ const EditPostPage = lazy(() => import("./Components/EditPostPage"));
 const Partners = lazy(() => import("./Components/Partners.jsx"));
 
 const AllPermissions = lazy(() => import("./Components/AllPermissions.jsx"));
-const PortfolioRedirectWidget = lazy(() => import("./Components/widgets/PortfolioRedirectWidget"));
+// const PortfolioRedirectWidget = lazy(() => import("./Components/widgets/PortfolioRedirectWidget"));
 
 const ParentComponent = lazy(() => import("./Components/widgets/ParentComponent"));
 
@@ -409,7 +409,7 @@ const App = () => {
           <Route path="/EditBlog/:postId" element={<EditBlog />} />
           <Route path="/BlogDashboard" element={<BlogDashboard />} />
 
-          <Route path="/PortfolioRedirectWidget" element={<PortfolioRedirectWidget />} />
+          {/* <Route path="/PortfolioRedirectWidget" element={<PortfolioRedirectWidget />} /> */}
           <Route path="/ParentComponent" element={<ParentComponent />} />
 
 
