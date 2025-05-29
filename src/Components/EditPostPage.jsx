@@ -269,7 +269,7 @@ const EditPostPage = () => {
           // Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      navigate('/'); // or redirect to /ManagePostsPage if needed
+      navigate('/DashboardLayout'); // or redirect to /ManagePostsPage if needed
     } catch (err) {
       console.error(err);
       alert('Failed to update post');

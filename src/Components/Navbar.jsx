@@ -292,11 +292,11 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/partners" onClick={scrollToTop}>Partners</Link>
                         </li>
-                        {/* {isLoggedIn && (
+                        {isLoggedIn && (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/DashboardLayout" onClick={scrollToTop}>Dashboard</Link>
                             </li>
-                        )} */}
+                        )}
                         <li className="nav-item">
                             <Link className="nav-link" to="/ContactUs" onClick={scrollToTop}>Contact Us</Link>
                         </li>

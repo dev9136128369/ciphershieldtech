@@ -848,6 +848,7 @@ const Login = ({ setIsLoggedIn, setCurrentUser }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              placeholder='yash8754@gmail.com'
             />
           </div>
           
@@ -859,6 +860,7 @@ const Login = ({ setIsLoggedIn, setCurrentUser }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder='yash@12123'
             />
           </div>
           

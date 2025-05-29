@@ -420,7 +420,7 @@ const App = () => {
 
        {/* <Route path="/blogs" element={<BlogFront />} />
         <Route path="/blogs/:slug" element={<BlogDetail />} /> */}
-          {/* <Route path="/" element={<BlogList />} />
+          {/* <Route path="/" element={<BlogList />} />   
         <Route path="/blogs/:slug" element={<BlogDetail />} /> */}
 
 
