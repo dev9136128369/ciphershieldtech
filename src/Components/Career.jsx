@@ -772,6 +772,8 @@ const Career = () => {
     
         if (validateForm()) {
             try {
+                // const response = await axios.post('http://localhost:8000/submit-form', formData);
+
                 const response = await axios.post('https://api.ciphershieldtech.com/submit-form', formData);
                 if (response.status === 200) {
                     alert(response.data.message);
@@ -856,7 +858,7 @@ const Career = () => {
                         <div className="col-12 text-center">
                             <h1 className="career-main-heading">
                                 Career Opportunities at CipherShield Technologies
-                                                               <span className="decorative-line5"></span>
+                           <span className="decorative-line5"></span>
 
                             </h1>
                         </div>
@@ -864,12 +866,12 @@ const Career = () => {
                 </div>
 
                 {/* About Section */}
-                <div className="container mb-5">
+                <div className="containers ">
                     <div className="row align-items-center">
-                        <div className="col-lg-6 mb-4 mb-lg-0">
+                        <div className="col-lg-6 mb-4 mb-lg-0 ps-5">
                             <h2 className="section-title">Join CipherShield Technologies - Innovate with Us
 
-                                                               <span className="decorative-line1"></span>
+                           <span className="decorative-line1"></span>
 
                             </h2>
                             <p className="section-text text-justify">
@@ -883,7 +885,7 @@ const Career = () => {
                                 <img 
                                     src={img2Jpg} 
                                     alt="About CipherShield Technologies" 
-                                    className="img-fluid rounded"
+                                    className="img-fluid rounded ps-3"
                                     loading="lazy"
                                 />
                             </picture>
@@ -892,9 +894,9 @@ const Career = () => {
                 </div>
 
                 {/* Python Developer Section */}
-                <div className="container mb-5">
+                <div className="container ">
                     <div className="row">
-                        <div className="col-12 text-center mb-4">
+                        <div className="col-12 text-center mb-3">
                             <h3 className="job-position-heading">
                                 Python Developer (2+ Years Experience) - Apply Now!
                               <span className="decorative-line5"></span>
@@ -996,7 +998,7 @@ const Career = () => {
                 </div>
 
                 {/* Java Developer Section */}
-                <div className="container mb-5">
+                <div className="container ">
                     <div className="row">
                         <div className="col-12 text-center mb-4">
                             <h3 className="job-position-heading">
@@ -1102,7 +1104,7 @@ const Career = () => {
                 <div className="container mb-5">
                     <div className="row">
                         <div className="col-12 text-center">
-                            <h3 className="job-position-heading">
+                            <h3 className="job-position-heading mb-5">
                                 How to Apply
                  <span className="decorative-line3"></span>
 
@@ -1272,7 +1274,7 @@ const Career = () => {
                     </div>
                 </div> */}
 
-                <div className="container application-form mb-5">
+                <div className=" application-form mb-5">
   <div className="row">
     <div className="col-lg-6 mb-4 mb-lg-0">
       <form onSubmit={handleSubmit} className="form-container">

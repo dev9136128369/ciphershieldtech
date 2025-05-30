@@ -284,7 +284,7 @@ const Home = () => {
                         </picture>
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 order-md-2 order-1">
-                        <div className="boxe p-3 p-md-5 text-md-left text-center">
+                        <div className="boxe p-md-5 text-md-left text-center">
                             <h1 className="heading-with-line">
                                 CipherShield Technologies - AI & Automation Experts
                                 <span className="decorative-line3"></span>
@@ -299,10 +299,10 @@ const Home = () => {
                 </div>
 
                 {/* Introduction Section */}
-                <div className="container care py-5">
+                <div className="container care">
                     <h2 className="mb-4 text-center">
                         Introduction to AI-Driven Business Solutions
-                                                       <span className="decorative-line3"></span>
+                        <span className="decorative-line3"></span>
 
                     </h2>
                     <div className="row justify-content-center">
@@ -317,7 +317,7 @@ const Home = () => {
                 </div>
 
                 {/* Image Section */}
-                <div className="container py-5">
+                <div className="container ">
                     <div className="row justify-content-center">
                         <div className="col-lg-8 col-md-10">
                             <h3 className="text-center mb-5 pb-5">

@@ -514,7 +514,7 @@ Cloud Security,"/>
           
           {/* Scrolling Title Section */}
           <div className='autscrole'>
-          <div className="scrolle mt-5 py-3">
+          <div className="scrolle mt-5">
             <div className="scroll">
               <h2>AUTOMATION</h2>
               <h2>AUTOMATION</h2>
@@ -565,7 +565,7 @@ Cloud Security,"/>
                 </picture>
               </div>
             </div> */}
-                 <div className="row autom">
+                 <div className="row autom ">
                     <div className="col-sm-6 automtext">
                     <h3>Automation Solutions for Efficiency
                     </h3>
@@ -612,7 +612,7 @@ Cloud Security,"/>
       sizes="(max-width: 600px) 300px, (max-width: 1200px) 600px, 1200px"
       loading="lazy"
       alt="Ai-Power img" 
-      className="img-responsive" 
+      className="img-responsive " 
      width="100%"
       height="auto"
     />
@@ -624,9 +624,9 @@ Cloud Security,"/>
                 </div>
 
             {/* Cards Section */}
-            <div className="row cards mt-5">
+            <div className="row cards ">
               <div className="container">
-                <div className="row g-4">
+                <div className="row g-5">
                   {/* Card 1 */}
                   <div className="col-xl-4 col-md-6">
                     <div className="carde h-100">
@@ -757,7 +757,7 @@ Cloud Security,"/>
               </h4>
             </div>
             <div className="container">
-              <div className="row g-4 mt-2 pb-5">
+              <div className="row g-4 mt-2 ">
                 <div className="col-lg-4 col-md-6">
                   <div className="carde h-100">
                     <div className="card-body text-justify">
@@ -797,12 +797,12 @@ Cloud Security,"/>
             {/* Mailing Automation Section */}
             <div className="col-12 zohotext mt-5">
               <h4>Mailing Automation
-                                <span className="decorative-line8"></span>
+              <span className="decorative-line8"></span>
 
               </h4>
             </div>
             <div className="container">
-              <div className="row g-4 mt-2 pb-4">
+              <div className="row g-4 mt-2 ">
                 <div className="col-lg-4 col-md-6">
                   <div className="carde h-100">
                     <div className="card-body text-justify">
@@ -840,9 +840,9 @@ Cloud Security,"/>
             </div>
             
             {/* Data Extraction Section */}
-            <div className="col-12 zohotext pt-5">
+            <div className="col-12 zohotext ">
               <h4>Data Extraction
-                               <span className="decorative-line8"></span>
+            <span className="decorative-line8"></span>
 
               </h4>
             </div>
@@ -885,7 +885,7 @@ Cloud Security,"/>
             </div>
             
             {/* Image Scroller */}
-            <div className="scrollr my-5">
+            <div className="scrollr">
               <div className="scrollo">
                 {[img2, img3, img4, img5, img6].map((img, index) => (
                   <React.Fragment key={index}>
@@ -897,7 +897,7 @@ Cloud Security,"/>
             </div>
             
             {/* Feature Cards */}
-            <div className="card-container row g-4 justify-content-center">
+            <div className="card-container row g-5 justify-content-center">
               <div className="col-lg-4 col-md-6">
                 <div className="automa" id="automa1">
                   <div className="overlay">

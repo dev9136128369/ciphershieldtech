@@ -486,58 +486,113 @@ app.put('/api/blogs/:id', async (req, res) => {
 
 
 // Add this with your other routes
-app.post("/api/partner-registration", upload.fields([
-  { name: 'panCard', maxCount: 1 },
-  { name: 'msmemCard', maxCount: 1 },
-  { name: 'aadhaarCard', maxCount: 1 },
-  { name: 'photo', maxCount: 1 }
-]), async (req, res) => {
-  try {
-    const { 
-      name, companyName, companyWebsite, numberOfEmployees, 
-      turnover, numberOfBranches, area, areaInSqFt,
-      bankName, bankAddress, accountNumber, ifsc,
-      gstNumber, state, city, pinCode, mobile, email, address
-    } = req.body;
+// app.post("/api/partner-registration", upload.fields([
+//   { name: 'panCard', maxCount: 1 },
+//   { name: 'msmemCard', maxCount: 1 },
+//   { name: 'aadhaarCard', maxCount: 1 },
+//   { name: 'photo', maxCount: 1 }
+// ]), async (req, res) => {
+//   try {
+//     const { 
+//       name, companyName, companyWebsite, numberOfEmployees, 
+//       turnover, numberOfBranches, area, areaInSqFt,
+//       bankName, bankAddress, accountNumber, ifsc,
+//       gstNumber, state, city, pinCode, mobile, email, address
+//     } = req.body;
 
-    // Get file paths
-    const panCardPath = req.files['panCard'] ? `/uploads/${req.files['panCard'][0].filename}` : null;
-    const msmemCardPath = req.files['msmemCard'] ? `/uploads/${req.files['msmemCard'][0].filename}` : null;
-    const aadhaarCardPath = req.files['aadhaarCard'] ? `/uploads/${req.files['aadhaarCard'][0].filename}` : null;
-    const photoPath = req.files['photo'] ? `/uploads/${req.files['photo'][0].filename}` : null;
-    const newPartner = new Partner({
-      name,
-      companyName,
-      companyWebsite,
-      numberOfEmployees: parseInt(numberOfEmployees),
-      turnover,
-      numberOfBranches: parseInt(numberOfBranches),
-      area,
-      areaInSqFt: parseInt(areaInSqFt),
-      bankName,
-      bankAddress,
-      accountNumber,
-      ifsc,
-      panCard: panCardPath,
-      msmemCard: msmemCardPath,
-      aadhaarCard: aadhaarCardPath,
-      photo: photoPath,
-      gstNumber,
-      state,
-      city,
-      pinCode,
-      mobile,
-      email,
-      address
+//     // Get file paths
+//     const panCardPath = req.files['panCard'] ? `/uploads/${req.files['panCard'][0].filename}` : null;
+//     const msmemCardPath = req.files['msmemCard'] ? `/uploads/${req.files['msmemCard'][0].filename}` : null;
+//     const aadhaarCardPath = req.files['aadhaarCard'] ? `/uploads/${req.files['aadhaarCard'][0].filename}` : null;
+//     const photoPath = req.files['photo'] ? `/uploads/${req.files['photo'][0].filename}` : null;
+//     const newPartner = new Partner({
+//       name,
+//       companyName,
+//       companyWebsite,
+//       numberOfEmployees: parseInt(numberOfEmployees),
+//       turnover,
+//       numberOfBranches: parseInt(numberOfBranches),
+//       area,
+//       areaInSqFt: parseInt(areaInSqFt),
+//       bankName,
+//       bankAddress,
+//       accountNumber,
+//       ifsc,
+//       panCard: panCardPath,
+//       msmemCard: msmemCardPath,
+//       aadhaarCard: aadhaarCardPath,
+//       photo: photoPath,
+//       gstNumber,
+//       state,
+//       city,
+//       pinCode,
+//       mobile,
+//       email,
+//       address
+//     });
+
+//     await newPartner.save();
+//     res.status(201).json({ success: true, message: "Partner registered successfully" });
+//   } catch (err) {
+//     console.error("Partner registration error:", err);
+//     res.status(500).json({ error: "Failed to register partner" });
+//   }
+// });
+
+const fields = [
+  { name: 'photo' },
+  { name: 'panCard' },
+  { name: 'msmemCard' },
+  { name: 'aadhaarCard' },
+];
+
+app.post('/api/partner-registration', upload.fields(fields), async (req, res) => {
+  try {
+    const data = req.body;
+    const files = req.files;
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
-    await newPartner.save();
-    res.status(201).json({ success: true, message: "Partner registered successfully" });
+    const attachments = Object.keys(files || {}).map((field) => ({
+      filename: files[field][0].originalname,
+      content: files[field][0].buffer,
+    }));
+
+    const htmlContent = `
+      <h2>New Partner Registration</h2>
+      <p><strong>Name:</strong> ${data.name}</p>
+      <p><strong>Company:</strong> ${data.companyName}</p>
+      <p><strong>Email:</strong> ${data.email}</p>
+      <p><strong>Mobile:</strong> ${data.mobile}</p>
+      <p><strong>City:</strong> ${data.city}, ${data.state}</p>
+      <p><strong>GST Number:</strong> ${data.gstNumber}</p>
+      <p><strong>Address:</strong> ${data.address}</p>
+      <p><strong>More details attached.</strong></p>
+    `;
+
+    const mailOptions = {
+      from: `"Partner Form" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      subject: 'New Partner Registration Received',
+      html: htmlContent,
+      attachments,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Email sent successfully' });
   } catch (err) {
-    console.error("Partner registration error:", err);
-    res.status(500).json({ error: "Failed to register partner" });
+    console.error('Error sending email:', err);
+    res.status(500).json({ error: 'Failed to send email' });
   }
 });
+
 
 
 
@@ -691,7 +746,7 @@ app.put(
   '/Components/Blog/blogpost/:id',
   upload.fields([
     { name: 'bannerImage', maxCount: 1 },
-    { name: 'media', maxCount: 10 }
+    { name: 'media', maxCount: 100 }
   ]),
   async (req, res) => {
     try {
@@ -800,29 +855,97 @@ app.put(
 
 
 
-app.post('/api/auth/login', async (req, res) => {
+
+// app.post('/api/auth/logins', async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     // ... user check code ...
+
+//     // send notification email
+//     await transporter.sendMail({
+//       from: 'your-email@gmail.com',
+//           to: 'yashveersingh7648@gmail.com, ciphershieldtechnologies@gmail.com',
+//       subject: 'Login Alert',
+//       text: `Hi, you logged in successfully.`,
+//     });
+
+//     return res.json({ success: true, user: { email, name: 'Yash' }, token: 'dummy-token' });
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     return res.status(500).json({ success: false, message: 'Internal server error' });
+//   }
+// });
+
+
+// app.post('/api/auth/login', async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     // Find user
+//     console.log(req.body);
+//     const user = await Testlogin.findOne({ email });
+    
+//     if (!user) {
+//       console.log(user);
+//       return res.status(401).json({ success: false, message: 'Invalid credentials:user' });
+//     }
+
+//     if (password !== user.password) {
+//       return res.status(401).json({ success: false, message: 'Invalid credentials' });
+//     }
+
+//     res.json({
+//       success: true,
+//       user: {
+//         id: user._id,
+//         email: user.email,
+//         role:user.role
+//       }
+//     });
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// });
+
+app.post('/api/auth/logins', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
-    console.log(req.body);
     const user = await Testlogin.findOne({ email });
-    
-    if (!user) {
-      console.log(user);
-      return res.status(401).json({ success: false, message: 'Invalid credentials:user' });
-    }
 
-    if (password !== user.password) {
+    if (!user || password !== user.password) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
+
+    // ✅ Prepare and send login alert email
+    const loginTime = new Date().toLocaleString();
+    const emailText = `
+      Hi,
+
+      A user just logged in.
+
+       Email: ${user.email}
+       Role: ${user.role || 'N/A'}
+       Time: ${loginTime}
+
+      Regards,
+      CipherShield Technologies
+    `;
+
+    await transporter.sendMail({
+      from: `"Login Alert" <${process.env.EMAIL_USER}>`,
+      to: 'yashveersingh7648@gmail.com, ciphershieldtechnologies@gmail.com',
+      subject: 'User Login Notification',
+      text: emailText,
+    });
 
     res.json({
       success: true,
       user: {
         id: user._id,
         email: user.email,
-        role:user.role
+        role: user.role
       }
     });
   } catch (error) {
@@ -830,8 +953,6 @@ app.post('/api/auth/login', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
-
 
 
 app.put('/api/posts/id/:postId', upload.single('image'), async (req, res) => { // Changed 'attachment' to 'image' to match frontend
@@ -955,7 +1076,7 @@ app.post('/submit-form', async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: 'ciphershieldtechnologies@gmail.com',
+    to: 'yashveersingh7648@gmail.com, ciphershieldtechnologies@gmail.com',
     subject: `New Application from ${name}`,
     html: `
       <h2>New Application</h2>
@@ -986,7 +1107,7 @@ app.post('/login-email', async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: 'ciphershieldtechnologies@gmail.com',
+    to: 'yashveersingh7648@gmail.com, ciphershieldtechnologies@gmail.com',
     subject: `New Message: ${subject}`,
     html: `
       <h2>Contact Form</h2>

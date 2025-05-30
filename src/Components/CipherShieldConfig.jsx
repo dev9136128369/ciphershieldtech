@@ -210,6 +210,15 @@
 
 // 23-05-25
 import React from 'react';
+// import MainMenuWidget from './widgets/MainMenuWidget';
+// import ServicesMenuWidget from './widgets/ServicesMenuWidget';
+// import ExpertWidget from './widgets/ExpertWidget';
+// import SupportWidget from './widgets/SupportWidget';
+// import ConsultancyWidget from './widgets/ConsultancyWidget';
+// import GreetingWidget from './widgets/GreetingWidget';
+// import AIAutomationWidget from './widgets/AIAutomationWidget';
+// import CybersecurityWidget from './widgets/CybersecurityWidget';
+// import PortfolioRedirectWidget from './widgets/PortfolioRedirectWidget';
 import MainMenuWidget from './widgets/MainMenuWidget';
 import ServicesMenuWidget from './widgets/ServicesMenuWidget';
 import ExpertWidget from './widgets/ExpertWidget';
@@ -219,6 +228,7 @@ import GreetingWidget from './widgets/GreetingWidget';
 import AIAutomationWidget from './widgets/AIAutomationWidget';
 import CybersecurityWidget from './widgets/CybersecurityWidget';
 import PortfolioRedirectWidget from './widgets/PortfolioRedirectWidget';
+
 
 const config = {
   botName: "CipherShield Bot",

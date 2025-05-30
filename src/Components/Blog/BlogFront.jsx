@@ -288,9 +288,231 @@
 
 
 // src/pages/BlogFront.jsx
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+
+// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+// const BlogFront = () => {
+//   const [posts, setPosts] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//       try {
+//         setIsLoading(true);
+//         const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost`);
+//         setPosts(response.data || []);
+//       } catch (err) {
+//         console.error('Error fetching posts:', err);
+//         setError('Failed to load posts. Please try again.');
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+//     fetchPosts();
+//   }, []);
+
+//   const generateSlug = (title = '') =>
+//     title
+//       .toLowerCase()
+//       .replace(/[^\w\s-]/g, '')
+//       .replace(/\s+/g, '-')
+//       .replace(/--+/g, '-')
+//       .trim();
+
+//   const getProperImageUrl = (url) => {
+//     if (!url) return '';
+//     if (url.startsWith('http') || url.startsWith('blob:')) return url;
+//     if (url.startsWith('/uploads')) return `${apiBaseUrl}${url}`;
+//     return `${apiBaseUrl}/uploads/${url}`;
+//   };
+
+//   if (isLoading) return <div>Loading blogs...</div>;
+//   if (error) return <div>{error}</div>;
+//   if (posts.length === 0) return <div>No blogs found.</div>;
+
+//   return (
+//     <div style={{ padding: '1rem' }}>
+//       <h1 style={{ marginBottom: '1.5rem' }}>All Blogs</h1>
+//       <div
+//         style={{
+//           display: 'grid',
+//           gridTemplateColumns: 'repeat(4, 1fr)', // 4 cards per row
+//           gap: '1.5rem',
+//           alignItems: 'stretch',
+//         }}
+//       >
+//         {posts.map((post) => {
+//           const slug = generateSlug(post.title);
+//           return (
+//             <div
+//               key={post._id}
+//               onClick={() => navigate(`/blog/${slug}`)}
+//               style={{
+//                 cursor: 'pointer',
+//                 border: '1px solid #ccc',
+//                 borderRadius: '8px',
+//                 overflow: 'hidden',
+//                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+//                 display: 'flex',
+//                 flexDirection: 'column',
+//                 height: '100%',
+//                 backgroundColor: '#fff',
+//                 transition: 'transform 0.2s ease',
+//               }}
+//               onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
+//               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+//             >
+//               {post.bannerImage && (
+//                 <img
+//                   src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
+//                   alt="Banner"
+//                   style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+//                 />
+//               )}
+//               <div style={{ padding: '1rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+//                 <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem', color: '#222', fontWeight: 'bold' }}>
+//                   {post.title}
+//                 </h3>
+//                 <p style={{ flexGrow: 1, fontSize: '0.9rem', color: 'black', overflow: 'hidden', textOverflow: 'ellipsis' }}
+//                    dangerouslySetInnerHTML={{ __html: post.content.substring(0, 100) + '...' }}
+//                 />
+//                 <button
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     navigate(`/blog/${slug}`);
+//                   }}
+//                   style={{
+//                     marginTop: '1rem',
+//                     padding: '0.4rem 0.8rem',
+//                     border: 'none',
+//                     backgroundColor: '#007BFF',
+//                     color: '#fff',
+//                     borderRadius: '4px',
+//                     cursor: 'pointer',
+//                     alignSelf: 'flex-start',
+//                   }}
+//                 >
+//                   Read More
+//                 </button>
+//               </div>
+//             </div>
+//           );
+//         })}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default BlogFront;
+
+
+
+// 29-05-25
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+// import './BlogFront.css'; // We'll create this CSS file
+
+// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+// const BlogFront = () => {
+//   const [posts, setPosts] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//       try {
+//         setIsLoading(true);
+//         const response = await axios.get(`${apiBaseUrl}/Components/Blog/blogpost`);
+//         setPosts(response.data || []);
+//       } catch (err) {
+//         console.error('Error fetching posts:', err);
+//         setError('Failed to load posts. Please try again.');
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+//     fetchPosts();
+//   }, []);
+
+//   const generateSlug = (title = '') =>
+//     title
+//       .toLowerCase()
+//       .replace(/[^\w\s-]/g, '')
+//       .replace(/\s+/g, '-')
+//       .replace(/--+/g, '-')
+//       .trim();
+
+//   const getProperImageUrl = (url) => {
+//     if (!url) return '';
+//     if (url.startsWith('http') || url.startsWith('blob:')) return url;
+//     if (url.startsWith('/uploads')) return `${apiBaseUrl}${url}`;
+//     return `${apiBaseUrl}/uploads/${url}`;
+//   };
+
+//   if (isLoading) return <div className="loading">Loading blogs...</div>;
+//   if (error) return <div className="error-message">{error}</div>;
+//   if (posts.length === 0) return <div className="no-blogs">No blogs found.</div>;
+
+//   return (
+//     <div className="blog-front-container">
+//       <h1 className="blog-front-title">All Blogs</h1>
+//       <div className="blog-grid">
+//         {posts.map((post) => {
+//           const slug = generateSlug(post.title);
+//           return (
+//             <div
+//               key={post._id}
+//               className="blog-card"
+//               onClick={() => navigate(`/blog/${slug}`)}
+//             >
+//               {post.bannerImage && (
+//                 <img
+//                   src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
+//                   alt="Banner"
+//                   className="blog-card-image"
+//                 />
+//               )}
+//               <div className="blog-card-content">
+//                 <h3 className="blog-card-title">{post.title}</h3>
+//                 <p 
+//                   className="blog-card-excerpt"
+//                   dangerouslySetInnerHTML={{ __html: post.content.substring(0, 100) + '...' }}
+//                 />
+//                 <button
+//                   className="read-more-btn"
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     navigate(`/blog/${slug}`);
+//                   }}
+//                 >
+//                   Read More
+//                 </button>
+//               </div>
+//             </div>
+//           );
+//         })}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default BlogFront;
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './BlogFront.css';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -331,70 +553,39 @@ const BlogFront = () => {
     return `${apiBaseUrl}/uploads/${url}`;
   };
 
-  if (isLoading) return <div>Loading blogs...</div>;
-  if (error) return <div>{error}</div>;
-  if (posts.length === 0) return <div>No blogs found.</div>;
+  if (isLoading) return <div className="loading">Loading blogs...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+  if (posts.length === 0) return <div className="no-blogs">No blogs found.</div>;
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h1 style={{ marginBottom: '1.5rem' }}>All Blogs</h1>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)', // 4 cards per row
-          gap: '1.5rem',
-          alignItems: 'stretch',
-        }}
-      >
+    <div className="blog-front-container">
+      <h1 className="blog-front-title">All Blogs</h1>
+      <div className="blog-grid">
         {posts.map((post) => {
           const slug = generateSlug(post.title);
           return (
             <div
               key={post._id}
+              className="blog-card"
               onClick={() => navigate(`/blog/${slug}`)}
-              style={{
-                cursor: 'pointer',
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                backgroundColor: '#fff',
-                transition: 'transform 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
               {post.bannerImage && (
                 <img
                   src={getProperImageUrl(post.bannerImage.url || post.bannerImage)}
                   alt="Banner"
-                  style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+                  className="blog-card-image"
                 />
               )}
-              <div style={{ padding: '1rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem', color: '#222', fontWeight: 'bold' }}>
-                  {post.title}
-                </h3>
-                <p style={{ flexGrow: 1, fontSize: '0.9rem', color: 'black', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                   dangerouslySetInnerHTML={{ __html: post.content.substring(0, 100) + '...' }}
-                />
+              <div className="blog-card-content">
+                <h3 className="blog-card-title">{post.title}</h3>
+                <div className="blog-card-excerpt">
+                  <p>{post.content.replace(/(<([^>]+)>)/gi, '').substring(0, 100)}...</p>
+                </div>
                 <button
+                  className="read-more-btn"
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate(`/blog/${slug}`);
-                  }}
-                  style={{
-                    marginTop: '1rem',
-                    padding: '0.4rem 0.8rem',
-                    border: 'none',
-                    backgroundColor: '#007BFF',
-                    color: '#fff',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    alignSelf: 'flex-start',
                   }}
                 >
                   Read More
@@ -409,4 +600,3 @@ const BlogFront = () => {
 };
 
 export default BlogFront;
-

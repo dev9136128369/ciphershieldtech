@@ -293,8 +293,8 @@ import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
-
+import AnimatedBall from './Components/AnimatedBall';
+// import SplashCursor from './Components/SplashCursor'
 // Lazy Load Components
 const Home = lazy(() => import("./Components/Home"));
 const AboutUs = lazy(() => import("./Components/AboutUs"));
@@ -381,7 +381,8 @@ const App = () => {
         <title>CipherShield Technologies</title>
         <meta name="description" content="IT solutions and cybersecurity services" />
       </Helmet>
-
+      {/* <SplashCursor /> */}
+<AnimatedBall />
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
 
       <Suspense fallback={<div className="loading-spinner">Loading...</div>}>

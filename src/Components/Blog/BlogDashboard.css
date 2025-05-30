@@ -1,0 +1,196 @@
+/* Container & Layout */
+.blog-dashboard-container {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.no-blogs {
+  text-align: center;
+  color: #555;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+/* Card */
+.post-card {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+  word-break: break-word;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+}
+
+.banner-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+/* Media */
+.media-header {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #000;
+}
+
+.media-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.media-image-container {
+  margin: 10px 0;
+}
+
+.media-image {
+  width: 150px;
+  max-height: 150px;
+  object-fit: contain;
+  cursor: pointer;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  display: block;
+}
+
+.media-caption {
+  font-style: italic;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.media-video {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.media-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.media-link {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-word;
+}
+
+/* Post Content */
+.post-content {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+  margin-top: 10px;
+  flex-grow: 1;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.post-content img{
+    width: 22rem;
+}
+/* Buttons */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Loading Spinner */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+
+/* Error Container */
+.error-container {
+  text-align: center;
+  color: #f44336;
+  padding: 20px;
+}
+
+.retry-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.retry-button:hover {
+  background-color: #1976d2;
+}

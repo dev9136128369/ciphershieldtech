@@ -155,9 +155,9 @@
 // 22-05-25 
 
 import React from 'react';
-import aboutUsBannerWebp from '/Images/about_us1.webp';
-import aboutUsBannerJpeg from '/Images/about_us1.webp';
-import aboutUsBannerJpg from '/Images/about_us1.webp';
+import aboutUsBannerWebp from '/Images/about_us2.webp';
+import aboutUsBannerJpeg from '/Images/about_us2.webp';
+import aboutUsBannerJpg from '/Images/about_us2.webp';
 
 import img2Webp from '/Images/finance_AI.webp';
 import img2Jpeg from '/Images/finance_AI.webp';
@@ -221,7 +221,7 @@ const AboutUs = () => {
 
               </h1>
               <h2>Empowering Businesses with Smart AI Solutions</h2>
-              <p>
+              <p className='ps-3'>
                 CipherShield Technologies is dedicated to delivering advanced AI, machine learning, and automation solutions that redefine how businesses operate.
                 Our team of experts works with organizations to design intelligent systems that automate manual tasks, reduce human error, and optimize workflows—leading to faster decision-making and better outcomes.
                 We serve industries such as finance, healthcare, manufacturing, and cybersecurity, and our solutions are built to scale with your business.
@@ -234,7 +234,7 @@ const AboutUs = () => {
                 <img
                   src={img2Jpg}
                   alt="AboutUs Image - Text Centered"
-                  className="img-fluid responsive-img"
+                  className="img-fluid responsive-img ms-2"
                   loading="lazy"
                 />
               </picture>
@@ -242,7 +242,7 @@ const AboutUs = () => {
           </div>
         </div>
 
-        <div className="contant animated-text  mb-5 text-center" id="zohoanimated">
+        <div className="contant animated-text   text-center" id="zohoanimated">
           <div className="col-sm-12 zohotext">
             <div className='container'>
               <h3>
@@ -253,7 +253,7 @@ const AboutUs = () => {
           </div>
           <div className="row trainningcard2 animated-text mt-4 mb-5 pb-5 justify-content-center">
             <div className="col-md-4 col-sm-12 mb-3">
-              <div className="carde1 h-100">
+              <div className="carde1 h-100 ">
                 <div className="card-body">
                   <h5 className="card-titles"><b>Proven ROI</b></h5>
                   <p>Our solutions help businesses cut costs, increase operational efficiency, and drive profitability.</p>
